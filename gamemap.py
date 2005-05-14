@@ -1,3 +1,3 @@
-class Map:
+class GameMap:
 	def init():
 		pass

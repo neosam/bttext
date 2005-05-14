@@ -43,6 +43,7 @@ def main():
     myTF = Textfield(2, 6, w/2 - 4, h - 7)
     falco = Person(myTF, "Falco", configs.colorof["falco"][0])
     mike = Person(myTF, "Du", configs.colorof["mike"][0])
+    myGM = GameMap()
     
     myTF.sendText(BT_SMALL_LOGOTEXT + " - Kapitel 1")
     myTF.sendText("Die Kreidezeit")
