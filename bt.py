@@ -3,6 +3,7 @@ import timer
 import time
 import init
 from textfield import *
+from gamemap import *
 from configs import *
 import configs
 from person import *
@@ -23,14 +24,6 @@ BT_LOGO="    /\\  /\\   |\\ |-- |\\           |\\        ___ |\\ o      |\\  |  
 BT_WINDOW_TOO_SMALL = "Fenster zu klein"
 
 def waveWare(x, y):
-    #stdscr.addstr(y, x, "W", curses.A_BOLD | curses.color_pair(color.blue))
-    #stdscr.addstr("ave ")
-    #stdscr.addstr("W", curses.A_BOLD | curses.color_pair(color.blue))
-    #stdscr.addstr("are")
-    #textOut("W", x, y, color.blue)
-    #textOut("ave ")
-    #textOut("W", col=color.blue)
-    #textOut("are")
     ww = btText("$%4$%W$%-1$%ave $%4$%W$%-1$%are")
     textOut(ww, x, y)
 
