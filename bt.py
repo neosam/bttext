@@ -24,7 +24,7 @@ BT_LOGO="    /\\  /\\   |\\ |-- |\\           |\\        ___ |\\ o      |\\  |  
 BT_WINDOW_TOO_SMALL = "Fenster zu klein"
 
 def waveWare(x, y):
-    ww = btText("$%4$%W$%-1$%ave $%4$%W$%-1$%are")
+    ww = btText("$%2$%W$%-1$%ave $%4$%W$%-1$%are")
     textOut(ww, x, y)
 
 def main():
@@ -33,7 +33,7 @@ def main():
     print 
     print BT_LOGO
     print
-    time.sleep(2)
+    time.sleep(1)
     
     init.init()
     stdscr = init.stdscr
@@ -43,7 +43,7 @@ def main():
     myTF = Textfield(2, 6, w/2 - 4, h - 7)
     falco = Person(myTF, "Falco", configs.colorof["falco"][0])
     mike = Person(myTF, "Du", configs.colorof["mike"][0])
-    myGM = GameMap()
+    myGM = GameMap(w/2 + 2, 6, w/2 - 4, h - 7)
     
     myTF.sendText(BT_SMALL_LOGOTEXT + " - Kapitel 1")
     myTF.sendText("Die Kreidezeit")
@@ -84,10 +84,12 @@ def main():
                           misc.BT_ERROR)
         else:
             myTF.resize(w/2 - 4, h - 7)
+            myGM.resize(w/2 + 2, 6, w/2 - 4, h - 7)
             stdscr.box()
             stdscr.addstr(0, (w - len(BT_SMALL_LOGOTEXT)) / 2,
                           BT_SMALL_LOGOTEXT)
             myTF.draw()
+            myGM.draw(stdscr)
             stdscr.vline(4, w/2, curses.ACS_VLINE, h - 5)
             stdscr.addstr(4, 2, "Meldungen:", curses.A_BOLD)
             stdscr.addstr(4, w/2 + 2, "Karte:", curses.A_BOLD)
