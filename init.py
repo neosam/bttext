@@ -1,6 +1,7 @@
 import curses
 import configs
 import sys
+import color
 
 global stdscr, mainWin
 stdscr = 0
@@ -45,6 +46,7 @@ def init():
         except:
             configs.misc.COLORED = False
         btInit()
+        color.init()
         print configs.colorof
 
     except:
