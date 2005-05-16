@@ -2,8 +2,11 @@ import curses
 import textout
 import color
 
-LEVEL_WIDTH = 20
-LEVEL_HEIGHT = 20
+LEVEL_WIDTH = 200
+LEVEL_HEIGHT = 200
+
+def nothing():
+	pass
 
 class GameMap:
 	def __init__(self, x, y, w, h):
@@ -12,7 +15,7 @@ class GameMap:
 		self.y = y
 		self.w = w
 		self.h = h
-		self.pos = [10, 10]
+		self.pos = [100, 100]
 		
 		# Preparing level
 		self.gMap = []
@@ -20,8 +23,7 @@ class GameMap:
 			self.gMap.append([])
 		for elem in self.gMap:
 			for i in range(LEVEL_HEIGHT):
-				elem.append([" ", 0, 7, True])
-		self.gMap[10][10][0] = "M"
+				elem.append([" ", 3, 7, True, nothing])
 
 	def resize(self, x, y, w, h):
 		self.x = x
@@ -37,8 +39,9 @@ class GameMap:
 				if (pos[0] > 0) & (pos[1] > 1) & \
 				   (pos[0] < LEVEL_WIDTH) & \
 				   (pos[1] < LEVEL_HEIGHT):
-					dst.addstr(self.y + h, self.x + w,
-						self.gMap[pos[0]][pos[1]][0],
+					dst.addstr(self.y + self.h - h - 2,
+						   self.x + self.w - w - 1,
+						   self.gMap[pos[0]][pos[1]][0],
 						   color.color(self.gMap[pos[0]][pos[1]][1],
 							       self.gMap[pos[0]][pos[1]][2]))
 

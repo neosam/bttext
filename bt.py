@@ -40,10 +40,15 @@ def main():
 
     h, w = stdscr.getmaxyx()
 
+    myGM = GameMap(w/2 + 2, 6, w/2 - 4, h - 8)
+    myGM.pos = [10, 10]
     myTF = Textfield(2, 6, w/2 - 4, h - 7)
-    falco = Person(myTF, "Falco", configs.colorof["falco"][0])
-    mike = Person(myTF, "Du", configs.colorof["mike"][0])
-    myGM = GameMap(w/2 + 2, 6, w/2 - 4, h - 7)
+    falco = Person(myTF, "Falco", myGM, [0, 0], ["F", 7, 4],
+                   configs.colorof["falco"][0])
+    falco.jumpTo(1, 0)
+    mike = Person(myTF, "Du", myGM, [0, 0], ["M", 0, 3],
+                  configs.colorof["mike"][0])
+    
     
     myTF.sendText(BT_SMALL_LOGOTEXT + " - Kapitel 1")
     myTF.sendText("Die Kreidezeit")
@@ -71,6 +76,10 @@ def main():
             myTF.sendText("Mitte im Menue Beenden ('m' druecken)")
         if c == ord("w"): misc.COLORED = not misc.COLORED
         if c == ord("m"): menu.start()
+        if c == ord("h"): mike.goLeft()
+        if c == ord("j"): mike.goDown()
+        if c == ord("k"): mike.goUp()
+        if c == ord("l"): mike.goRight()
         # --- Event handling ---
 
         # +++ Drawing +++
@@ -90,6 +99,8 @@ def main():
                           BT_SMALL_LOGOTEXT)
             myTF.draw()
             myGM.draw(stdscr)
+            mike.draw(stdscr)
+            falco.draw(stdscr)
             stdscr.vline(4, w/2, curses.ACS_VLINE, h - 5)
             stdscr.addstr(4, 2, "Meldungen:", curses.A_BOLD)
             stdscr.addstr(4, w/2 + 2, "Karte:", curses.A_BOLD)
