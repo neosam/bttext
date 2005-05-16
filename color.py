@@ -1,6 +1,7 @@
 import curses
 
 def init():
+    curses.start_color()
     if curses.has_colors():
         for i in range(8):
             for j in range(8):

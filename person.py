@@ -2,6 +2,7 @@ from init import *
 import init
 import sys
 import color
+import configs
 
 class Person:
     def __init__(self, tf, name, gMap, pos = [0,0], mapDraw=["?", 0, 7],
@@ -45,9 +46,12 @@ class Person:
            (pos[0] <= (self.gMap.x + self.gMap.w)) & \
            (pos[1] <= (self.gMap.y + self.gMap.h)):
 
-            dst.addstr(pos[1], pos[0], self.mapDraw[0],
-                       color.color(self.mapDraw[1],
-                                   self.mapDraw[2]))
+            if configs.misc.COLORED == True:
+                dst.addstr(pos[1], pos[0], self.mapDraw[0],
+                           color.color(self.mapDraw[1],
+                                       self.mapDraw[2]))
+            else:
+                dst.addstr(pos[1], pos[0], self.mapDraw[0])
 
     def jumpTo(self, x, y):
         self.pos = [x, y]

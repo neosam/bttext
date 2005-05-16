@@ -1,6 +1,7 @@
 import curses
 import textout
 import color
+import configs
 
 LEVEL_WIDTH = 200
 LEVEL_HEIGHT = 200
@@ -39,9 +40,14 @@ class GameMap:
 				if (pos[0] > 0) & (pos[1] > 1) & \
 				   (pos[0] < LEVEL_WIDTH) & \
 				   (pos[1] < LEVEL_HEIGHT):
-					dst.addstr(self.y + self.h - h - 2,
-						   self.x + self.w - w - 1,
-						   self.gMap[pos[0]][pos[1]][0],
-						   color.color(self.gMap[pos[0]][pos[1]][1],
-							       self.gMap[pos[0]][pos[1]][2]))
+					if configs.misc.COLORED == True:
+						dst.addstr(self.y + self.h - h - 2,
+							   self.x + self.w - w - 1,
+							   self.gMap[pos[0]][pos[1]][0],
+							   color.color(self.gMap[pos[0]][pos[1]][1],
+								       self.gMap[pos[0]][pos[1]][2]))
+					else:
+						dst.addstr(self.y + self.h - h - 2,
+							   self.x + self.w - w - 1,
+							   self.gMap[pos[0]][pos[1]][0])
 
