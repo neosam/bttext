@@ -23,6 +23,9 @@ BT_LOGO="    /\\  /\\   |\\ |-- |\\           |\\        ___ |\\ o      |\\  |  
 
 BT_WINDOW_TOO_SMALL = "Fenster zu klein"
 
+def empty():
+    pass
+
 def waveWare(x, y):
     ww = btText("$%2$%W$%-1$%ave $%4$%W$%-1$%are")
     textOut(ww, x, y)
@@ -40,14 +43,17 @@ def main():
 
     h, w = stdscr.getmaxyx()
 
-    myGM = GameMap(w/2 + 2, 6, w/2 - 4, h - 8)
-    myGM.pos = [10, 10]
-    myTF = Textfield(2, 6, w/2 - 4, h - 7)
+    myGM = GameMap(w/2 + 2, 6, w/2 - 4, 10)
+    myGM.pos = [10, 4]
+    myTF = Textfield(2, 6, w/2 - 5, h - 7)
     falco = Person(myTF, "Falco", myGM, [0, 0], ["F", 7, 4],
                    configs.colorof["falco"][0])
     falco.jumpTo(1, 0)
     mike = Person(myTF, "Du", myGM, [0, 0], ["M", 0, 3],
                   configs.colorof["mike"][0])
+
+    for i in range(10):
+        myGM.gMap[10][i] = ["~", 7, 4, False, nothing]
     
     
     myTF.sendText(BT_SMALL_LOGOTEXT + " - Kapitel 1")
@@ -93,7 +99,7 @@ def main():
                           misc.BT_ERROR)
         else:
             myTF.resize(w/2 - 4, h - 7)
-            myGM.resize(w/2 + 2, 6, w/2 - 4, h - 7)
+            myGM.resize(w/2 + 2, 6, w/2 - 5, h - 8)
             stdscr.box()
             stdscr.addstr(0, (w - len(BT_SMALL_LOGOTEXT)) / 2,
                           BT_SMALL_LOGOTEXT)

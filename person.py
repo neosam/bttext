@@ -57,13 +57,17 @@ class Person:
         self.pos = [x, y]
 
     def goRight(self):
-        self.jumpTo(self.pos[0] + 1, self.pos[1])
+        if self.gMap.gMap[self.pos[0] + 1][self.pos[1]][3] == True:
+            self.jumpTo(self.pos[0] + 1, self.pos[1])
 
     def goLeft(self):
-        self.jumpTo(self.pos[0] - 1, self.pos[1])
+        if self.gMap.gMap[self.pos[0] - 1][self.pos[1]][3] == True:
+            self.jumpTo(self.pos[0] - 1, self.pos[1])
 
     def goDown(self):
-        self.jumpTo(self.pos[0], self.pos[1] + 1)
+        if self.gMap.gMap[self.pos[0]][self.pos[1] + 1][3] == True:
+            self.jumpTo(self.pos[0], self.pos[1] + 1)
 
     def goUp(self):
-        self.jumpTo(self.pos[0], self.pos[1] - 1)
+        if self.gMap.gMap[self.pos[0]][self.pos[1] - 1][3] == True:
+            self.jumpTo(self.pos[0], self.pos[1] - 1)

@@ -37,17 +37,17 @@ class GameMap:
 			for  w in range(self.w):
 				pos = [self.pos[0] + (self.w/2 - w),
 				       self.pos[1] + (self.h/2 - h)]
-				if (pos[0] > 0) & (pos[1] > 1) & \
+				if (pos[0] >= 0) & (pos[1] >= 0) & \
 				   (pos[0] < LEVEL_WIDTH) & \
 				   (pos[1] < LEVEL_HEIGHT):
 					if configs.misc.COLORED == True:
-						dst.addstr(self.y + self.h - h - 2,
-							   self.x + self.w - w - 1,
+						dst.addstr(self.y + self.h - h,
+							   self.x + self.w - w,
 							   self.gMap[pos[0]][pos[1]][0],
 							   color.color(self.gMap[pos[0]][pos[1]][1],
 								       self.gMap[pos[0]][pos[1]][2]))
 					else:
-						dst.addstr(self.y + self.h - h - 2,
-							   self.x + self.w - w - 1,
+						dst.addstr(self.y + self.h - h,
+							   self.x + self.w - w,
 							   self.gMap[pos[0]][pos[1]][0])
 
