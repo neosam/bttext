@@ -9,6 +9,7 @@ import configs
 from person import *
 import menu
 from textout import *
+import world
 
 global stdscr
 
@@ -43,34 +44,39 @@ def main():
 
     h, w = stdscr.getmaxyx()
 
-    myGM = GameMap(w/2 + 2, 6, w/2 - 4, 10)
-    myGM.pos = [10, 4]
-    myTF = Textfield(2, 6, w/2 - 5, h - 7)
-    falco = Person(myTF, "Falco", myGM, [0, 0], ["F", 7, 4],
-                   configs.colorof["falco"][0])
-    falco.jumpTo(1, 0)
-    mike = Person(myTF, "Du", myGM, [0, 0], ["M", 0, 3],
+#    myGM = GameMap(w/2 + 2, 6, w/2 - 4, 10)
+#    myGM.pos = [10, 4]
+#    myTF = Textfield(2, 6, w/2 - 5, h - 7)
+#    falco = Person(myTF, "Falco", myGM, [0, 0], ["F", 7, 4],
+#                   configs.colorof["falco"][0])
+#    falco.jumpTo(1, 0)
+    mike = Person(-1, "Du", -1, [0, 0], ["M", 0, 3],
                   configs.colorof["mike"][0])
+    
+    theWorld = world.World(w, h)
+    theWorld.setPlayer(mike)
 
     for i in range(10):
-        myGM.gMap[10][i] = ["~", 7, 4, False, nothing]
+        theWorld.gMaps[1][1].gMap[10][i] = ["~", 7, 4, False, nothing]
+    for i in range(10):
+        theWorld.gMaps[1][0].gMap[10][198-i] = ["~", 7, 4, False, nothing]
     
     
-    myTF.sendText(BT_SMALL_LOGOTEXT + " - Kapitel 1")
-    myTF.sendText("Die Kreidezeit")
-    myTF.sendText("")
-    myTF.sendText("Du stehst am Strand einer grossen Insel, in dessen Mitte ein grosser Vulkan empor ragt.  Neben dir auf dem Boden liegt ein Knochen, an dem ein spitzer Stein angebracht ist, sieht beinahe wie eine Waffe aus.")
-    myTF.sendText("Du nimmst den Knochen")
-    falco.comes()
-    falco.say("Du bist auch hier??")
-    mike.say("Ja, hallo Faklo!")
-    falco.say("Ich heisse FALKO!!")
-    mike.say("Sorry, war ein Tippfehler")
-    falco.say("Verdammt... zuerst die komische vom Flughafen und dann auch noch du...")
-    mike.say("Welche vom Flughafen?")
-    falco.say("Vergiss es, pass auf")
+#    myTF.sendText(BT_SMALL_LOGOTEXT + " - Kapitel 1")
+#    myTF.sendText("Die Kreidezeit")
+#    myTF.sendText("")
+#    myTF.sendText("Du stehst am Strand einer grossen Insel, in dessen Mitte ein grosser Vulkan empor ragt.  Neben dir auf dem Boden liegt ein Knochen, an dem ein spitzer Stein angebracht ist, sieht beinahe wie eine Waffe aus.")
+#    myTF.sendText("Du nimmst den Knochen")
+#    falco.comes()
+#    falco.say("Du bist auch hier??")
+#    mike.say("Ja, hallo Faklo!")
+#    falco.say("Ich heisse FALKO!!")
+#    mike.say("Sorry, war ein Tippfehler")
+#    falco.say("Verdammt... zuerst die komische vom Flughafen und dann auch noch du...")
+#    mike.say("Welche vom Flughafen?")
+#    falco.say("Vergiss es, pass auf")
 
-    myTF.sendText("...")
+#    myTF.sendText("...")
 
     while 1:                     # Gameloop
         timer.fpsDelay()         # FPS-Control
@@ -79,13 +85,13 @@ def main():
         c = stdscr.getch()       # I don't think an eventloop is needed in an
                                  # textadventure
         if c == ord("q"):
-            myTF.sendText("Mitte im Menue Beenden ('m' druecken)")
+            theWorld.sendText("Mitte im Menue Beenden ('m' druecken)")
         if c == ord("w"): misc.COLORED = not misc.COLORED
         if c == ord("m"): menu.start()
-        if c == ord("h"): mike.goLeft()
-        if c == ord("j"): mike.goDown()
-        if c == ord("k"): mike.goUp()
-        if c == ord("l"): mike.goRight()
+        if c == ord("h"): theWorld.playerGoLeft()
+        if c == ord("j"): theWorld.playerGoDown()
+        if c == ord("k"): theWorld.playerGoUp()
+        if c == ord("l"): theWorld.playerGoRight()
         # --- Event handling ---
 
         # +++ Drawing +++
@@ -98,15 +104,19 @@ def main():
             stdscr.addstr(h/2, (w - len(misc.BT_ERROR)) / 2,
                           misc.BT_ERROR)
         else:
-            myTF.resize(w/2 - 4, h - 7)
-            myGM.resize(w/2 + 2, 6, w/2 - 5, h - 8)
+            theWorld.resize(w, h)
+#            myTF.resize(w/2 - 4, h - 7)
+#            myGM.resize(w/2 + 2, 6, w/2 - 5, h - 8)
+
             stdscr.box()
             stdscr.addstr(0, (w - len(BT_SMALL_LOGOTEXT)) / 2,
                           BT_SMALL_LOGOTEXT)
-            myTF.draw()
-            myGM.draw(stdscr)
-            mike.draw(stdscr)
-            falco.draw(stdscr)
+
+            theWorld.draw(stdscr)
+#            myTF.draw()
+#            myGM.draw(stdscr)
+#            mike.draw(stdscr)
+#            falco.draw(stdscr)
             stdscr.vline(4, w/2, curses.ACS_VLINE, h - 5)
             stdscr.addstr(4, 2, "Meldungen:", curses.A_BOLD)
             stdscr.addstr(4, w/2 + 2, "Karte:", curses.A_BOLD)

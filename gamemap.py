@@ -17,6 +17,7 @@ class GameMap:
 		self.w = w
 		self.h = h
 		self.pos = [100, 100]
+		self.size = [LEVEL_WIDTH, LEVEL_HEIGHT]
 		
 		# Preparing level
 		self.gMap = []
