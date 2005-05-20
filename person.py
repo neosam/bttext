@@ -71,3 +71,6 @@ class Person:
     def goUp(self):
         if self.gMap.gMap[self.pos[0]][self.pos[1] - 1][3] == True:
             self.jumpTo(self.pos[0], self.pos[1] - 1)
+
+    def crashWith(self, person):
+        pass

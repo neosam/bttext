@@ -27,6 +27,10 @@ BT_WINDOW_TOO_SMALL = "Fenster zu klein"
 def empty():
     pass
 
+def FalcoCrashMike(self, person):
+    self.say("Du wagst es!!")
+
+
 def waveWare(x, y):
     ww = btText("$%2$%W$%-1$%ave $%4$%W$%-1$%are")
     textOut(ww, x, y)
@@ -47,14 +51,17 @@ def main():
 #    myGM = GameMap(w/2 + 2, 6, w/2 - 4, 10)
 #    myGM.pos = [10, 4]
 #    myTF = Textfield(2, 6, w/2 - 5, h - 7)
-#    falco = Person(myTF, "Falco", myGM, [0, 0], ["F", 7, 4],
-#                   configs.colorof["falco"][0])
-#    falco.jumpTo(1, 0)
+    falco = Person(-1, "Falco", -1, [0, 0], ["F", 7, 4],
+                   configs.colorof["falco"][0])
+    falco.jumpTo(1, 0)
+    falco.crashWith = FalcoCrashMike
+    
     mike = Person(-1, "Du", -1, [0, 0], ["M", 0, 3],
                   configs.colorof["mike"][0])
     
     theWorld = world.World(w, h)
     theWorld.setPlayer(mike)
+    theWorld.addPerson(falco)
 
     for i in range(10):
         theWorld.gMaps[1][1].gMap[10][i] = ["~", 7, 4, False, nothing]
@@ -97,7 +104,7 @@ def main():
         # +++ Drawing +++
         h, w = stdscr.getmaxyx()
         stdscr.erase()
-        if (w < 70) | (h < 20):
+        if (w < 70) | (h < 24):
             stdscr.addstr(h/2, (w - len(BT_WINDOW_TOO_SMALL)) / 2,
                           BT_WINDOW_TOO_SMALL)
         elif misc.BT_ERROR != "":
