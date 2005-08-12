@@ -48,9 +48,6 @@ def main():
 
     h, w = stdscr.getmaxyx()
 
-#    myGM = GameMap(w/2 + 2, 6, w/2 - 4, 10)
-#    myGM.pos = [10, 4]
-#    myTF = Textfield(2, 6, w/2 - 5, h - 7)
     falco = Person(-1, "Falco", -1, [0, 0], ["F", 7, 4],
                    configs.colorof["falco"][0])
     falco.jumpTo(1, 0)
@@ -59,7 +56,7 @@ def main():
     mike = Person(-1, "Du", -1, [0, 0], ["M", 0, 3],
                   configs.colorof["mike"][0])
     
-    theWorld = world.World(w, h)
+    theWorld = world.World(stdscr, w, h)
     theWorld.setPlayer(mike)
     theWorld.addPerson(falco)
 
@@ -69,22 +66,6 @@ def main():
         theWorld.gMaps[1][0].gMap[10][198-i] = ["~", 7, 4, False, nothing]
     
     
-#    myTF.sendText(BT_SMALL_LOGOTEXT + " - Kapitel 1")
-#    myTF.sendText("Die Kreidezeit")
-#    myTF.sendText("")
-#    myTF.sendText("Du stehst am Strand einer grossen Insel, in dessen Mitte ein grosser Vulkan empor ragt.  Neben dir auf dem Boden liegt ein Knochen, an dem ein spitzer Stein angebracht ist, sieht beinahe wie eine Waffe aus.")
-#    myTF.sendText("Du nimmst den Knochen")
-#    falco.comes()
-#    falco.say("Du bist auch hier??")
-#    mike.say("Ja, hallo Faklo!")
-#    falco.say("Ich heisse FALKO!!")
-#    mike.say("Sorry, war ein Tippfehler")
-#    falco.say("Verdammt... zuerst die komische vom Flughafen und dann auch noch du...")
-#    mike.say("Welche vom Flughafen?")
-#    falco.say("Vergiss es, pass auf")
-
-#    myTF.sendText("...")
-
     while 1:                     # Gameloop
         timer.fpsDelay()         # FPS-Control
         clearError()
@@ -112,23 +93,12 @@ def main():
                           misc.BT_ERROR)
         else:
             theWorld.resize(w, h)
-#            myTF.resize(w/2 - 4, h - 7)
-#            myGM.resize(w/2 + 2, 6, w/2 - 5, h - 8)
 
             stdscr.box()
             stdscr.addstr(0, (w - len(BT_SMALL_LOGOTEXT)) / 2,
                           BT_SMALL_LOGOTEXT)
 
             theWorld.draw(stdscr)
-#            myTF.draw()
-#            myGM.draw(stdscr)
-#            mike.draw(stdscr)
-#            falco.draw(stdscr)
-            stdscr.vline(4, w/2, curses.ACS_VLINE, h - 5)
-            stdscr.addstr(4, 2, "Meldungen:", curses.A_BOLD)
-            stdscr.addstr(4, w/2 + 2, "Karte:", curses.A_BOLD)
-            stdscr.addstr(2, 2, "Status: ", curses.A_BOLD)
-            stdscr.addstr(2, 10, "AP: 100/100    MP: 100/100   Level: 1")
             waveWare(w - 10, h - 1)
 
         stdscr.refresh()

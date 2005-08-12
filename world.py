@@ -2,10 +2,11 @@ import gamemap
 import textfield
 import timer
 import person
+import statusbox
 
 
 class World:
-    def __init__(self, w, h, filename = -1, maps = [3, 3],
+    def __init__(self, stdscr, w, h, filename = -1, maps = [3, 3],
                  mapPos = -1):
         self.maps = maps
         self.w = w
@@ -18,6 +19,8 @@ class World:
         
         self.textField = textfield.Textfield(2, 6, self.w/2 - 5, self.h - 7)
         self.persons = []
+
+        self.statusBox = statusbox.statusBox(stdscr, w, h)
 
 
 
@@ -49,6 +52,7 @@ class World:
             for j in range(self.maps[0]):
                 self.gMaps[j][i].resize(self.w/2 + 2, 6,
                                         self.w/2 - 5, self.h - 8)
+        self.statusBox.resize(w, h)
 
     def setMapPos(self, x, y):
         for i in range(self.maps[1]):
@@ -129,6 +133,8 @@ class World:
         self.player.draw(dst)
         for elem in self.persons:
             elem.draw(dst)
+
+        self.statusBox.draw()
 
     def sendText(self, text):
         self.textField.sendText(text)
