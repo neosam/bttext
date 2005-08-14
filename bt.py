@@ -7,6 +7,7 @@ from gamemap import *
 from configs import *
 import configs
 from person import *
+from player import *
 import menu
 from textout import *
 import world
@@ -52,11 +53,13 @@ def main():
                    configs.colorof["falco"][0])
     falco.jumpTo(1, 0)
     falco.crashWith = FalcoCrashMike
-    
-    mike = Person(-1, "Du", -1, [0, 0], ["M", 0, 3],
-                  configs.colorof["mike"][0])
-    
+
     theWorld = world.World(stdscr, w, h)
+    
+    mike = Player(theWorld.statusBox, -1, "Du", -1, [0, 0], ["M", 0, 3],
+                  configs.colorof["mike"][0], profile={"hp": [100, 100],
+                                                       "mp": [0, 0]})
+    
     theWorld.setPlayer(mike)
     theWorld.addPerson(falco)
 

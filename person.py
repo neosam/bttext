@@ -6,13 +6,17 @@ import configs
 
 class Person:
     def __init__(self, tf, name, gMap, pos = [0,0], mapDraw=["?", 0, 7],
-                 color = configs.color.green):
+                 color = configs.color.green, profile=0):
         self.tf = tf
         self.color = color
         self.name = name
         self.gMap = gMap
         self.pos = pos
         self.mapDraw = mapDraw
+
+        if profile == 0:
+            profile = { "HP": [0,0] }
+        self.profile = profile
 
     def say(self, text):
         try:
