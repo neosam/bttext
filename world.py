@@ -39,6 +39,12 @@ class World:
                                             (self.mapPos[1] - i) * \
                                             self.gMaps[j][i].size[1]]
 
+    def save(self, filename):
+        """ Works but load doesn't work ;) """
+        saveDict = {}
+        saveDict["map"] = self.gMaps
+        file(filename, "w").write(str(saveDict))
+
     def addPerson(self, person):
         person.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
         person.tf = self.textField
@@ -79,6 +85,8 @@ class World:
         player.say("Ich adde mich!")
 
     def playerGoRight(self):
+        self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]]) # Would be faster but doesn't work ;)
+        self.player.gMap.drawAllFlag = True
         if self.player.pos[0] >= (self.player.gMap.size[1] - 1):
             self.mapPos = [self.mapPos[0] + 1, self.mapPos[1]]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
@@ -127,9 +135,12 @@ class World:
                    (self.player.pos[1] == elem.pos[1]):
                 elem.crashWith(elem, self.player)
         self.textField.draw()
-        for i in range(self.maps[1]):
-            for j in range(self.maps[0]):
+        for i in range(self.mapPos[1] - 1, self.mapPos[1] + 2):
+            for j in range(self.mapPos[0] - 1, self.mapPos[1] + 2):
                 self.gMaps[j][i].draw(dst)
+#        for i in range(self.maps[1]):        
+#            for j in range(self.maps[0]):         # Old because every map will be drawn and not just nine
+#                self.gMaps[j][i].draw(dst)
         self.player.draw(dst)
         for elem in self.persons:
             elem.draw(dst)

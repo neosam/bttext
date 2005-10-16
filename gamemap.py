@@ -18,6 +18,8 @@ class GameMap:
 		self.h = h
 		self.pos = [100, 100]
 		self.size = [LEVEL_WIDTH, LEVEL_HEIGHT]
+		self.drawPos = []
+		self.drawAllFlag = True
 		
 		# Preparing level
 		self.gMap = []
@@ -25,7 +27,10 @@ class GameMap:
 			self.gMap.append([])
 		for elem in self.gMap:
 			for i in range(LEVEL_HEIGHT):
-				elem.append([" ", 3, 7, True, nothing])
+				elem.append([" ", 3, 7, True, 0])
+
+	def __repr__(self):
+		return str([[self.x, self.y, self.w, self.h], self.size, self.gMap])
 
 	def resize(self, x, y, w, h):
 		self.x = x
@@ -34,6 +39,28 @@ class GameMap:
 		self.h = h
 
 	def draw(self, dst):
+		if self.drawAllFlag == True:
+			self.drawAll(dst)
+		else:
+			for elem in self.drawPos:
+				pos = [self.pos[0] + (self.w/2 - elem[0]),
+				       self.pos[1] + (self.h/2 - elem[1])]
+				if (pos[0] >= 0) & (pos[1] >= 0) & \
+				       (pos[0] < LEVEL_WIDTH) & \
+				       (pos[1] < LEVEL_HEIGHT):
+					if configs.misc.COLORED == True:
+						dst.addstr(self.y + self.h - elem[1],
+							   self.x + self.w - elem[0],
+							   self.gMap[pos[0]][pos[1]][0],
+							   color.color(self.gMap[pos[0]][pos[1]][1],
+								       self.gMap[pos[0]][pos[1]][2]))
+					else:
+						dst.addstr(self.y + self.h - elem[1],
+							   self.x + self.h - elem[0],
+							   self.gMap[pos[0]][pos[1]][0])
+
+	def drawAll(self, dst):
+		self.drawAllFlag = False
 		for h in range(self.h):
 			for  w in range(self.w):
 				pos = [self.pos[0] + (self.w/2 - w),
