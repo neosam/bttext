@@ -1,3 +1,4 @@
+
 import gamemap
 import textfield
 import timer
@@ -40,7 +41,7 @@ class World:
                                             self.gMaps[j][i].size[1]]
 
     def save(self, filename):
-        """ Works but load doesn't work ;) """
+        # TODO: Maybe something is wrong with the save function
         saveDict = {}
         saveDict["map"] = self.gMaps
         file(filename, "w").write(str(saveDict))
@@ -84,9 +85,17 @@ class World:
         player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
         player.say("Ich adde mich!")
 
+    # TODO: Same code four times - that's bad -.- (playerGo...)
+
+    def redrawAllMaps(self):
+        for i in range(self.mapPos[1] - 1, self.mapPos[1] + 2):
+            for j in range(self.mapPos[0] - 1, self.mapPos[1] + 2):
+                self.gMaps[j][i].drawAllFlag = True
+
     def playerGoRight(self):
-        self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]]) # Would be faster but doesn't work ;)
-        self.player.gMap.drawAllFlag = True
+        # TODO: The whole map will be draw if player moves -> too slow
+        # self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]]) # Would be faster but doesn't work ;)
+        self.redrawAllMaps()
         if self.player.pos[0] >= (self.player.gMap.size[1] - 1):
             self.mapPos = [self.mapPos[0] + 1, self.mapPos[1]]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
@@ -98,6 +107,8 @@ class World:
         self.player.goRight()
 
     def playerGoLeft(self):
+        self.redrawAllMaps()
+        self.player.gMap.drawAllFlag = True
         if self.player.pos[0] <= 0:
             self.mapPos = [self.mapPos[0] - 1, self.mapPos[1]]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
@@ -109,6 +120,8 @@ class World:
             self.setMapPos(self.softPos[0] - 1, self.softPos[1])
         self.player.goLeft()
     def playerGoUp(self):
+        self.redrawAllMaps()
+        self.player.gMap.drawAllFlag = True
         if self.player.pos[1] <= 0:
             self.mapPos = [self.mapPos[0], self.mapPos[1] - 1]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
@@ -119,6 +132,8 @@ class World:
             self.setMapPos(self.softPos[0], self.softPos[1] - 1)
         self.player.goUp()
     def playerGoDown(self):
+        self.redrawAllMaps()
+        self.player.gMap.drawAllFlag = True
         if self.player.pos[1] >= (self.player.gMap.size[1] - 1):
             self.mapPos = [self.mapPos[0], self.mapPos[1] + 1]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
