@@ -15,16 +15,12 @@ import world
 
 global stdscr
 
-BT_VERSION = "16102005"
+BT_VERSION = "23102005"
 
 BT_SMALL_LOGO = "/\\\\"
 BT_SMALL_BACKLOGO = "//\\"
 BT_SMALL_LOGOTEXT = BT_SMALL_LOGO + " Bermuda Triangle " + BT_SMALL_BACKLOGO
 
-#BT_LOGO="    /\\  /\\   |\\ |-- |\\           |\\        ___ |\\ o      |\\  |  __ |   |--\n\
-#   /  \\/  \\  |< |-  |/ |\\/| |  | | | /\\     |  |/ |  /\\  | \\ | /   |   |-\n\
-#  /____\\___\\ |/ |-- |\\ |  |  \\/  |/ /--\\    |  |\\ | /--\\ |  \\| \\_\\ \\__ |--\n\
-# <--------------------Die Zukunft liegt in deiner Hand-------------------->"
 BT_LOGO = file("btlogo.txt").read()
 
 BT_WINDOW_TOO_SMALL = "Fenster zu klein"
@@ -96,8 +92,11 @@ def main():
             # --- Event handling ---
 
             # +++ Drawing +++
+            oldH = h   # Need this for resizing
+            oldW = w
             h, w = stdscr.getmaxyx()
             #stdscr.erase()
+            # Window size exception
             if (w < 70) | (h < 24):
                 stdscr.addstr(h/2, (w - len(BT_WINDOW_TOO_SMALL)) / 2,
                               BT_WINDOW_TOO_SMALL)
@@ -105,8 +104,12 @@ def main():
                 stdscr.addstr(h/2, (w - len(misc.BT_ERROR)) / 2,
                               misc.BT_ERROR)
             else:
-                theWorld.resize(w, h)
+                # Check for resize event
+                if (oldH != h) | (oldW != w):
+                    stdscr.erase()  # Have to clear the whole screen. Maybe this should do the theWorld object...
+                    theWorld.resize(w, h)
 
+                # Painting wonderful border ;)
                 stdscr.box()
                 stdscr.addstr(0, (w - len(BT_SMALL_LOGOTEXT)) / 2,
                               BT_SMALL_LOGOTEXT)
@@ -128,6 +131,11 @@ def main():
 #        print dir(sys.exc_info()[2].tb_lasti)
         print "Hardcore error in Bermuda Triangle " + BT_VERSION + " :`(  Exiting forced!!!"
         print "Please send bt_last_error.log to neosam@gmail.com"
+        print "Problems while initialize"
+        print "Unexpected error:", sys.exc_info()[2].tb_next
+        print sys.exc_info()[1]
+        print configs.colorof
+        
         # TODO: There really should be a bt_last_error.log ;)
 
 

@@ -1,6 +1,6 @@
 import curses
 import init
-from textout import *
+from textout import btText, textOut
 
 STD_MAX_LINES = 100
 
@@ -16,7 +16,7 @@ class Textfield:
         self.colors = []
 
     def newLine(self):
-        self.lines += 1
+        self.lines = self.lines + 1
 
     def sendText(self, text2):
         text = btText(text2)

@@ -39,9 +39,9 @@ def start():
     while 1:
         c = menuWin.getch()
         if c == ord("j"):
-            choice += 1
+            choice = choice + 1
         elif c == ord("k"):
-            choice -= 1
+            choice = choice - 1
         elif (c == ord("l")) | (c == ord(" ")):
             if menuList[choice][1] == btContinue:
                 break

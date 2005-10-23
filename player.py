@@ -1,5 +1,5 @@
 import configs
-from person import *
+from person import Person
 
 class Player (Person):
     def __init__(self, statusBox, tf, name, gMap, pos = [0,0],

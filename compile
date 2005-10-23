@@ -1,0 +1,17 @@
+#! /bin/bash
+
+cp color.py       color.pyx
+cp configs.py     configs.pyx
+cp gamemap.py     gamemap.pyx
+cp init.py        init.pyx
+cp menu.py        menu.pyx
+cp person.py      person.pyx
+cp player.py      player.pyx
+cp statusbox.py   statusbox.pyx
+cp textfield.py   textfield.pyx
+cp timer.py       timer.pyx
+cp world.py       world.pyx
+
+python setup.py build_ext --inplace
+
+rm *.pyx

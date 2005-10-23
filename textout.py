@@ -1,9 +1,16 @@
 import curses
-from configs import *
+import configs
 import init
 import bt
 import sys
 import init
+
+color = configs.color
+colorof = configs.colorof
+recreateColors = configs.recreateColors
+addError = configs.addError
+clearError = configs.clearError
+misc = configs.misc
 
 class btText(str):
     def __init__(self, text = ""):
@@ -24,7 +31,7 @@ class btText(str):
                                            len(self.__inlist__[i + 1]),
                                            self.__inlist__[i]])
             if len(self.__positions__) != 1:
-                self.__positions__[len(self.__positions__)-1][3] += 1
+                self.__positions__[len(self.__positions__)-1][3] = self.__positions__[len(self.__positions__)-1][3] + 1
         except:
             addError("btText Problem!!")
             

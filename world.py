@@ -39,6 +39,8 @@ class World:
                                             self.gMaps[j][i].size[0],
                                             (self.mapPos[1] - i) * \
                                             self.gMaps[j][i].size[1]]
+                    self.gMaps[j][i].textField = self.textField
+                    
 
     def save(self, filename):
         # TODO: Maybe something is wrong with the save function
@@ -89,59 +91,58 @@ class World:
 
     def redrawAllMaps(self):
         for i in range(self.mapPos[1] - 1, self.mapPos[1] + 2):
-            for j in range(self.mapPos[0] - 1, self.mapPos[1] + 2):
+            for j in range(self.mapPos[0] - 1, self.mapPos[0] + 2):
                 self.gMaps[j][i].drawAllFlag = True
 
     def playerGoRight(self):
-        # TODO: The whole map will be draw if player moves -> too slow
-        # self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]]) # Would be faster but doesn't work ;)
-        self.redrawAllMaps()
+        self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
         if self.player.pos[0] >= (self.player.gMap.size[1] - 1):
             self.mapPos = [self.mapPos[0] + 1, self.mapPos[1]]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
-            self.player.pos[0] -= self.player.gMap.size[0]
+            self.player.pos[0] = self.player.pos[0] - self.player.gMap.size[0]
             self.textField.sendText("DEBUG: Changed Map")
         if ((self.player.gMap.size[0] * self.mapPos[0] +
              self.player.pos[0]) - self.softPos[0]) > self.walkArea:
             self.setMapPos(self.softPos[0] + 1, self.softPos[1])
+            self.redrawAllMaps()
         self.player.goRight()
 
     def playerGoLeft(self):
-        self.redrawAllMaps()
-        self.player.gMap.drawAllFlag = True
+        self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
         if self.player.pos[0] <= 0:
             self.mapPos = [self.mapPos[0] - 1, self.mapPos[1]]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
-            self.player.pos[0] += self.player.gMap.size[0]
+            self.player.pos[0] = self.player.pos[0] + self.player.gMap.size[0]
             self.textField.sendText("DEBUG: Changed Map")
         if ((self.player.gMap.size[0] * self.mapPos[0] +
              self.player.pos[0]) - self.softPos[0]) < -self.walkArea:
             
             self.setMapPos(self.softPos[0] - 1, self.softPos[1])
+            self.redrawAllMaps()
         self.player.goLeft()
     def playerGoUp(self):
-        self.redrawAllMaps()
-        self.player.gMap.drawAllFlag = True
+        self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
         if self.player.pos[1] <= 0:
             self.mapPos = [self.mapPos[0], self.mapPos[1] - 1]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
-            self.player.pos[1] += self.player.gMap.size[1]
+            self.player.pos[1] = self.player.pos[1] + self.player.gMap.size[1]
             self.textField.sendText("DEBUG: Changed Map")
         if ((self.player.gMap.size[1] * self.mapPos[1] +
              self.player.pos[1]) - self.softPos[1]) < -self.walkArea:
             self.setMapPos(self.softPos[0], self.softPos[1] - 1)
+            self.redrawAllMaps()
         self.player.goUp()
     def playerGoDown(self):
-        self.redrawAllMaps()
-        self.player.gMap.drawAllFlag = True
+        self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
         if self.player.pos[1] >= (self.player.gMap.size[1] - 1):
             self.mapPos = [self.mapPos[0], self.mapPos[1] + 1]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
-            self.player.pos[1] -= self.player.gMap.size[1]
+            self.player.pos[1] = self.player.pos[1] - self.player.gMap.size[1]
             self.textField.sendText("DEBUG: Changed Map")
         if ((self.player.gMap.size[1] * self.mapPos[1] +
              self.player.pos[1]) - self.softPos[1]) > self.walkArea:
             self.setMapPos(self.softPos[0], self.softPos[1] + 1)
+            self.redrawAllMaps()
         self.player.goDown()
 
     def draw(self, dst):

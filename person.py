@@ -1,4 +1,4 @@
-from init import *
+# from init import *
 import init
 import sys
 import color

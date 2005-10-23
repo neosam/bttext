@@ -26,7 +26,7 @@ class statusBox:
     def createStatusString(self):
         self.statusString = "HP: " + str(self.hp[0]) + "/" + str(self.hp[1])
         if self.mp_active:
-            self.statusString += "   MP: " + str(self.mp[0]) + "/" + \
+            self.statusString = self.statusString + "   MP: " + str(self.mp[0]) + "/" + \
                                  self.mp[1]
 
     def changeHP(self, hp):
