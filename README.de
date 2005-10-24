@@ -1,0 +1,181 @@
+
+    /\  /\   |\ |-- |\           |\        ___ |\ o      |\  |  __ |   |--
+   /  \/  \  |< |-  |/ |\/| |  | | | /\     |  |/ |  /\  | \ | /   |   |-
+  /____\___\ |/ |-- |\ |  |  \/  |/ /--\    |  |\ | /--\ |  \| \_\ \__ |--
+ <-Textversion---------Die Zukunft liegt in deiner Hand------------Readme->
+
+
+/\\ Inhalt:
+
+
+/1\\ Was ist Bermuda Triangle?
+/1.1\\ Status
+
+/2\\ Wie starten?
+/2.1\\ Pures Python
+/2.2\\ Mit pyrex kompilieren
+
+/3\\ Im Spiel
+/3.1\\ Der Screen
+/3.2\\ Die Steuerung
+
+
+
+/1\\ Was ist Bermuda Triangle? //1\
+
+Bermuda Triangle ist eine Story, die vom Wave Ware Team entwickelt
+wurde und jeder frei nach eigenen Aenderungen in ein Spiel umsetzen
+kann.  Die Story wird im wesentlich durch dieses Textadventure
+definiert.  Von der Wave Ware sind neben dieser Textadventure Version
+auch noch Umsetzungen in 2D und 3D geplant.  Wann (oder ob) es so weit
+ist, kann niemand genau vorhersagen.
+
+
+/1.1\\ Status
+
+Naja, so weit sind wir im Moment nicht wirklich :-D
+Die Story steht im Groben fest, aber keine Einzelheiten.  Das
+Textadventure hat noch fast gar keine spielbaren Eigenheiten, aber man
+kann es starten und beenden - immerhin ;)
+
+
+
+/2\\ Wie starten? //2\
+
+Python ist ein Interpreter und kein Just In Time Compiler.  Was ich
+damit sagen will ist, dass es leider nicht ganz so schnell wie andere
+Programmiersprachen ist.  Da es sich um ein Textadventure handelt,
+spielt die Geschwindigkeit denk ich keine so grosse Rolle.
+
+Falls du jedoch mit der Geschwindigkeit Probleme haben solltest, weil
+du einen langsameren Computer hast, bieten wir die Moeglichkeit die
+Module des Spieles zu kompilieren, wodurch sich die Geschwindigkeit
+verbessert.  Dafuer musst du aber Pyrex installiert haben. 
+
+
+/2.1\\ Pures Python
+
+Anforderungen:
+  Python 2.3 oder hoeher
+
+Wenn du das Spiel starten willst, geh einfach in das Verzeichnis und
+tippe ./bttext ein. 
+Fertig, das Spiel startet.
+
+
+/2.2\\ Mit pyrex kompilieren
+
+Anforderungen:
+  Python 2.3 oder hoeher (http://www.python.org)
+  ca. Pyrex 0.9.3-r2 ;)  (http://www.cosc.canterbury.ac.nz/~greg/python/Pyrex/)
+
+Nun werden einige Python Module in Maschinencode uebersetzt, so dass
+sie nicht interpretiert werden muessen, was das Spiel sehr viel
+schneller macht.  Dazu gibt man einfach folgendes ein:
+
+./compile
+
+Es wird automatisch aus jedem Modul C-Quellcode erstellt und dann
+kompiliert.  Wenn das Spiel dann z.B. das Modul gamemap laden will,
+wird es zwei Module (gamemap.py - das originale python File - und
+gamemap.so - das in Maschinencode umgewandelte File) finden und sich
+fuer die ".so" Datei entscheiden.  Deshalb kann man danach ganz
+normal ohne Probleme das Spiel starten:
+
+./bttext
+
+Will man die Module wieder weghaben, kann man alles mit einen
+Befehl wieder zurueckstellen:
+
+./clean
+
+Fertig.
+
+
+
+/3\\ Das Spiel //3\
+
+Das Spiel an sich ist in drei Bereiche aufgeteilt.  Und zwar gibt es
+einen, in denen die Meldungen erscheinen und du alles lesen kannst,
+was vor sich geht, in einem anderen Bereich befindet sich die Karte,
+in der du dich und alles um dich herum siehst.  Oben wird
+noch eine Box sein, in der du dein eigenes Befinden ablesen kannst.
+
+Halte diese drei Bereiche geschickt im Auge und du wirst dein
+Abenteuer bestreiten. (boa, das hab ich jetzt toll gesagt...)
+
+
+/3.1\\ Der Screen
+
+                    Titel (bzw. Werbung :-D)
+ Statusbox                   |
+     |                       |
++----|--------------/\\ Bermuda Triangle //\-----------------+
+|    |                                                       |
+| Status: HP: 100/100                                        | 
+|                                                            |
+| Meldungen:                    |  Karte:                    |
+|                               |                            |
+| Mike: Boa geil!!              |  +----------+--            |
+| Britta: Danke, Schwuli ;)     |  |    M  B                 |
+| Mike: -.-                     |  |          +--            |
+|                               |  +----------+              |
+|       |                       |     |                      |
++-------|-----------------------------|-------------Wave Ware+
+        |                             |                |
+   Messagebox                        Map               |
+                                               Totale Schleichwerbung
+                                                   (sauerei!)
+
+Statusbox: Hier siehst du, wie es deinen Helden / deiner Heldin geht.
+Messagebox: Alle Ereignisse werden hier sofort erscheinen
+Map: Quasi dein Auge.  Sehr wichtig im Kampf!
+Titel und Schleichwerbung: Auch da mal hinschaun :-D
+
+
+/3.2\\ Die Steuerung
+
+Fuer einen Anfaenger in der *nix Welt wird die Steuerung warscheinlich
+etwas ungewohnt sein.  Man verwendet zum Bewegen die Tasten HJKL:
+
+H = links
+J = runter (Eselsbruecke: J zeigt nach unten)
+K = rauf
+L = rechts
+
++-----------------------------------------------+
+| Hintergrund:                                  |
+|   In der *nix Welt gibt es einen Editor       |
+|   namens VI, dessen Steuerung genauso ist.    |
+|   Das Spiel Nethack hat diese Steuerung auch  |
+|   uebernommen.                                |
+|   An alle eventuell beleidigten Emacs Fans:   |
+|   Ich hasse Emacs nicht, find ihn toll, aber  |
+|   die VI Steuerung besser, da leichter zu     |
+|   erlernen ist und die Tasten nebeneinander   |
+|   liegen (Reaktionszeit schneller)            |
++-----------------------------------------------+
+
+In das Spielmenue kommt man durch die Taste 'M'.  Auch hier bedient
+man das Menue mit den VI-Tasten von oben.  Menuepunkt aktivieren mit L
+oder Leertaste.
+
+Im Menue kann man auch beenden ;)
+
+
+Viel Spass,
+Dein Wave Ware Team.
+
+
+Copyright (C) 2005 Simon Goller (neosam@gmail.com)
+
+
+
+
+
+
+
+    /\  /\   |\ |-- |\           |\        ___ |\ o      |\  |  __ |   |--
+   /  \/  \  |< |-  |/ |\/| |  | | | /\     |  |/ |  /\  | \ | /   |   |-
+  /____\___\ |/ |-- |\ |  |  \/  |/ /--\    |  |\ | /--\ |  \| \_\ \__ |--
+ <--------------------Die Zukunft liegt in deiner Hand-------------------->

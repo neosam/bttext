@@ -131,10 +131,9 @@ def main():
 #        print dir(sys.exc_info()[2].tb_lasti)
         print "Hardcore error in Bermuda Triangle " + BT_VERSION + " :`(  Exiting forced!!!"
         print "Please send bt_last_error.log to neosam@gmail.com"
-        print "Problems while initialize"
+
         print "Unexpected error:", sys.exc_info()[2].tb_next
         print sys.exc_info()[1]
-        print configs.colorof
         
         # TODO: There really should be a bt_last_error.log ;)
 
