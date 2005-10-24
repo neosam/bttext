@@ -3,6 +3,7 @@ import textout
 import color
 import configs
 import textfield
+import init
 
 LEVEL_WIDTH = 200
 LEVEL_HEIGHT = 200
@@ -43,6 +44,25 @@ class GameMap:
 		return self.gMap[x][y][3]
 	def getElem(self, x, y):
 		return self.gMap[x][y]
+	def saveToFile(self, filename):
+		saveFile = file(filename, "w")
+		saveFile.write( str(self.size[0]) + "\n" + str(self.size[1]))
+		i = 0
+		j = 0
+		for row in self.gMap:
+			for elem in row:
+				saveFile.write( 
+					     str(elem[0]) + "\n" + 
+					     str(elem[1]) + "\n" +
+					     str(elem[2]) + "\n" +
+					     str(elem[3]) + "\n")
+				i = i + 1
+			j = j + 1
+			textout.textOut ("[" + str(i) + ", " + str(j) + "]", 5, 5)
+			init.stdscr.refresh()
+			
+				
+				
 
 	def resize(self, x, y, w, h):
 		self.x = x

@@ -39,11 +39,11 @@ class Person:
             print sys.ext_info()[1]
 
     def draw(self, dst):
-        xa = self.gMap.w - self.gMap.w/2*2
-        ya = self.gMap.h - self.gMap.h/2*2
+        #xa = self.gMap.w - self.gMap.w/2*2
+        #ya = self.gMap.h - self.gMap.h/2*2
         
-        pos = [self.gMap.x + self.gMap.w/2 + self.pos[0] - self.gMap.pos[0] + xa,
-               self.gMap.y + self.gMap.h/2 + self.pos[1] - self.gMap.pos[1] + ya]
+        pos = [self.gMap.x + self.gMap.w/2 + self.pos[0] - self.gMap.pos[0] + self.gMap.w%2,#xa,
+               self.gMap.y + self.gMap.h/2 + self.pos[1] - self.gMap.pos[1] + self.gMap.h%2]#ya]
         
         if (pos[0] >= self.gMap.x) & \
            (pos[1] >= self.gMap.y) & \

@@ -12,6 +12,7 @@ from player import *
 import menu
 import textout
 import world
+import gui
 
 
 global stdscr
@@ -20,22 +21,14 @@ BT_VERSION = "23102005"
 
 BT_SMALL_LOGO = "/\\\\"
 BT_SMALL_BACKLOGO = "//\\"
-BT_SMALL_LOGOTEXT = BT_SMALL_LOGO + " Bermuda Triangle" + BT_SMALL_BACKLOGO
+BT_SMALL_LOGOTEXT = BT_SMALL_LOGO + " Bermuda Triangle Editor " + BT_SMALL_BACKLOGO
 
 BT_LOGO = file("btlogo.txt").read()
 
 BT_WINDOW_TOO_SMALL = "Fenster zu klein"
 
-def empty():
-    pass
-
-def FalcoCrashMike(self, person):
-    """ This happens if Falco and Mike stand on one field """
-    self.say("Fass mich nich an!!")
-
 
 def waveWare(x, y, dst):
-    # TODO: WaveWare Logo is not colored?
     blue = str(curses.color_pair(4))
     white = str(curses.color_pair(7))
     ww = textout.btText("$%" + blue + "$%W$%" + white + "$%ave $%" + blue + "$%W$%" + white + "$%are")
@@ -53,30 +46,22 @@ def main():
 
         h, w = stdscr.getmaxyx()
 
-        # Create falco and put him into the map
-        falco = Person(-1, "Falco", -1, [0, 0], ["F", 7, 4],
-                   configs.colorof["falco"][0])
-        falco.jumpTo(1, 0)
-        falco.crashWith = FalcoCrashMike
 
         theWorld = world.World(stdscr, w, h)
 
-        # Mike is the hero!
-        mike = Player(theWorld.statusBox, -1, "Du", -1, [0, 0], ["M", 0, 3],
+        # Initialize cursor object
+        cursor = Player(theWorld.statusBox, -1, "Du", -1, [0, 0], ["M", 0, 3],
                       configs.colorof["mike"][0], profile={"hp": [100, 100],
                                                        "mp": [0, 0]})
         
-        # Adding mike and falco to Bermuda Triangle World
-        theWorld.setPlayer(mike)
-        theWorld.addPerson(falco)
+        # Adding cursor to the world
+        theWorld.setPlayer(cursor)
 
-        # Adding whater in map (mike cannot move on it)
-        for i in range(10):
-            theWorld.gMaps[1][1].gMap[10][i] = ["~", 7, 4, False, nothing]
-        for i in range(10):
-            theWorld.gMaps[1][0].gMap[10][198-i] = ["~", 7, 4, False, nothing]
-    
-    
+        win = gui.Window(None)
+        win.addObj(gui.ObjButton(win, "Hallo Welt"))
+        win.draw()
+        stdscr.getch()
+
         while 1:                     # Gameloop
             timer.fpsDelay()         # FPS-Control
             clearError()

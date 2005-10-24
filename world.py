@@ -1,4 +1,4 @@
-
+import os
 import gamemap
 import textfield
 import timer
@@ -45,10 +45,21 @@ class World:
                     
 
     def save(self, filename):
-        # TODO: Maybe something is wrong with the save function
-        saveDict = {}
-        saveDict["map"] = self.gMaps
-        file(filename, "w").write(str(saveDict))
+        try:
+            os.mkdir(filename)
+        except:
+            pass
+        i = 0
+        j = 0
+           
+        for row in self.gMaps:
+            for elem in row:
+                elem.saveToFile(filename + "/map" +
+                                str(i) + "_" + str(j));
+                j = j + 1
+
+            j = 0
+            i = i + 1
 
     def addPerson(self, person):
         person.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
