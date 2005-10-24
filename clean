@@ -1,0 +1,5 @@
+#! /bin/bash
+
+printf "Cleaning up... "
+rm -f -r   *.pyx *.c *.so *.pyc build/ >> /dev/null
+printf "done\n\n"
