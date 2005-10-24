@@ -28,3 +28,4 @@ def clearError():
 class misc:
     BT_ERROR = ""
     COLORED = True
+    DEBUG = False

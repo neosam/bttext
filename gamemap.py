@@ -68,8 +68,8 @@ class GameMap:
 							   color.color(self.gMap[pos[0]][pos[1]][1],
 								       self.gMap[pos[0]][pos[1]][2]))
 					else:
-						dst.addstr(self.y + self.h - elem[1],
-							   self.x + self.w - elem[0],
+						dst.addstr(self.y + elem[1] + self.h/2 - self.pos[1] + self.h%2,
+							   self.x + elem[0] + self.w/2 - self.pos[0] + self.w%2,
 							   self.gMap[pos[0]][pos[1]][0])
 			self.drawPos = []
 

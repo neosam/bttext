@@ -10,8 +10,9 @@ import configs
 from person import *
 from player import *
 import menu
-from textout import *
+import textout
 import world
+
 
 global stdscr
 
@@ -30,13 +31,15 @@ def empty():
 
 def FalcoCrashMike(self, person):
     """ This happens if Falco and Mike stand on one field """
-    self.say("Du wagst es!!")
+    self.say("Fass mich nich an!!")
 
 
-def waveWare(x, y):
+def waveWare(x, y, dst):
     # TODO: WaveWare Logo is not colored?
-    ww = btText("$%4$%W$%-1$%ave $%4$%W$%-1$%are")
-    textOut(ww, x, y)
+    blue = str(curses.color_pair(4))
+    white = str(curses.color_pair(7))
+    ww = textout.btText("$%" + blue + "$%W$%" + white + "$%ave $%" + blue + "$%W$%" + white + "$%are")
+    textout.textOut(ww, x, y, dst)
 
 def main():
     global stdscr
@@ -78,11 +81,13 @@ def main():
             timer.fpsDelay()         # FPS-Control
             clearError()
                                      # +++ Event handling +++
-            c = stdscr.getch()       # I don't think an eventloop is needed in an
+            c = stdscr.getch()       # I don't think an eventloop is needed in a
                                      # textadventure
             if c == ord("q"):
                 theWorld.sendText("Bitte im Menue Beenden ('m' druecken)")
-            if c == ord("w"): misc.COLORED = not misc.COLORED # Switches between colored and b/w
+            if c == ord("w"): # Switches between colored and b/w
+                misc.COLORED = not misc.COLORED
+                theWorld.redrawAllMaps()
             if c == ord("m"): menu.start() # Enter menu
             if c == ord("h"): theWorld.playerGoLeft()  #
             if c == ord("j"): theWorld.playerGoDown()  #  Player
@@ -115,7 +120,7 @@ def main():
                               BT_SMALL_LOGOTEXT)
 
                 theWorld.draw(stdscr)
-                waveWare(w - 10, h - 1)
+                waveWare(w - 10, h - 1, stdscr)
 
             stdscr.refresh()
         # --- Drawing ---

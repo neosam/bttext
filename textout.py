@@ -81,7 +81,6 @@ class btText(str):
                 dst.addstr(y, x, self.__inlist__[0])
 
             for i in range(1, len(self.__inlist__), 2):
-                file("log.log", "w+").write(str(self.__inlist__) + str(i))
                 if int(self.__inlist__[i]) == -1:
                     dst.addstr(self.__inlist__[i+1])
                 else:

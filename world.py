@@ -4,6 +4,8 @@ import textfield
 import timer
 import person
 import statusbox
+from configs import misc
+import textout
 
 
 class World:
@@ -100,7 +102,8 @@ class World:
             self.mapPos = [self.mapPos[0] + 1, self.mapPos[1]]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
             self.player.pos[0] = self.player.pos[0] - self.player.gMap.size[0]
-            self.textField.sendText("DEBUG: Changed Map")
+            if misc.DEBUG == True:
+                self.textField.sendText("DEBUG: Changed Map")
         if ((self.player.gMap.size[0] * self.mapPos[0] +
              self.player.pos[0]) - self.softPos[0]) > self.walkArea:
             self.setMapPos(self.softPos[0] + 1, self.softPos[1])
@@ -113,7 +116,8 @@ class World:
             self.mapPos = [self.mapPos[0] - 1, self.mapPos[1]]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
             self.player.pos[0] = self.player.pos[0] + self.player.gMap.size[0]
-            self.textField.sendText("DEBUG: Changed Map")
+            if misc.DEBUG == True:
+                self.textField.sendText("DEBUG: Changed Map")
         if ((self.player.gMap.size[0] * self.mapPos[0] +
              self.player.pos[0]) - self.softPos[0]) < -self.walkArea:
             
@@ -126,7 +130,8 @@ class World:
             self.mapPos = [self.mapPos[0], self.mapPos[1] - 1]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
             self.player.pos[1] = self.player.pos[1] + self.player.gMap.size[1]
-            self.textField.sendText("DEBUG: Changed Map")
+            if misc.DEBUG == True:
+                self.textField.sendText("DEBUG: Changed Map")
         if ((self.player.gMap.size[1] * self.mapPos[1] +
              self.player.pos[1]) - self.softPos[1]) < -self.walkArea:
             self.setMapPos(self.softPos[0], self.softPos[1] - 1)
@@ -138,7 +143,8 @@ class World:
             self.mapPos = [self.mapPos[0], self.mapPos[1] + 1]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
             self.player.pos[1] = self.player.pos[1] - self.player.gMap.size[1]
-            self.textField.sendText("DEBUG: Changed Map")
+            if misc.DEBUG == True:
+                self.textField.sendText("DEBUG: Changed Map")
         if ((self.player.gMap.size[1] * self.mapPos[1] +
              self.player.pos[1]) - self.softPos[1]) > self.walkArea:
             self.setMapPos(self.softPos[0], self.softPos[1] + 1)
