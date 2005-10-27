@@ -70,7 +70,7 @@ def main():
         theWorld.setPlayer(mike)
         theWorld.addPerson(falco)
 
-        # Adding whater in map (mike cannot move on it)
+        # Adding water in map (mike cannot move on it)
         for i in range(10):
             theWorld.gMaps[1][1].gMap[10][i] = ["~", 7, 4, False, nothing]
         for i in range(10):
