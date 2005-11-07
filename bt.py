@@ -36,8 +36,8 @@ def FalcoCrashMike(self, person):
 
 def waveWare(x, y, dst):
     # TODO: WaveWare Logo is not colored?
-    blue = str(curses.color_pair(4))
-    white = str(curses.color_pair(7))
+    blue = str(curses.color_pair(curses.COLOR_BLUE))
+    white = str(curses.color_pair(curses.COLOR_WHITE))
     ww = textout.btText("$%" + blue + "$%W$%" + white + "$%ave $%" + blue + "$%W$%" + white + "$%are")
     textout.textOut(ww, x, y, dst)
 
@@ -54,7 +54,7 @@ def main():
         h, w = stdscr.getmaxyx()
 
         # Create falco and put him into the map
-        falco = Person(-1, "Falco", -1, [0, 0], ["F", 7, 4],
+        falco = Person(-1, "Falco", -1, [0, 0], ["F", curses.COLOR_WHITE, curses.COLOR_BLUE],
                    configs.colorof["falco"][0])
         falco.jumpTo(1, 0)
         falco.crashWith = FalcoCrashMike
@@ -62,7 +62,7 @@ def main():
         theWorld = world.World(stdscr, w, h)
 
         # Mike is the hero!
-        mike = Player(theWorld.statusBox, -1, "Du", -1, [0, 0], ["M", 0, 3],
+        mike = Player(theWorld.statusBox, -1, "Du", -1, [0, 0], ["M", curses.COLOR_BLACK, curses.COLOR_RED],
                       configs.colorof["mike"][0], profile={"hp": [100, 100],
                                                        "mp": [0, 0]})
         
@@ -72,9 +72,9 @@ def main():
 
         # Adding water in map (mike cannot move on it)
         for i in range(10):
-            theWorld.gMaps[1][1].gMap[10][i] = ["~", 7, 4, False, nothing]
+            theWorld.gMaps[1][1].gMap[10][i] = ["~", curses.COLOR_WHITE, curses.COLOR_BLUE, False, nothing]
         for i in range(10):
-            theWorld.gMaps[1][0].gMap[10][198-i] = ["~", 7, 4, False, nothing]
+            theWorld.gMaps[1][0].gMap[10][198-i] = ["~", curses.COLOR_WHITE, curses.COLOR_BLUE, False, nothing]
     
     
         while 1:                     # Gameloop
