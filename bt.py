@@ -12,11 +12,12 @@ from player import *
 import menu
 import textout
 import world
+import traceback
 
 
 global stdscr
 
-BT_VERSION = "23102005"
+BT_VERSION = "07112005"
 
 BT_SMALL_LOGO = "/\\\\"
 BT_SMALL_BACKLOGO = "//\\"
@@ -128,20 +129,30 @@ def main():
     
         init.quit()
 
-    except:
+    except SystemExit:   # This is not really an error so there happens nothing
+        pass
+    except:              # If there was an error python will do this:
+        # Exiting curses
         curses.nocbreak()
         stdscr.keypad(0)
         curses.echo()
         curses.endwin()
-        errorString = ""
-#        print dir(sys.exc_info()[2].tb_lasti)
-        print "Hardcore error in Bermuda Triangle " + BT_VERSION + " :`(  Exiting forced!!!"
-        print "Please send bt_last_error.log to neosam@gmail.com"
 
-        print "Unexpected error:", sys.exc_info()[2].tb_next
-        print sys.exc_info()[1]
-        
-        # TODO: There really should be a bt_last_error.log ;)
+        # Telling there is went something wrong
+        print "Hardcore error in Bermuda Triangle " + BT_VERSION + " :`(  Exiting forced!!!"
+        print "Please send bt_last_error.log and a  description what you did"
+        print "to neosam@gmail.com"
+
+        # Writing error to file
+        errorFile = file("bt_last_error.log", "w")
+        errorFile.write("Error in Bermuda Triangle Text - Version " + BT_VERSION + "\n")
+        traceback.print_exc(file=errorFile)
+        errorFile.close()
+
+        # If debug is switched on it will print the error to stdout
+        if misc.DEBUG:
+            traceback.print_exc()
+
 
 
 if __name__ == "__main__":
