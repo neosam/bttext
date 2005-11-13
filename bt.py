@@ -17,7 +17,7 @@ import traceback
 
 global stdscr
 
-BT_VERSION = "07112005"
+BT_VERSION = "0.0.2"
 
 BT_SMALL_LOGO = "/\\\\"
 BT_SMALL_BACKLOGO = "//\\"
@@ -73,7 +73,7 @@ def main():
 
         # Adding water in map (mike cannot move on it)
         for i in range(10):
-            theWorld.gMaps[1][1].gMap[10][i] = ["~", curses.COLOR_WHITE, curses.COLOR_BLUE, False, nothing]
+            theWorld.gMaps[1][1].gMap[10][i] = ["~", curses.COLOR_WHITE, curses.COLOR_BLUE, True, nothing]
         for i in range(10):
             theWorld.gMaps[1][0].gMap[10][198-i] = ["~", curses.COLOR_WHITE, curses.COLOR_BLUE, False, nothing]
     
@@ -95,6 +95,7 @@ def main():
             if c == ord("k"): theWorld.playerGoUp()    #  movement
             if c == ord("l"): theWorld.playerGoRight() #
             if c == ord("s"): theWorld.save("testsave.btt")  # Loading doesn't really work ;)
+            if c == ord("x"): theWorld.sendText(str(mike.gMap.pos))
             # --- Event handling ---
 
             # +++ Drawing +++

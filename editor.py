@@ -13,6 +13,7 @@ import menu
 import textout
 import world
 import gui
+import traceback
 
 
 global stdscr
@@ -27,6 +28,10 @@ BT_LOGO = file("btlogo.txt").read()
 
 BT_WINDOW_TOO_SMALL = "Fenster zu klein"
 
+theWorld = 0
+curser = 0
+foreground = curses.COLOR_BLACK
+background = curses.COLOR_WHITE
 
 def waveWare(x, y, dst):
     blue = str(curses.color_pair(4))
@@ -34,8 +39,83 @@ def waveWare(x, y, dst):
     ww = textout.btText("$%" + blue + "$%W$%" + white + "$%ave $%" + blue + "$%W$%" + white + "$%are")
     textout.textOut(ww, x, y, dst)
 
+def insertAscii():
+    global theWorld, foreground
+
+    goon = True
+    while goon:
+        try:
+            asciiValue = stdscr.getkey()
+            goon = False
+        except:
+            goon = True
+        
+    
+    if cursor.gMap.setAscii(cursor.pos[0], cursor.pos[1], asciiValue):
+        cursor.gMap.setFG(cursor.pos[0], cursor.pos[1], foreground)
+        cursor.gMap.setBG(cursor.pos[0], cursor.pos[1], background)
+    return asciiValue
+
+def insertText():
+    global cursor, stdscr, theWorld
+
+    asciiValue = insertAscii()
+    while asciiValue != "\n":
+        theWorld.playerGoRight()
+        theWorld.draw(stdscr)
+        stdscr.refresh()
+        asciiValue = insertAscii()
+
+
+def changeForeground():
+    global stdscr, foreground
+
+    newForeground = ""
+    goon = True
+    while goon:
+        try:
+            newForeground = stdscr.getkey()
+            goon = False
+        except:
+            goon = True
+
+        if newForeground == "b":
+            foreground = curses.COLOR_BLUE
+        elif newForeground == "w":
+            foreground = curses.COLOR_WHITE
+        elif newForeground == "x":
+            foreground = curses.COLOR_BLACK
+        elif newForeground == "g":
+            foreground = curses.COLOR_GREEN
+        elif newForeground == "y":
+            foreground = curses.COLOR_YELLOW
+
+def changeBackground():
+    global stdscr, background
+
+    newBackground = ""
+    goon = True
+    while goon:
+        try:
+            newBackground = stdscr.getkey()
+            goon = False
+        except:
+            goon = True
+
+        if newBackground == "b":
+            background = curses.COLOR_BLUE
+        elif newBackground == "w":
+            background = curses.COLOR_WHITE
+        elif newBackground == "x":
+            background = curses.COLOR_BLACK
+        elif newBackground == "g":
+            background = curses.COLOR_GREEN
+        elif newBackground == "y":
+            background = curses.COLOR_YELLOW
+    
+
 def main():
-    global stdscr
+    global stdscr, theWorld, cursor
 
     print BT_LOGO
     time.sleep(1)
@@ -50,17 +130,14 @@ def main():
         theWorld = world.World(stdscr, w, h)
 
         # Initialize cursor object
-        cursor = Player(theWorld.statusBox, -1, "Du", -1, [0, 0], ["M", 0, 3],
+        cursor = Player(theWorld.statusBox, -1, "Cursor", -1, [0, 0], ["C", 0, 3],
                       configs.colorof["mike"][0], profile={"hp": [100, 100],
                                                        "mp": [0, 0]})
+
+        theWorld.sendText("BTText Map Editor!")
         
         # Adding cursor to the world
         theWorld.setPlayer(cursor)
-
-        win = gui.Window(None)
-        win.addObj(gui.ObjButton(win, "Hallo Welt"))
-        win.draw()
-        stdscr.getch()
 
         while 1:                     # Gameloop
             timer.fpsDelay()         # FPS-Control
@@ -75,10 +152,14 @@ def main():
                 theWorld.redrawAllMaps()
             if c == ord("m"): menu.start() # Enter menu
             if c == ord("h"): theWorld.playerGoLeft()  #
-            if c == ord("j"): theWorld.playerGoDown()  #  Player
+            if c == ord("j"): theWorld.playerGoDown()  #  Cursor
             if c == ord("k"): theWorld.playerGoUp()    #  movement
             if c == ord("l"): theWorld.playerGoRight() #
             if c == ord("s"): theWorld.save("testsave.btt")  # Loading doesn't really work ;)
+            if c == ord("a"): insertAscii()
+            if c == ord("t"): insertText()
+            if c == ord("f"): changeForeground()
+            if c == ord("b"): changeBackground()
             # --- Event handling ---
 
             # +++ Drawing +++
@@ -113,20 +194,29 @@ def main():
     
         init.quit()
 
-    except:
+    except SystemExit:   # This is not really an error so there happens nothing
+        pass
+    except:              # If there was an error python will do this:
+        # Exiting curses
         curses.nocbreak()
         stdscr.keypad(0)
         curses.echo()
         curses.endwin()
-        errorString = ""
-#        print dir(sys.exc_info()[2].tb_lasti)
-        print "Hardcore error in Bermuda Triangle " + BT_VERSION + " :`(  Exiting forced!!!"
-        print "Please send bt_last_error.log to neosam@gmail.com"
 
-        print "Unexpected error:", sys.exc_info()[2].tb_next
-        print sys.exc_info()[1]
-        
-        # TODO: There really should be a bt_last_error.log ;)
+        # Telling there is went something wrong
+        print "Hardcore error in Bermuda Triangle " + BT_VERSION + " :`(  Exiting forced!!!"
+        print "Please send bt_last_error.log and a  description what you did"
+        print "to neosam@gmail.com"
+
+        # Writing error to file
+        errorFile = file("bt_last_error.log", "w")
+        errorFile.write("Error in Bermuda Triangle Text - Version " + BT_VERSION + "\n")
+        traceback.print_exc(file=errorFile)
+        errorFile.close()
+
+        # If debug is switched on it will print the error to stdout
+        if misc.DEBUG:
+            traceback.print_exc()
 
 
 if __name__ == "__main__":

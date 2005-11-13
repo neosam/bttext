@@ -44,6 +44,15 @@ class GameMap:
 		return self.gMap[x][y][3]
 	def getElem(self, x, y):
 		return self.gMap[x][y]
+	def setAscii(self, x, y, ascii):
+		if ascii != "\n":
+			self.gMap[x][y][0] = ascii
+			return True
+		return False
+	def setFG(self, x, y, color):
+		self.gMap[x][y][1] = color
+	def setBG(self, x, y, color):
+		self.gMap[x][y][2] = color
 	def saveToFile(self, filename):
 		saveFile = file(filename, "w")
 		saveFile.write( str(self.size[0]) + "\n" + str(self.size[1]))
@@ -75,8 +84,10 @@ class GameMap:
 			self.drawAll(dst)
 		else:
 			for elem in self.drawPos:
-				pos = [self.pos[0] + (self.w/2 - elem[0]), 
-				       self.pos[1] + (self.h/2 - elem[1])]
+#				pos = [self.pos[0] + (self.w/2 - elem[0]), 
+#				       self.pos[1] + (self.h/2 - elem[1])]
+                                pos = [elem[0],
+				       elem[1]]
 
 				if (pos[0] >= 0) & (pos[1] >= 0) & \
 				       (pos[0] < LEVEL_WIDTH) & \
