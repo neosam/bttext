@@ -1,5 +1,6 @@
 import curses
 import init
+import textout
 
 # This object can added to a window
 class WinObj:
@@ -29,7 +30,9 @@ class ObjButton(WinObj):
     def draw(self, x, y):
         WinObj.draw(self, x, y)
 
-        self.parent.dst.addstr(y + 1, x + 1, self.title)
+        textout.textOut(self.title, x, y, dst=self.dst)
+#        self.parent.dst.addstr(y + 1, x + 1, self.title)
+
 
 
 
@@ -47,6 +50,8 @@ class Window:
         w = self.size[0]
         h = self.size[1]
         self.dst = curses.newwin(h, w, y, x)
+        for elem in self.winObjs:
+            elem.dst = self.dst
 
     def recalcSize(self):
         width = 2
@@ -72,8 +77,9 @@ class Window:
         pos = 1
         for elem in self.winObjs:
             elem.draw(1, pos)
-            pos = pos + elem.getSize()
+            pos = pos + elem.getSize()[1]
         self.dst.refresh()
         init.stdscr.refresh()
 
-    
+    def wait(self):
+        self.dst.getch()

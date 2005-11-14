@@ -18,7 +18,7 @@ import traceback
 
 global stdscr
 
-BT_VERSION = "23102005"
+BT_VERSION = "07112005"
 
 BT_SMALL_LOGO = "/\\\\"
 BT_SMALL_BACKLOGO = "//\\"
@@ -205,6 +205,7 @@ def main():
 
         # Telling there is went something wrong
         print "Hardcore error in Bermuda Triangle " + BT_VERSION + " :`(  Exiting forced!!!"
+<<<<<<< editor.py
         print "Please send bt_last_error.log and a  description what you did"
         print "to neosam@gmail.com"
 
@@ -217,6 +218,24 @@ def main():
         # If debug is switched on it will print the error to stdout
         if misc.DEBUG:
             traceback.print_exc()
+
+=======
+        print "Please send bt_last_error.log and a  description what you did"
+        print "to neosam@gmail.com"
+>>>>>>> 1.2
+
+<<<<<<< editor.py
+=======
+        # Writing error to file
+        errorFile = file("bt_last_error.log", "w")
+        errorFile.write("Error in Bermuda Triangle Text - Version " + BT_VERSION + "\n")
+        traceback.print_exc(file=errorFile)
+        errorFile.close()
+
+        # If debug is switched on it will print the error to stdout
+        if misc.DEBUG:
+            traceback.print_exc()
+>>>>>>> 1.2
 
 
 if __name__ == "__main__":
