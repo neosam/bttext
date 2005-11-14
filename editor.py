@@ -32,6 +32,7 @@ theWorld = 0
 curser = 0
 foreground = curses.COLOR_BLACK
 background = curses.COLOR_WHITE
+walkable = True
 
 def waveWare(x, y, dst):
     blue = str(curses.color_pair(4))
@@ -54,6 +55,7 @@ def insertAscii():
     if cursor.gMap.setAscii(cursor.pos[0], cursor.pos[1], asciiValue):
         cursor.gMap.setFG(cursor.pos[0], cursor.pos[1], foreground)
         cursor.gMap.setBG(cursor.pos[0], cursor.pos[1], background)
+        cursor.gMap.setWalkable(cursor.pos[0], cursor.pos[1], walkable)
     return asciiValue
 
 def insertText():
@@ -65,6 +67,7 @@ def insertText():
         theWorld.draw(stdscr)
         stdscr.refresh()
         asciiValue = insertAscii()
+        
 
 
 def changeForeground():
@@ -112,7 +115,28 @@ def changeBackground():
             background = curses.COLOR_GREEN
         elif newBackground == "y":
             background = curses.COLOR_YELLOW
-    
+
+def changeWalkable():
+    global stdscr, walkable
+
+    newWalkable = ""
+    goon = True
+    while goon:
+        try:
+            newWalkable = stdscr.getkey()
+            goon = False
+        except:
+            goon = True
+
+        if newWalkable == "t":
+            walkable = True
+        elif newWalkable == "f":
+            walkable = False
+
+def saveMap():
+    global theWorld
+
+    theWorld.save("testsave.btt")
 
 def main():
     global stdscr, theWorld, cursor
@@ -129,6 +153,17 @@ def main():
 
         theWorld = world.World(stdscr, w, h)
 
+        shortcutList = [
+            ["h", theWorld.playerGoLeft],
+            ["j", theWorld.playerGoDown],
+            ["k", theWorld.playerGoUp],
+            ["l", theWorld.playerGoRight],
+            ["a", insertAscii],
+            ["t", insertText],
+            ["f", changeForeground],
+            ["b", changeBackground],
+            ["g", changeWalkable],
+            ["s", saveMap]]
         # Initialize cursor object
         cursor = Player(theWorld.statusBox, -1, "Cursor", -1, [0, 0], ["C", 0, 3],
                       configs.colorof["mike"][0], profile={"hp": [100, 100],
@@ -139,6 +174,8 @@ def main():
         # Adding cursor to the world
         theWorld.setPlayer(cursor)
 
+        theWorld.setCheatWalkEverywhere(True)
+
         while 1:                     # Gameloop
             timer.fpsDelay()         # FPS-Control
             clearError()
@@ -146,20 +183,25 @@ def main():
             c = stdscr.getch()       # I don't think an eventloop is needed in a
                                      # textadventure
             if c == ord("q"):
-                theWorld.sendText("Bitte im Menue Beenden ('m' druecken)")
+                init.quit()
+                sys.exit()
             if c == ord("w"): # Switches between colored and b/w
                 misc.COLORED = not misc.COLORED
                 theWorld.redrawAllMaps()
-            if c == ord("m"): menu.start() # Enter menu
-            if c == ord("h"): theWorld.playerGoLeft()  #
-            if c == ord("j"): theWorld.playerGoDown()  #  Cursor
-            if c == ord("k"): theWorld.playerGoUp()    #  movement
-            if c == ord("l"): theWorld.playerGoRight() #
-            if c == ord("s"): theWorld.save("testsave.btt")  # Loading doesn't really work ;)
-            if c == ord("a"): insertAscii()
-            if c == ord("t"): insertText()
-            if c == ord("f"): changeForeground()
-            if c == ord("b"): changeBackground()
+            for elem in shortcutList:
+                if c == ord(elem[0]):
+                    elem[1]()
+#            if c == ord("m"): menu.start() # Enter menu
+#            if c == ord("h"): theWorld.playerGoLeft()  #
+#            if c == ord("j"): theWorld.playerGoDown()  #  Cursor
+#            if c == ord("k"): theWorld.playerGoUp()    #  movement
+#            if c == ord("l"): theWorld.playerGoRight() #
+#            if c == ord("s"): theWorld.save("testsave.btt")  # Loading doesn't really work ;)
+#            if c == ord("a"): insertAscii()
+#            if c == ord("t"): insertText()
+#            if c == ord("f"): changeForeground()
+#            if c == ord("b"): changeBackground()
+
             # --- Event handling ---
 
             # +++ Drawing +++
@@ -205,7 +247,6 @@ def main():
 
         # Telling there is went something wrong
         print "Hardcore error in Bermuda Triangle " + BT_VERSION + " :`(  Exiting forced!!!"
-<<<<<<< editor.py
         print "Please send bt_last_error.log and a  description what you did"
         print "to neosam@gmail.com"
 
@@ -218,24 +259,6 @@ def main():
         # If debug is switched on it will print the error to stdout
         if misc.DEBUG:
             traceback.print_exc()
-
-=======
-        print "Please send bt_last_error.log and a  description what you did"
-        print "to neosam@gmail.com"
->>>>>>> 1.2
-
-<<<<<<< editor.py
-=======
-        # Writing error to file
-        errorFile = file("bt_last_error.log", "w")
-        errorFile.write("Error in Bermuda Triangle Text - Version " + BT_VERSION + "\n")
-        traceback.print_exc(file=errorFile)
-        errorFile.close()
-
-        # If debug is switched on it will print the error to stdout
-        if misc.DEBUG:
-            traceback.print_exc()
->>>>>>> 1.2
 
 
 if __name__ == "__main__":

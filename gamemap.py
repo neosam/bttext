@@ -53,9 +53,11 @@ class GameMap:
 		self.gMap[x][y][1] = color
 	def setBG(self, x, y, color):
 		self.gMap[x][y][2] = color
+	def setWalkable(self, x, y, walkable):
+		self.gMap[x][y][3] = walkable
 	def saveToFile(self, filename):
 		saveFile = file(filename, "w")
-		saveFile.write( str(self.size[0]) + "\n" + str(self.size[1]))
+		saveFile.write( str(self.size[0]) + "\n" + str(self.size[1]) + "\n")
 		i = 0
 		j = 0
 		for row in self.gMap:
@@ -67,9 +69,23 @@ class GameMap:
 					     str(elem[3]) + "\n")
 				i = i + 1
 			j = j + 1
-			textout.textOut ("[" + str(i) + ", " + str(j) + "]", 5, 5)
-			init.stdscr.refresh()
-			
+
+	def loadFromFile(self, filename):
+		levelFile = file(filename)
+		self.size = [int(levelFile.readline()),
+			     int(levelFile.readline())]
+		i = 0
+		j = 0
+		for row in self.gMap:
+			for elem in row:
+				elem[0] = levelFile.readline()[0]
+				elem[1] = int(levelFile.readline())
+				elem[2] = int(levelFile.readline())
+				elem[3] = levelFile.readline()[0]
+				if elem[3] == "F":
+					elem[3] = False
+				else:
+					elem[3] = True
 				
 				
 

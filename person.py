@@ -13,6 +13,7 @@ class Person:
         self.gMap = gMap
         self.pos = pos
         self.mapDraw = mapDraw
+        self.cheatWalkEverywhere = False
 
         if profile == 0:
             profile = { "HP": [0,0] }
@@ -61,19 +62,23 @@ class Person:
         self.pos = [x, y]
 
     def goRight(self):
-        if self.gMap.gMap[self.pos[0] + 1][self.pos[1]][3] == True:
+        if (self.gMap.gMap[self.pos[0] + 1][self.pos[1]][3] == True) | \
+               (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0] + 1, self.pos[1])
 
     def goLeft(self):
-        if self.gMap.gMap[self.pos[0] - 1][self.pos[1]][3] == True:
+        if (self.gMap.gMap[self.pos[0] - 1][self.pos[1]][3] == True) | \
+               (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0] - 1, self.pos[1])
 
     def goDown(self):
-        if self.gMap.gMap[self.pos[0]][self.pos[1] + 1][3] == True:
+        if (self.gMap.gMap[self.pos[0]][self.pos[1] + 1][3] == True) | \
+               (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0], self.pos[1] + 1)
 
     def goUp(self):
-        if self.gMap.gMap[self.pos[0]][self.pos[1] - 1][3] == True:
+        if (self.gMap.gMap[self.pos[0]][self.pos[1] - 1][3] == True) | \
+               (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0], self.pos[1] - 1)
 
     def crashWith(self, person):

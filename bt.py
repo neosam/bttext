@@ -36,7 +36,6 @@ def FalcoCrashMike(self, person):
 
 
 def waveWare(x, y, dst):
-    # TODO: WaveWare Logo is not colored?
     blue = str(curses.color_pair(curses.COLOR_BLUE))
     white = str(curses.color_pair(curses.COLOR_WHITE))
     ww = textout.btText("$%" + blue + "$%W$%" + white + "$%ave $%" + blue + "$%W$%" + white + "$%are")
@@ -66,16 +65,20 @@ def main():
         mike = Player(theWorld.statusBox, -1, "Du", -1, [0, 0], ["M", curses.COLOR_BLACK, curses.COLOR_RED],
                       configs.colorof["mike"][0], profile={"hp": [100, 100],
                                                        "mp": [0, 0]})
-        
+
         # Adding mike and falco to Bermuda Triangle World
         theWorld.setPlayer(mike)
         theWorld.addPerson(falco)
+
+        theWorld.setCheatWalkEverywhere(False)
 
         # Adding water in map (mike cannot move on it)
         for i in range(10):
             theWorld.gMaps[1][1].gMap[10][i] = ["~", curses.COLOR_WHITE, curses.COLOR_BLUE, True, nothing]
         for i in range(10):
             theWorld.gMaps[1][0].gMap[10][198-i] = ["~", curses.COLOR_WHITE, curses.COLOR_BLUE, False, nothing]
+
+        theWorld.load("testsave.btt")
     
     
         while 1:                     # Gameloop
@@ -94,7 +97,7 @@ def main():
             if c == ord("j"): theWorld.playerGoDown()  #  Player
             if c == ord("k"): theWorld.playerGoUp()    #  movement
             if c == ord("l"): theWorld.playerGoRight() #
-            if c == ord("s"): theWorld.save("testsave.btt")  # Loading doesn't really work ;)
+            if c == ord("s"): theWorld.load("testsave.btt")  # Loading doesn't really work ;)
             if c == ord("x"): theWorld.sendText(str(mike.gMap.pos))
             # --- Event handling ---
 

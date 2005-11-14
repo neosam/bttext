@@ -22,8 +22,10 @@ class World:
         
         self.textField = textfield.Textfield(2, 6, self.w/2 - 5, self.h - 7)
         self.persons = []
+        self.cheatWalkEverywhere = False
 
         self.statusBox = statusbox.statusBox(stdscr, w, h)
+        self.stdscr = stdscr
 
 
 
@@ -44,7 +46,13 @@ class World:
                     self.gMaps[j][i].textField = self.textField
                     
 
+    def setCheatWalkEverywhere(self, newCheat):
+        self.cheatWalkEverywhere = newCheat
+        self.player.cheatWalkEverywhere = newCheat
+
     def save(self, filename):
+        self.sendText("Bitte Warten, Karte wird gespeichert")
+        self.draw(self.stdscr)
         try:
             os.mkdir(filename)
         except:
@@ -55,11 +63,22 @@ class World:
         for row in self.gMaps:
             for elem in row:
                 elem.saveToFile(filename + "/map" +
-                                str(i) + "_" + str(j));
+                                str(i) + "_" + str(j))
                 j = j + 1
 
             j = 0
             i = i + 1
+
+    def load(self, filename):
+        i = 0
+        j = 0
+        for row in self.gMaps:
+            for elem in row:
+                elem.loadFromFile(filename + "/map" + str(i) + "_" + str(j))
+                j = j + 1
+            j = 0
+            i = i + 1
+        self.redrawAllMaps()
 
     def addPerson(self, person):
         person.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
@@ -109,6 +128,8 @@ class World:
 
     def playerGoRight(self):
         self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
+
+
         if self.player.pos[0] >= (self.player.gMap.size[1] - 1):
             self.mapPos = [self.mapPos[0] + 1, self.mapPos[1]]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
@@ -123,6 +144,7 @@ class World:
 
     def playerGoLeft(self):
         self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
+
         if self.player.pos[0] <= 0:
             self.mapPos = [self.mapPos[0] - 1, self.mapPos[1]]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
@@ -137,6 +159,7 @@ class World:
         self.player.goLeft()
     def playerGoUp(self):
         self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
+
         if self.player.pos[1] <= 0:
             self.mapPos = [self.mapPos[0], self.mapPos[1] - 1]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
@@ -150,6 +173,7 @@ class World:
         self.player.goUp()
     def playerGoDown(self):
         self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
+
         if self.player.pos[1] >= (self.player.gMap.size[1] - 1):
             self.mapPos = [self.mapPos[0], self.mapPos[1] + 1]
             self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
