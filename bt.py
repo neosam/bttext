@@ -30,9 +30,9 @@ BT_WINDOW_TOO_SMALL = "Fenster zu klein"
 def empty():
     pass
 
-def FalcoCrashMike(self, person):
-    """ This happens if Falco and Mike stand on one field """
-    self.say("Fass mich nich an!!")
+#def FalcoCrashMike(self, person):
+#    """ This happens if Falco and Mike stand on one field """
+#    self.say("Fass mich nich an!!")
 
 
 def waveWare(x, y, dst):
@@ -54,10 +54,10 @@ def main():
         h, w = stdscr.getmaxyx()
 
         # Create falco and put him into the map
-        falco = Person(-1, "Falco", -1, [0, 0], ["F", curses.COLOR_WHITE, curses.COLOR_BLUE],
-                   configs.colorof["falco"][0])
-        falco.jumpTo(1, 0)
-        falco.crashWith = FalcoCrashMike
+#        falco = Person(-1, "Falco", -1, [0, 0], ["F", curses.COLOR_WHITE, curses.COLOR_BLUE],
+#                   configs.colorof["falco"][0])
+#        falco.jumpTo(1, 0)
+#        falco.crashWith = FalcoCrashMike
 
         theWorld = world.World(stdscr, w, h)
 
@@ -68,7 +68,7 @@ def main():
 
         # Adding mike and falco to Bermuda Triangle World
         theWorld.setPlayer(mike)
-        theWorld.addPerson(falco)
+#        theWorld.addPerson(falco)
 
         theWorld.setCheatWalkEverywhere(False)
 
@@ -78,7 +78,7 @@ def main():
         for i in range(10):
             theWorld.gMaps[1][0].gMap[10][198-i] = ["~", curses.COLOR_WHITE, curses.COLOR_BLUE, False, nothing]
 
-        theWorld.load("testsave.btt")
+        theWorld.load("testsave")
     
     
         while 1:                     # Gameloop

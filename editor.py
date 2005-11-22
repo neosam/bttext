@@ -33,6 +33,7 @@ curser = 0
 foreground = curses.COLOR_BLACK
 background = curses.COLOR_WHITE
 walkable = True
+mapFlags = []
 
 def waveWare(x, y, dst):
     blue = str(curses.color_pair(4))
@@ -92,6 +93,8 @@ def changeForeground():
             foreground = curses.COLOR_GREEN
         elif newForeground == "y":
             foreground = curses.COLOR_YELLOW
+        elif newForeground == "r":
+            foreground = curses.COLOR_RED
 
 def changeBackground():
     global stdscr, background
@@ -115,6 +118,8 @@ def changeBackground():
             background = curses.COLOR_GREEN
         elif newBackground == "y":
             background = curses.COLOR_YELLOW
+        elif newBackground == "r":
+            background = curses.COLOR_RED
 
 def changeWalkable():
     global stdscr, walkable
@@ -134,9 +139,27 @@ def changeWalkable():
             walkable = False
 
 def saveMap():
-    global theWorld
+    global theWorld, mapFlags
 
-    theWorld.save("testsave.btt")
+    theWorld.save("testsave")
+
+    flagFile = file("testsave/mapFlags", "w")
+    for elem in mapFlags:
+        flagFile.write(",".join(elem) + "\n")
+
+def insertFlag():
+    global theWorld, mapFlags, stdscr
+    playerPos = theWorld.getPlayerPos()
+    stdscr.nodelay(0)
+    flagName = stdscr.getstr()
+    stdscr.nodelay(1)
+    mapFlags.append([flagName,
+                     str(playerPos[0][0]),
+                     str(playerPos[0][1]),
+                     str(playerPos[1][0]),
+                     str(playerPos[1][1])])
+    theWorld.sendText("Added flag " + flagName)
+    
 
 def main():
     global stdscr, theWorld, cursor
@@ -163,7 +186,8 @@ def main():
             ["f", changeForeground],
             ["b", changeBackground],
             ["g", changeWalkable],
-            ["s", saveMap]]
+            ["s", saveMap],
+            ["e", insertFlag]]
         # Initialize cursor object
         cursor = Player(theWorld.statusBox, -1, "Cursor", -1, [0, 0], ["C", 0, 3],
                       configs.colorof["mike"][0], profile={"hp": [100, 100],

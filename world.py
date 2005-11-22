@@ -46,6 +46,9 @@ class World:
                     self.gMaps[j][i].textField = self.textField
                     
 
+    def getPlayerPos(self):
+        return self.player.pos, self.mapPos
+
     def setCheatWalkEverywhere(self, newCheat):
         self.cheatWalkEverywhere = newCheat
         self.player.cheatWalkEverywhere = newCheat
@@ -79,6 +82,11 @@ class World:
             j = 0
             i = i + 1
         self.redrawAllMaps()
+        importString = "import " + filename + " as curLevel"
+        importCode = compile(importString, filename + "/rules.py", "single")
+        exec(importCode)
+        self.curLevel = curLevel
+        curLevel.start(self)
 
     def addPerson(self, person):
         person.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
@@ -117,7 +125,6 @@ class World:
         self.player = player
         player.tf = self.textField
         player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
-        player.say("Ich adde mich!")
 
     # TODO: Same code four times - that's bad -.- (playerGo...)
 
@@ -125,6 +132,12 @@ class World:
         for i in range(self.mapPos[1] - 1, self.mapPos[1] + 2):
             for j in range(self.mapPos[0] - 1, self.mapPos[0] + 2):
                 self.gMaps[j][i].drawAllFlag = True
+
+    def jumpPlayerTo(self, x, y, mx, my):
+        self.player.pos = [x, y]
+        self.player.mapPos = [mx, my]
+        self.player.gMap = self.gMaps[mx][my]
+
 
     def playerGoRight(self):
         self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
@@ -141,6 +154,10 @@ class World:
             self.setMapPos(self.softPos[0] + 1, self.softPos[1])
             self.redrawAllMaps()
         self.player.goRight()
+        try:
+            self.curLevel.playerMoved()
+        except:
+            pass
 
     def playerGoLeft(self):
         self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
@@ -157,6 +174,11 @@ class World:
             self.setMapPos(self.softPos[0] - 1, self.softPos[1])
             self.redrawAllMaps()
         self.player.goLeft()
+        try:
+            self.curLevel.playerMoved()
+        except:
+            pass
+
     def playerGoUp(self):
         self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
 
@@ -171,6 +193,11 @@ class World:
             self.setMapPos(self.softPos[0], self.softPos[1] - 1)
             self.redrawAllMaps()
         self.player.goUp()
+        try:
+            self.curLevel.playerMoved()
+        except:
+            pass
+
     def playerGoDown(self):
         self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
 
@@ -185,6 +212,10 @@ class World:
             self.setMapPos(self.softPos[0], self.softPos[1] + 1)
             self.redrawAllMaps()
         self.player.goDown()
+        try:
+            self.curLevel.playerMoved()
+        except:
+            pass
 
     def draw(self, dst):
         for elem in self.persons:
