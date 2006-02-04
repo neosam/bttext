@@ -6,6 +6,7 @@ import person
 import statusbox
 from configs import misc
 import textout
+import levelhelp
 
 
 class World:
@@ -86,7 +87,7 @@ class World:
         importCode = compile(importString, filename + "/rules.py", "single")
         exec(importCode)
         self.curLevel = curLevel
-        curLevel.start(self)
+        curLevel.start(self, levelhelp, filename)
 
     def addPerson(self, person):
         person.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
