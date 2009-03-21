@@ -6,7 +6,6 @@ import person
 import statusbox
 from configs import misc
 import textout
-import levelhelp
 
 
 class World(object):
