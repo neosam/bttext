@@ -31,9 +31,6 @@ class GameMap(object):
 			for i in range(LEVEL_HEIGHT):
 				elem.append([" ", 3, 7, True, 0])
 
-	def __repr__(self):
-		return str([[self.x, self.y, self.w, self.h], self.size, self.gMap])
-
 	def getAscii(self, x, y):
 		return self.gMap[x][y][0]
 	def getFG(self, x, y):
