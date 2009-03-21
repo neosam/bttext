@@ -11,7 +11,7 @@ LEVEL_HEIGHT = 200
 def nothing():
 	pass
 
-class GameMap:
+class GameMap(object):
 	def __init__(self, x, y, w, h):
 		# Screen position
 		self.x = x

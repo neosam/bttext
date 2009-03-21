@@ -1,7 +1,7 @@
 import curses
 import init
 
-class color:
+class color(object):
     black = 0
     red = 1
     green = 2
@@ -25,7 +25,7 @@ def addError(text):
 def clearError():
     misc.BT_ERROR = ""
 
-class misc:
+class misc(object):
     BT_ERROR = ""
     COLORED = True
     DEBUG = True

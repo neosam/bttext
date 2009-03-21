@@ -1,6 +1,6 @@
 import curses
 
-class statusBox:
+class statusBox(object):
     def __init__(self, stdscr, w, h):
         self.stdscr = stdscr
         self.w = w

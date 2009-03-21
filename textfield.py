@@ -4,7 +4,7 @@ from textout import btText, textOut
 
 STD_MAX_LINES = 100
 
-class Textfield:
+class Textfield(object):
     def __init__(self, x, y, w, h, max = STD_MAX_LINES):
         self.x = x
         self.y = y

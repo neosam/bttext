@@ -9,7 +9,7 @@ import textout
 import levelhelp
 
 
-class World:
+class World(object):
     def __init__(self, stdscr, w, h, filename = -1, maps = [3, 3],
                  mapPos = -1):
         self.maps = maps

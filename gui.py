@@ -3,7 +3,7 @@ import init
 import textout
 
 # This object can added to a window
-class WinObj:
+class WinObj(object):
     def __init__(self, parent):
         self.parent = parent
         self.active = False
@@ -36,7 +36,7 @@ class ObjButton(WinObj):
 
 
 
-class Window:
+class Window(object):
     def __init__(self, parent):
         self.parent = parent
         self.winObjs = []

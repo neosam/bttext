@@ -4,7 +4,7 @@ import sys
 import color
 import configs
 
-class Person:
+class Person(object):
     def __init__(self, tf, name, gMap, pos = [0,0], mapDraw=["?", 0, 7],
                  color = configs.color.green, profile=0):
         self.tf = tf
