@@ -40,9 +40,6 @@ class Person(object):
             print sys.ext_info()[1]
 
     def draw(self, dst):
-        #xa = self.gMap.w - self.gMap.w/2*2
-        #ya = self.gMap.h - self.gMap.h/2*2
-        
         pos = [self.gMap.x + self.gMap.w/2 + self.pos[0] - self.gMap.pos[0] + self.gMap.w%2,#xa,
                self.gMap.y + self.gMap.h/2 + self.pos[1] - self.gMap.pos[1] + self.gMap.h%2]#ya]
         
@@ -62,22 +59,26 @@ class Person(object):
         self.pos = [x, y]
 
     def goRight(self):
-        if (self.gMap.gMap[self.pos[0] + 1][self.pos[1]][3] == True) | \
+	pos = (self.pos[0] + 1, self.pos[1])
+        if (self.gMap[pos][3] == True) | \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0] + 1, self.pos[1])
 
     def goLeft(self):
-        if (self.gMap.gMap[self.pos[0] - 1][self.pos[1]][3] == True) | \
+	pos = (self.pos[0] - 1, self.pos[1])
+        if (self.gMap[pos][3] == True) | \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0] - 1, self.pos[1])
 
     def goDown(self):
-        if (self.gMap.gMap[self.pos[0]][self.pos[1] + 1][3] == True) | \
+	pos = (self.pos[0], self.pos[1] + 1)
+        if (self.gMap[pos][3] == True) | \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0], self.pos[1] + 1)
 
     def goUp(self):
-        if (self.gMap.gMap[self.pos[0]][self.pos[1] - 1][3] == True) | \
+	pos = (self.pos[0], self.pos[1] - 1)
+        if (self.gMap[pos][3] == True) | \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0], self.pos[1] - 1)
 

@@ -18,7 +18,7 @@ class World(object):
             self.mapPos = [maps[0]/2, maps[1]/2]
         else:
             self.mapPos = mapPos
-        self.softPos = [self.mapPos[0] * 200, self.mapPos[1] * 200]
+        self.softPos = [self.mapPos[0] * 256, self.mapPos[1] * 256]
         
         self.textField = textfield.Textfield(2, 6, self.w/2 - 5, self.h - 7)
         self.persons = []
