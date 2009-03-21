@@ -27,8 +27,11 @@ class GameMap(object):
         self.clear()
 
     def clear(self):
-        self.map = [[" ", 3, 7, True, 0]] * \
-               (LEVEL_WIDTH * LEVEL_HEIGHT)
+        self.map = [{'ascii': ' ',
+                     'fg': 3,
+                     'bg': 7,
+                     'walkable': True,}] * \
+                   (LEVEL_WIDTH * LEVEL_HEIGHT)
 
     def __getitem__(self, pos):
         x, y = pos
@@ -39,34 +42,34 @@ class GameMap(object):
         self.map[y * LEVEL_WIDTH + x] = v
 
     def getAscii(self, x, y):
-        return self[x, y][0]
+        return self[x, y]['ascii']
 
     def getFG(self, x, y):
-        return self[x, y][1]
+        return self[x, y]['fg']
 
     def getBG(self, x, y):
-        return self[x, y][2]
+        return self[x, y]['bg']
 
     def isWalkable(self, x, y):
-        return self[x, y][3]
+        return self[x, y]['walkable']
 
     def getElem(self, x, y):
         return self[x, y]
 
     def setAscii(self, x, y, ascii):
         if ascii != "\n":
-            self[x, y][0] = ascii
+            self[x, y]['ascii'] = ascii
             return True
         return False
 
     def setFG(self, x, y, color):
-        self[x, y][1] = color
+        self[x, y]['fg'] = color
 
     def setBG(self, x, y, color):
-        self[x, y][2] = color
+        self[x, y]['bg'] = color
 
     def setWalkable(self, x, y, walkable):
-        self[x, y][3] = walkable
+        self[x, y]['walkable'] = walkable
 
     def saveToFile(self, filename):
         pass
@@ -91,12 +94,13 @@ class GameMap(object):
     def draw_colored(self, pos, elem):
         dst.addstr(self.y + elem[1] + self.h/2 - self.pos[1] + self.h%2,
                    self.x + elem[0] + self.w/2 - self.pos[0] + self.w%2,
-                   self[pos][0], color.color(self[pos][1], self[pos][2]))
+                   self[pos]['ascii'], 
+                   color.color(self[pos]['fg'], self[pos]['bg']))
 
     def draw_bw(self, pos, elem):
         dst.addstr(self.y + elem[1] + self.h/2 - self.pos[1] + self.h%2,
                    self.x + elem[0] + self.w/2 - self.pos[0] + self.w%2,
-                   self[pos][0])
+                   self[pos]['ascii'])
 
     def draw(self, dst):
         if self.drawAllFlag == True:
@@ -112,10 +116,10 @@ class GameMap(object):
 
                 screenpos = self.to_screenpos(pos[0], pos[1])
                 if configs.misc.COLORED == True:
-                    dst.addstr(screenpos[1], screenpos[0], self[pos][0],
-                               color.color(self[pos][1], self[pos][2]))
+                    dst.addstr(screenpos[1], screenpos[0], self[pos]['ascii'],
+                               color.color(self[pos]['fg'], self[pos]['bg']))
                 else:
-                    dst.addstr(screenpos[1], screenpos[0], self[pos][0])
+                    dst.addstr(screenpos[1], screenpos[0], self[pos]['ascii'])
 
 
                 self.drawPos = []
@@ -134,11 +138,11 @@ class GameMap(object):
                 if configs.misc.COLORED == True:
                     dst.addstr(self.y + self.h - h,
                                self.x + self.w - w,
-                               self[pos][0],
-                               color.color(self[pos][1],
-                               self[pos][2]))
+                               self[pos]['ascii'],
+                               color.color(self[pos]['fg'],
+                               self[pos]['bg']))
                 else:
                     dst.addstr(self.y + self.h - h,
                                self.x + self.w - w,
-                               self[pos][0])
+                               self[pos]['ascii'])
 

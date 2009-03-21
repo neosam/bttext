@@ -60,25 +60,25 @@ class Person(object):
 
     def goRight(self):
 	pos = (self.pos[0] + 1, self.pos[1])
-        if (self.gMap[pos][3] == True) | \
+        if (self.gMap[pos]['walkable'] == True) | \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0] + 1, self.pos[1])
 
     def goLeft(self):
 	pos = (self.pos[0] - 1, self.pos[1])
-        if (self.gMap[pos][3] == True) | \
+        if (self.gMap[pos]['walkable'] == True) | \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0] - 1, self.pos[1])
 
     def goDown(self):
 	pos = (self.pos[0], self.pos[1] + 1)
-        if (self.gMap[pos][3] == True) | \
+        if (self.gMap[pos]['walkable'] == True) | \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0], self.pos[1] + 1)
 
     def goUp(self):
 	pos = (self.pos[0], self.pos[1] - 1)
-        if (self.gMap[pos][3] == True) | \
+        if (self.gMap[pos]['walkable'] == True) | \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0], self.pos[1] - 1)
 
