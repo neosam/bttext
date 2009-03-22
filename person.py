@@ -5,7 +5,7 @@ import color
 import configs
 
 class Person(object):
-    def __init__(self, tf, name, gMap, pos = [0,0], mapDraw=["?", 0, 7],
+    def __init__(self, tf, name, gMap, w, pos = [0,0], mapDraw=["?", 0, 7],
                  color = configs.color.green, profile=0):
         self.tf = tf
         self.color = color
@@ -14,6 +14,7 @@ class Person(object):
         self.pos = pos
         self.mapDraw = mapDraw
         self.cheatWalkEverywhere = False
+        self.theWorld = w
 
         if profile == 0:
             profile = { "HP": [0,0] }
@@ -42,7 +43,7 @@ class Person(object):
     def draw(self, dst):
         pos = [self.gMap.x + self.gMap.w/2 + self.pos[0] - self.gMap.pos[0] + self.gMap.w%2,#xa,
                self.gMap.y + self.gMap.h/2 + self.pos[1] - self.gMap.pos[1] + self.gMap.h%2]#ya]
-        
+
         if (pos[0] >= self.gMap.x) & \
            (pos[1] >= self.gMap.y) & \
            (pos[0] <= (self.gMap.x + self.gMap.w)) & \
@@ -59,25 +60,33 @@ class Person(object):
         self.pos = [x, y]
 
     def goRight(self):
-	pos = (self.pos[0] + 1, self.pos[1])
+        pos = (self.pos[0] + 1, self.pos[1])
+        gMap = self.theWorld.maps[pos[0] / 256, pos[1] / 256]
+        pos = [x % 256 for x in pos]
         if (self.gMap[pos]['walkable'] == True) | \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0] + 1, self.pos[1])
 
     def goLeft(self):
-	pos = (self.pos[0] - 1, self.pos[1])
+        pos = (self.pos[0] - 1, self.pos[1])
+        gMap = self.theWorld.maps[pos[0] / 256, pos[1] / 256]
+        pos = [x % 256 for x in pos]
         if (self.gMap[pos]['walkable'] == True) | \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0] - 1, self.pos[1])
 
     def goDown(self):
-	pos = (self.pos[0], self.pos[1] + 1)
-        if (self.gMap[pos]['walkable'] == True) | \
+        pos = (self.pos[0], self.pos[1] + 1)
+        gMap = self.theWorld.maps[pos[0] / 256, pos[1] / 256]
+        pos = [x % 256 for x in pos]
+        if (gMap[pos]['walkable'] == True) | \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0], self.pos[1] + 1)
 
     def goUp(self):
-	pos = (self.pos[0], self.pos[1] - 1)
+        pos = (self.pos[0], self.pos[1] - 1)
+        gMap = self.theWorld.maps[pos[0] / 256, pos[1] / 256]
+        pos = [x % 256 for x in pos]
         if (self.gMap[pos]['walkable'] == True) | \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0], self.pos[1] - 1)

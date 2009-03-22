@@ -1,4 +1,5 @@
 [global]
 
 *.pyc
+*~
 bt_last_error.log

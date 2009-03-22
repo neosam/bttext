@@ -6,20 +6,18 @@ import person
 import statusbox
 from configs import misc
 import textout
+import curses
+from curses.textpad import Textbox
 
 
 class World(object):
-    def __init__(self, stdscr, w, h, filename = -1, maps = [3, 3],
-                 mapPos = -1):
-        self.maps = maps
+    def __init__(self, stdscr, w, h, filename = -1):
         self.w = w
         self.h = h
-        if mapPos == -1:
-            self.mapPos = [maps[0]/2, maps[1]/2]
-        else:
-            self.mapPos = mapPos
+        self.mapPos = [0,0]
+
         self.softPos = [self.mapPos[0] * 256, self.mapPos[1] * 256]
-        
+
         self.textField = textfield.Textfield(2, 6, self.w/2 - 5, self.h - 7)
         self.persons = []
         self.cheatWalkEverywhere = False
@@ -32,19 +30,40 @@ class World(object):
         if filename == -1:
             # If no filename is given, I will create an empty world
             self.walkArea = 3
-            self.gMaps = []
-            for i in range(maps[1]):
-                self.gMaps.append([])
-            for i in range(maps[0]):
-                for j in range(maps[0]):
-                    self.gMaps[j].append(gamemap.GameMap(self.w/2 + 2, 6,
-                                                         self.w/2 - 5, self.h - 8))
-                    self.gMaps[j][i].pos = [(self.mapPos[0] - j) * \
-                                            self.gMaps[j][i].size[0],
-                                            (self.mapPos[1] - i) * \
-                                            self.gMaps[j][i].size[1]]
-                    self.gMaps[j][i].textField = self.textField
+            self.maps = {}
+            for y in range(-1, 2):
+                for x in range(-1, 2):
+                    self.maps[(x, y)] = gamemap.GameMap(self.w/2 + 2, 6,
+                                                        self.w/2 - 5, self.h -
+                                                        8)
+                    self.maps[x, y].textField = self.textField
+            self.setMapPos((0, 0))
                     
+
+    def askCode(self):
+        def out(txt):
+            self.textField.sendText(txt)
+        title = "/\\\\ Hack some code //\\"
+        win = curses.newwin(self.h - 6, self.w - 10, 3, 5)
+        win.box()
+        size = win.getmaxyx()
+        win.addstr(0, size[1] / 2 - len(title) / 2, title)
+        win.refresh()
+        win = curses.newwin(self.h - 8, self.w - 12, 4, 6)
+        t = Textbox(win)
+        text = t.edit()
+        code = compile(text, 'fake.py', 'exec')
+        try:
+            eval(code)
+        except:
+            self.textField.sendText("error while executing code")
+
+    def setMapPos(self, pos):
+        self.softPos = pos
+        for y in range(-1, 2):
+            for x in range(-1, 2):
+                self.maps[x, y].pos = [gamemap.LEVEL_WIDTH * x + pos[0],
+                                       gamemap.LEVEL_HEIGHT * y + pos[1]]
 
     def getPlayerPos(self):
         return self.player.pos, self.mapPos
@@ -54,42 +73,13 @@ class World(object):
         self.player.cheatWalkEverywhere = newCheat
 
     def save(self, filename):
-        self.sendText("Bitte Warten, Karte wird gespeichert")
-        self.draw(self.stdscr)
-        try:
-            os.mkdir(filename)
-        except:
-            pass
-        i = 0
-        j = 0
-           
-        for row in self.gMaps:
-            for elem in row:
-                elem.saveToFile(filename + "/map" +
-                                str(i) + "_" + str(j))
-                j = j + 1
-
-            j = 0
-            i = i + 1
+        pass
 
     def load(self, filename):
-        i = 0
-        j = 0
-        for row in self.gMaps:
-            for elem in row:
-                elem.loadFromFile(filename + "/map" + str(i) + "_" + str(j))
-                j = j + 1
-            j = 0
-            i = i + 1
-        self.redrawAllMaps()
-        importString = "import " + filename + " as curLevel"
-        importCode = compile(importString, filename + "/rules.py", "single")
-        exec(importCode)
-        self.curLevel = curLevel
-        curLevel.start(self, levelhelp, filename)
+        pass
 
     def addPerson(self, person):
-        person.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
+        person.gMap = self.maps[0, 0]
         person.tf = self.textField
         self.persons.append(person)
     
@@ -97,102 +87,124 @@ class World(object):
         self.w = w
         self.h = h
         self.textField.resize(self.w/2 - 5, self.h - 7)
-        for i in range(self.maps[1]):
-            for j in range(self.maps[0]):
-                self.gMaps[j][i].resize(self.w/2 + 2, 6,
-                                        self.w/2 - 5, self.h - 8)
+        for map in self.maps.values():
+            map.resize(self.w/2 + 2, 6, self.w/2 - 5, self.h - 8)
         self.statusBox.resize(w, h)
 
-    def setMapPos(self, x, y):
-        for i in range(self.maps[1]):
-            for j in range(self.maps[0]):
-                self.gMaps[j][i].pos = [-j * self.player.gMap.size[0] + x,
-                                        -i * self.player.gMap.size[1] + y]
-#        self.mapPos = [x / self.player.gMap.size[0],
-#                       y / self.player.gMap.size[1]]
-        self.softPos = [x, y]
+#    def setMapPos(self, x, y):
+#        for i in range(self.maps[1]):
+#            for j in range(self.maps[0]):
+#                self.gMaps[j][i].pos = [-j * self.player.gMap.size[0] + x,
+#                                        -i * self.player.gMap.size[1] + y]
+#        self.softPos = [x, y]
 
-#        self.mapPos = [(self.player.gMap.size[0] - x) / \
-#                    self.player.gMap.size[0],
-#                    (self.player.gMap.size[1] - y) / \
-#                    self.player.gMap.size[1]]
-#        self.softPos = [(self.player.gMap.size[0] - x) % \
-#                        self.player.gMap.size[0],
-#                        (self.player.gMap.size[1] - y) % \
-#                        self.player.gMap.size[1]]
-            
     def setPlayer(self, player):
         self.player = player
         player.tf = self.textField
-        player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
+        player.gMap = self.maps[0, 0]
 
     # TODO: Same code four times - that's bad -.- (playerGo...)
 
     def redrawAllMaps(self):
-        for i in range(self.mapPos[1] - 1, self.mapPos[1] + 2):
-            for j in range(self.mapPos[0] - 1, self.mapPos[0] + 2):
-                self.gMaps[j][i].drawAllFlag = True
+#        for i in range(self.mapPos[1] - 1, self.mapPos[1] + 2):
+#            for j in range(self.mapPos[0] - 1, self.mapPos[0] + 2):
+
+        for map in self.maps.values():
+            map.drawAllFlag = True
 
     def jumpPlayerTo(self, x, y, mx, my):
         self.player.pos = [x, y]
         self.player.mapPos = [mx, my]
-        self.player.gMap = self.gMaps[mx][my]
+        self.player.gMap = self.maps[mx][my]
 
 
     def playerGoRight(self):
-        self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
+        self.player.gMap.drawPos.append([self.player.pos[0], 
+                                         self.player.pos[1]])
 
+        self.player.goRight()
+        self.check_playerpos()
 
-        if self.player.pos[0] >= (self.player.gMap.size[1] - 1):
-            self.mapPos = [self.mapPos[0] + 1, self.mapPos[1]]
-            self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
-            self.player.pos[0] = self.player.pos[0] - self.player.gMap.size[0]
-            if misc.DEBUG == True:
-                self.textField.sendText("DEBUG: Changed Map")
         if ((self.player.gMap.size[0] * self.mapPos[0] +
              self.player.pos[0]) - self.softPos[0]) > self.walkArea:
-            self.setMapPos(self.softPos[0] + 1, self.softPos[1])
+            self.setMapPos((self.softPos[0] + 1, self.softPos[1]))
             self.redrawAllMaps()
-        self.player.goRight()
         try:
             self.curLevel.playerMoved()
         except:
             pass
 
+    def check_playerpos(self):
+        changed = False
+        if self.player.pos[0] < 0:
+            for y in range(-1, 2):
+                for x in range(0, 2):
+                    self.maps[x - 1, y] = self.maps[x, y]
+                    self.maps[x, y] = gamemap.FakeGameMap(self.w/2 + 2, 6,
+                                                          self.w/2 - 5, self.h
+                                                          - 8)
+                    changed = True
+        if self.player.pos[0] >= gamemap.LEVEL_WIDTH:
+            for y in range(-1, 2):
+                for x in range(0, -2, -1):
+                    self.maps[x + 1, y] = self.maps[x, y]
+                    self.maps[x, y] = gamemap.FakeGameMap(self.w/2 + 2, 6,
+                                                          self.w/2 - 5, self.h -
+                                                          8)
+                    changed = True
+        if self.player.pos[1] < 0:
+            for y in range(0, 2):
+                for x in range(-1, 2):
+                    self.maps[x, y - 1] = self.maps[x, y]
+                    self.maps[x, y] = gamemap.FakeGameMap(self.w/2 + 2, 6,
+                                                          self.w/2 - 5, self.h -
+                                                          8)
+                    changed = True
+        if self.player.pos[1] >= gamemap.LEVEL_HEIGHT:
+            for y in range(0, -2, -1):
+                for x in range(-1, 2):
+                    self.maps[x, y + 1] = self.maps[x, y]
+                    self.maps[x, y] = gamemap.FakeGameMap(self.w/2 + 2, 6,
+                                                          self.w/2 - 5, self.h -
+                                                          8)
+                    changed = True
+
+        #if misc.DEBUG:
+        #    self.textField.sendText(str(self.player.pos) + str(self.mapPos))
+
+        if changed:
+            self.player.pos[0] %= gamemap.LEVEL_WIDTH
+            self.player.pos[1] %= gamemap.LEVEL_HEIGHT
+            self.player.gMap = self.maps[0, 0]
+            self.setMapPos(self.maps[0,0].pos)
+        #    if misc.DEBUG:
+        #        self.textField.sendText("DEBUG: Changed Map")
+
     def playerGoLeft(self):
         self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
+        self.player.goLeft()
+        self.check_playerpos()
 
-        if self.player.pos[0] <= 0:
-            self.mapPos = [self.mapPos[0] - 1, self.mapPos[1]]
-            self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
-            self.player.pos[0] = self.player.pos[0] + self.player.gMap.size[0]
-            if misc.DEBUG == True:
-                self.textField.sendText("DEBUG: Changed Map")
         if ((self.player.gMap.size[0] * self.mapPos[0] +
              self.player.pos[0]) - self.softPos[0]) < -self.walkArea:
-            
-            self.setMapPos(self.softPos[0] - 1, self.softPos[1])
+            self.setMapPos((self.softPos[0] - 1, self.softPos[1]))
             self.redrawAllMaps()
-        self.player.goLeft()
         try:
             self.curLevel.playerMoved()
         except:
             pass
 
     def playerGoUp(self):
-        self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
+        self.player.gMap.drawPos.append([self.player.pos[0], 
+                                         self.player.pos[1]])
 
-        if self.player.pos[1] <= 0:
-            self.mapPos = [self.mapPos[0], self.mapPos[1] - 1]
-            self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
-            self.player.pos[1] = self.player.pos[1] + self.player.gMap.size[1]
-            if misc.DEBUG == True:
-                self.textField.sendText("DEBUG: Changed Map")
+        self.player.goUp()
+        self.check_playerpos()
+
         if ((self.player.gMap.size[1] * self.mapPos[1] +
              self.player.pos[1]) - self.softPos[1]) < -self.walkArea:
-            self.setMapPos(self.softPos[0], self.softPos[1] - 1)
+            self.setMapPos((self.softPos[0], self.softPos[1] - 1))
             self.redrawAllMaps()
-        self.player.goUp()
         try:
             self.curLevel.playerMoved()
         except:
@@ -200,18 +212,13 @@ class World(object):
 
     def playerGoDown(self):
         self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
+        self.player.goDown()
+        self.check_playerpos()
 
-        if self.player.pos[1] >= (self.player.gMap.size[1] - 1):
-            self.mapPos = [self.mapPos[0], self.mapPos[1] + 1]
-            self.player.gMap = self.gMaps[self.mapPos[0]][self.mapPos[1]]
-            self.player.pos[1] = self.player.pos[1] - self.player.gMap.size[1]
-            if misc.DEBUG == True:
-                self.textField.sendText("DEBUG: Changed Map")
         if ((self.player.gMap.size[1] * self.mapPos[1] +
              self.player.pos[1]) - self.softPos[1]) > self.walkArea:
-            self.setMapPos(self.softPos[0], self.softPos[1] + 1)
+            self.setMapPos((self.softPos[0], self.softPos[1] + 1))
             self.redrawAllMaps()
-        self.player.goDown()
         try:
             self.curLevel.playerMoved()
         except:
@@ -223,12 +230,8 @@ class World(object):
                    (self.player.pos[1] == elem.pos[1]):
                 elem.crashWith(elem, self.player)
         self.textField.draw()
-        for i in range(self.mapPos[1] - 1, self.mapPos[1] + 2):
-            for j in range(self.mapPos[0] - 1, self.mapPos[1] + 2):
-                self.gMaps[j][i].draw(dst)
-#        for i in range(self.maps[1]):        
-#            for j in range(self.maps[0]):         # Old because every map will be drawn and not just nine
-#                self.gMaps[j][i].draw(dst)
+        for map in self.maps.values():
+                map.draw(dst)
         self.player.draw(dst)
         for elem in self.persons:
             elem.draw(dst)
@@ -237,5 +240,3 @@ class World(object):
 
     def sendText(self, text):
         self.textField.sendText(text)
-            
-            

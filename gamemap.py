@@ -11,6 +11,135 @@ LEVEL_HEIGHT = 256
 def nothing():
     pass
 
+class FakeGameMap(object):
+    def __init__(self, x, y, w, h):
+        # Screen position
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+        self.pos = [LEVEL_WIDTH/2, LEVEL_HEIGHT/2]
+        self.size = [LEVEL_WIDTH, LEVEL_HEIGHT]
+        self.drawPos = []
+        self.drawAllFlag = True
+
+    def clear(self):
+        self.map = [{'ascii': ' ',
+                     'fg': 3,
+                     'bg': 7,
+                     'walkable': True,}] * \
+                   (LEVEL_WIDTH * LEVEL_HEIGHT)
+
+    def __getitem__(self, pos):
+	return {'ascii': ' ',
+                     'fg': 3,
+                     'bg': 7,
+                     'walkable': True,}
+
+    def __setitem__(self, pos, v):
+	pass
+
+    def getAscii(self, x, y):
+        return ' '
+
+    def getFG(self, x, y):
+        return 3
+
+    def getBG(self, x, y):
+        return 7
+
+    def isWalkable(self, x, y):
+        return True
+
+    def getElem(self, x, y):
+        return {'ascii': ' ',
+                     'fg': 3,
+                     'bg': 7,
+                     'walkable': True,}
+
+    def setAscii(self, x, y, ascii):
+        if ascii != "\n":
+            return True
+        return False
+
+    def setFG(self, x, y, color):
+        pass
+
+    def setBG(self, x, y, color):
+        pass
+
+    def setWalkable(self, x, y, walkable):
+        pass
+
+    def saveToFile(self, filename):
+        pass
+
+    def loadFromFile(self, filename):
+        pass
+
+    def resize(self, x, y, w, h):
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+
+    def to_screenpos(self, x, y):
+        ret = (x + self.x + self.w/2 - self.pos[0] + self.w%2, \
+               y + self.y + self.h/2 - self.pos[1] + self.h%2)
+        if (ret[0] < 0) or (ret[1] < 0) or (ret[0] >= 80) or (ret[1] >= 24):
+            raise "%i, %i, %i, %i, %i, %i" % (self.pos[0], self.pos[1],
+                                              x, y, ret[0], ret[1])
+        return ret
+
+    def draw_colored(self, pos, elem):
+        pass
+
+    def draw_bw(self, pos, elem):
+        pass
+
+    def draw(self, dst):
+        if self.drawAllFlag == True:
+            self.drawAll(dst)
+        else:
+            for elem in self.drawPos:
+                pos = (elem[0], elem[1])
+
+                if (pos[0] < 0) or (pos[1] < 0) or \
+                   (pos[0] >= LEVEL_WIDTH) or \
+                   (pos[1] >= LEVEL_HEIGHT):
+                    continue
+
+                screenpos = self.to_screenpos(pos[0], pos[1])
+                if configs.misc.COLORED == True:
+                    dst.addstr(screenpos[1], screenpos[0], ' ',
+                               color.color(3, 7))
+                else:
+                    dst.addstr(screenpos[1], screenpos[0], ' ')
+
+
+                self.drawPos = []
+
+    def drawAll(self, dst):
+        self.drawAllFlag = False
+        for h in range(self.h):
+            for  w in range(self.w):
+                pos = (self.pos[0] + (self.w/2 - w),
+                       self.pos[1] + (self.h/2 - h))
+                if (pos[0] < 0) or (pos[1] < 0) or \
+                   (pos[0] >= LEVEL_WIDTH) or \
+                   (pos[1] >= LEVEL_HEIGHT):
+                    continue
+
+                if configs.misc.COLORED == True:
+                    dst.addstr(self.y + self.h - h,
+                               self.x + self.w - w,
+                               ' ', color.color(3, 7))
+                else:
+                    dst.addstr(self.y + self.h - h,
+                               self.x + self.w - w,
+                               ' ')
+
+
 class GameMap(object):
     def __init__(self, x, y, w, h):
         # Screen position

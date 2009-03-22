@@ -181,6 +181,7 @@ def main():
             ["j", theWorld.playerGoDown],
             ["k", theWorld.playerGoUp],
             ["l", theWorld.playerGoRight],
+            ["c", theWorld.askCode],
             ["a", insertAscii],
             ["t", insertText],
             ["f", changeForeground],
@@ -189,7 +190,7 @@ def main():
             ["s", saveMap],
             ["e", insertFlag]]
         # Initialize cursor object
-        cursor = Player(theWorld.statusBox, -1, "Cursor", -1, [0, 0], ["C", 0, 3],
+        cursor = Player(theWorld.statusBox, -1, "Cursor", -1, theWorld, [0, 0], ["C", 0, 3],
                       configs.colorof["mike"][0], profile={"hp": [100, 100],
                                                        "mp": [0, 0]})
 
