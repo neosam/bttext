@@ -45,7 +45,10 @@ class Textfield(object):
             begin = 0
             height = self.lines
 
+        blankLine = " " * self.w
+
         for i in range(begin, height):
+            textOut(blankLine, self.x, self.y + i - begin)
             if len(self.line[i]) > self.w:
                 textOut(self.line[i].getRegion(0, self.w), self.x,
                         self.y + i - begin)

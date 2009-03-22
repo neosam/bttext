@@ -51,8 +51,8 @@ def insertAscii():
             goon = False
         except:
             goon = True
-        
-    
+
+
     if cursor.gMap.setAscii(cursor.pos[0], cursor.pos[1], asciiValue):
         cursor.gMap.setFG(cursor.pos[0], cursor.pos[1], foreground)
         cursor.gMap.setBG(cursor.pos[0], cursor.pos[1], background)

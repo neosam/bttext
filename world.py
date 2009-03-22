@@ -38,7 +38,8 @@ class World(object):
                                                         8)
                     self.maps[x, y].textField = self.textField
             self.setMapPos((0, 0))
-                    
+            self.globalMapPos = [0, 0]
+
 
     def askCode(self):
         def out(txt):
@@ -137,6 +138,7 @@ class World(object):
     def check_playerpos(self):
         changed = False
         if self.player.pos[0] < 0:
+            self.globalMapPos[0] -= 1
             for y in range(-1, 2):
                 for x in range(0, 2):
                     self.maps[x - 1, y] = self.maps[x, y]
@@ -145,6 +147,7 @@ class World(object):
                                                           - 8)
                     changed = True
         if self.player.pos[0] >= gamemap.LEVEL_WIDTH:
+            self.globalMapPos[0] += 1
             for y in range(-1, 2):
                 for x in range(0, -2, -1):
                     self.maps[x + 1, y] = self.maps[x, y]
@@ -153,6 +156,7 @@ class World(object):
                                                           8)
                     changed = True
         if self.player.pos[1] < 0:
+            self.globalMapPos[1] -= 1
             for y in range(0, 2):
                 for x in range(-1, 2):
                     self.maps[x, y - 1] = self.maps[x, y]
@@ -161,6 +165,7 @@ class World(object):
                                                           8)
                     changed = True
         if self.player.pos[1] >= gamemap.LEVEL_HEIGHT:
+            self.globalMapPos[1] += 1
             for y in range(0, -2, -1):
                 for x in range(-1, 2):
                     self.maps[x, y + 1] = self.maps[x, y]

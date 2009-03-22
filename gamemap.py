@@ -27,8 +27,8 @@ class FakeGameMap(object):
         self.map = [{'ascii': ' ',
                      'fg': 3,
                      'bg': 7,
-                     'walkable': True,}] * \
-                   (LEVEL_WIDTH * LEVEL_HEIGHT)
+                     'walkable': True,} for \
+                    x in xrange(LEVEL_WIDTH * LEVEL_HEIGHT)]
 
     def __getitem__(self, pos):
 	return {'ascii': ' ',
@@ -159,8 +159,8 @@ class GameMap(object):
         self.map = [{'ascii': ' ',
                      'fg': 3,
                      'bg': 7,
-                     'walkable': True,}] * \
-                   (LEVEL_WIDTH * LEVEL_HEIGHT)
+                     'walkable': True,} for x in  \
+                   xrange(LEVEL_WIDTH * LEVEL_HEIGHT)]
 
     def __getitem__(self, pos):
         x, y = pos
