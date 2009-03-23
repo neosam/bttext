@@ -11,39 +11,88 @@ from curses.textpad import Textbox
 
 
 class World(object):
-    def __init__(self, stdscr, w, h, filename = -1):
+    def __init__(self, stdscr, w, h, filename):
         self.w = w
         self.h = h
         self.mapPos = [0,0]
+        self.walkArea = 3
 
         self.softPos = [self.mapPos[0] * 256, self.mapPos[1] * 256]
 
-        self.textField = textfield.Textfield(2, 6, self.w/2 - 5, self.h - 7)
+        self.textField = textfield.Textfield(*self.screenposText())
         self.persons = []
         self.cheatWalkEverywhere = False
 
         self.statusBox = statusbox.statusBox(stdscr, w, h)
         self.stdscr = stdscr
 
+        self.globalMapPos = [0, 0]
 
+        self.filename = filename
+        self.maps = dict()
+        for y in xrange(-1, 2):
+            for x in xrange(-1, 2):
+                self.loadMap((x, y))
+        self.setMapPos((0, 0))
+        self.redrawAllMaps()
 
-        if filename == -1:
+#        if filename == -1:
             # If no filename is given, I will create an empty world
-            self.walkArea = 3
-            self.maps = {}
-            for y in range(-1, 2):
-                for x in range(-1, 2):
-                    self.maps[(x, y)] = gamemap.GameMap(self.w/2 + 2, 6,
-                                                        self.w/2 - 5, self.h -
-                                                        8)
-                    self.maps[x, y].textField = self.textField
-            self.setMapPos((0, 0))
-            self.globalMapPos = [0, 0]
+#            self.walkArea = 3
+#            self.maps = {}
+#            for y in range(-1, 2):
+#                for x in range(-1, 2):
+#                    self.maps[(x, y)] = gamemap.GameMap(self.w/2 + 2, 6,
+#                                                        self.w/2 - 5, self.h -
+#                                                        8)
+#                    self.maps[x, y].textField = self.textField
+#            self.setMapPos((0, 0))
+#            self.globalMapPos = [0, 0]
+#
+    def screenposMap(self):
+        return (self.w * 3 / 4 + 2, 6, self.w / 4 - 5, self.h - 8)
 
+    def screenposText(self):
+        return (2, 6, self.w * 3 / 4 - 5, self.h - 7)
+
+    def step(self, pos):
+        pass
+
+    def loadMap(self, pos):
+        filename = "%s/map%i_%i" % (self.filename,
+                                    self.globalMapPos[0] - pos[0],
+                                    self.globalMapPos[1] - pos[1])
+        self.maps[pos] = gamemap.loadFromFile(filename, self)
+        self.maps[pos].textField = self.textField
+
+    def saveMap(self, pos):
+        filename = "%s/map%i_%i" % (self.filename,
+                                    self.globalMapPos[0] - pos[0],
+                                    self.globalMapPos[1] - pos[1])
+        self.maps[pos].saveToFile(filename)
+
+    def createNewMap(self, pos):
+        mappos = self.screenposMap()
+        self.maps[pos] = gamemap.GameMap(*mappos)
+        self.setMapPos(self.softPos)
+        self.redrawAllMaps()
 
     def askCode(self):
         def out(txt):
-            self.textField.sendText(txt)
+            self.textField.sendText(str(txt))
+        def save():
+            for y in xrange(-1, 2):
+                for x in xrange(-1, 2):
+                    self.saveMap((x, y))
+        def load():
+            for y in xrange(-1, 2):
+                for x in xrange(-1, 2):
+                    self.loadMap((x, y))
+            self.redrawAllMaps()
+            self.setMapPos(self.softPos)
+
+        def new(pos=(0, 0)):
+            self.createNewMap(pos)
         title = "/\\\\ Hack some code //\\"
         win = curses.newwin(self.h - 6, self.w - 10, 3, 5)
         win.box()
@@ -65,6 +114,10 @@ class World(object):
             for x in range(-1, 2):
                 self.maps[x, y].pos = [gamemap.LEVEL_WIDTH * x + pos[0],
                                        gamemap.LEVEL_HEIGHT * y + pos[1]]
+        try:
+            self.player.gMap = self.maps[0, 0]
+        except:
+            pass
 
     def getPlayerPos(self):
         return self.player.pos, self.mapPos
@@ -87,10 +140,13 @@ class World(object):
     def resize(self, w, h):
         self.w = w
         self.h = h
-        self.textField.resize(self.w/2 - 5, self.h - 7)
+        mappos = self.screenposMap()
+        textpos = self.screenposText()
+        self.textField.resize(textpos[2], textpos[3])
         for map in self.maps.values():
-            map.resize(self.w/2 + 2, 6, self.w/2 - 5, self.h - 8)
+            map.resize(*mappos)
         self.statusBox.resize(w, h)
+        self.redrawAllMaps()
 
 #    def setMapPos(self, x, y):
 #        for i in range(self.maps[1]):
@@ -122,7 +178,7 @@ class World(object):
     def playerGoRight(self):
         self.player.gMap.drawPos.append([self.player.pos[0], 
                                          self.player.pos[1]])
-
+        self.step((self.player.pos[0] + 1, self.player.pos[1]))
         self.player.goRight()
         self.check_playerpos()
 
@@ -137,41 +193,34 @@ class World(object):
 
     def check_playerpos(self):
         changed = False
+        mappos = self.screenposMap()
         if self.player.pos[0] < 0:
             self.globalMapPos[0] -= 1
             for y in range(-1, 2):
                 for x in range(0, 2):
                     self.maps[x - 1, y] = self.maps[x, y]
-                    self.maps[x, y] = gamemap.FakeGameMap(self.w/2 + 2, 6,
-                                                          self.w/2 - 5, self.h
-                                                          - 8)
+                    self.maps[x, y] = gamemap.FakeGameMap(*mappos)
                     changed = True
         if self.player.pos[0] >= gamemap.LEVEL_WIDTH:
             self.globalMapPos[0] += 1
             for y in range(-1, 2):
                 for x in range(0, -2, -1):
                     self.maps[x + 1, y] = self.maps[x, y]
-                    self.maps[x, y] = gamemap.FakeGameMap(self.w/2 + 2, 6,
-                                                          self.w/2 - 5, self.h -
-                                                          8)
+                    self.maps[x, y] = gamemap.FakeGameMap(*mappos)
                     changed = True
         if self.player.pos[1] < 0:
             self.globalMapPos[1] -= 1
             for y in range(0, 2):
                 for x in range(-1, 2):
                     self.maps[x, y - 1] = self.maps[x, y]
-                    self.maps[x, y] = gamemap.FakeGameMap(self.w/2 + 2, 6,
-                                                          self.w/2 - 5, self.h -
-                                                          8)
+                    self.maps[x, y] = gamemap.FakeGameMap(*mappos)
                     changed = True
         if self.player.pos[1] >= gamemap.LEVEL_HEIGHT:
             self.globalMapPos[1] += 1
             for y in range(0, -2, -1):
                 for x in range(-1, 2):
                     self.maps[x, y + 1] = self.maps[x, y]
-                    self.maps[x, y] = gamemap.FakeGameMap(self.w/2 + 2, 6,
-                                                          self.w/2 - 5, self.h -
-                                                          8)
+                    self.maps[x, y] = gamemap.FakeGameMap(*mappos)
                     changed = True
 
         #if misc.DEBUG:
@@ -187,6 +236,7 @@ class World(object):
 
     def playerGoLeft(self):
         self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
+        self.step((self.player.pos[0] - 1, self.player.pos[1]))
         self.player.goLeft()
         self.check_playerpos()
 
@@ -202,6 +252,7 @@ class World(object):
     def playerGoUp(self):
         self.player.gMap.drawPos.append([self.player.pos[0], 
                                          self.player.pos[1]])
+        self.step((self.player.pos[0], self.player.pos[1] - 1))
 
         self.player.goUp()
         self.check_playerpos()
@@ -217,6 +268,7 @@ class World(object):
 
     def playerGoDown(self):
         self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
+        self.step((self.player.pos[0], self.player.pos[1] + 1))
         self.player.goDown()
         self.check_playerpos()
 

@@ -14,7 +14,7 @@ import textout
 import world
 import gui
 import traceback
-
+from curses.textpad import Textbox
 
 global stdscr
 
@@ -68,8 +68,23 @@ def insertText():
         theWorld.draw(stdscr)
         stdscr.refresh()
         asciiValue = insertAscii()
-        
 
+def addTrigger():
+    global cursor, stdscr, theWorld
+
+    dst = cursor.gMap[cursor.pos]
+    title = "/\\\\ Add trigger code //\\"
+    win = curses.newwin(theWorld.h - 6, theWorld.w - 10, 3, 5)
+    win.box()
+    size = win.getmaxyx()
+    win.addstr(0, size[1] / 2 - len(title) / 2, title)
+    win.refresh()
+    win = curses.newwin(theWorld.h - 8, theWorld.w - 12, 4, 6)
+    if 'trigger' in dst:
+        win.addstr(dst['trigger'])
+    t = Textbox(win)
+    dst['trigger'] = t.edit()
+    cursor.gMap[cursor.pos] = dst
 
 def changeForeground():
     global stdscr, foreground
@@ -148,18 +163,19 @@ def saveMap():
         flagFile.write(",".join(elem) + "\n")
 
 def insertFlag():
-    global theWorld, mapFlags, stdscr
-    playerPos = theWorld.getPlayerPos()
-    stdscr.nodelay(0)
-    flagName = stdscr.getstr()
-    stdscr.nodelay(1)
-    mapFlags.append([flagName,
-                     str(playerPos[0][0]),
-                     str(playerPos[0][1]),
-                     str(playerPos[1][0]),
-                     str(playerPos[1][1])])
-    theWorld.sendText("Added flag " + flagName)
-    
+    global cursor, stdscr, theWorld
+
+    title = "/\\\\ Set field name //\\"
+    win = curses.newwin(3, theWorld.w - 10, theWorld.h / 2 - 1, 6)
+    win.box()
+    size = win.getmaxyx()
+    win.addstr(0, size[1] / 2 - len(title) / 2, title)
+    win.refresh()
+    win = curses.newwin(1, theWorld.w - 12, theWorld.h / 2, 7)
+    t = Textbox(win)
+    k = t.edit()
+    cursor.gMap.setNamedField(k, cursor.pos)
+
 
 def main():
     global stdscr, theWorld, cursor
@@ -174,7 +190,7 @@ def main():
         h, w = stdscr.getmaxyx()
 
 
-        theWorld = world.World(stdscr, w, h)
+        theWorld = world.World(stdscr, w, h, filename = sys.argv[1])
 
         shortcutList = [
             ["h", theWorld.playerGoLeft],
@@ -184,6 +200,7 @@ def main():
             ["c", theWorld.askCode],
             ["a", insertAscii],
             ["t", insertText],
+            ["T", addTrigger],
             ["f", changeForeground],
             ["b", changeBackground],
             ["g", changeWalkable],

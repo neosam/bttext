@@ -1,3 +1,4 @@
+import cPickle
 import curses
 import textout
 import color
@@ -10,6 +11,19 @@ LEVEL_HEIGHT = 256
 
 def nothing():
     pass
+
+def loadFromFile(filename, theWorld):
+    try:
+        res = cPickle.load(file(filename))
+    except:
+        res = FakeGameMap(0, 0, 0, 0)
+    res.pos = theWorld.softPos
+    mappos = theWorld.screenposMap()
+    res.x = mappos[0]
+    res.y = mappos[1]
+    res.w = mappos[2]
+    res.h = mappos[3]
+    return res
 
 class FakeGameMap(object):
     def __init__(self, x, y, w, h):
@@ -31,10 +45,10 @@ class FakeGameMap(object):
                     x in xrange(LEVEL_WIDTH * LEVEL_HEIGHT)]
 
     def __getitem__(self, pos):
-	return {'ascii': ' ',
-                     'fg': 3,
-                     'bg': 7,
-                     'walkable': True,}
+	return {'ascii': '+',
+                     'fg': 7,
+                     'bg': 3,
+                     'walkable': False,}
 
     def __setitem__(self, pos, v):
 	pass
@@ -86,9 +100,9 @@ class FakeGameMap(object):
     def to_screenpos(self, x, y):
         ret = (x + self.x + self.w/2 - self.pos[0] + self.w%2, \
                y + self.y + self.h/2 - self.pos[1] + self.h%2)
-        if (ret[0] < 0) or (ret[1] < 0) or (ret[0] >= 80) or (ret[1] >= 24):
-            raise "%i, %i, %i, %i, %i, %i" % (self.pos[0], self.pos[1],
-                                              x, y, ret[0], ret[1])
+        #if (ret[0] < 0) or (ret[1] < 0) or (ret[0] >= 80) or (ret[1] >= 24):
+        #    raise "%i, %i, %i, %i, %i, %i" % (self.pos[0], self.pos[1],
+        #                                      x, y, ret[0], ret[1])
         return ret
 
     def draw_colored(self, pos, elem):
@@ -111,10 +125,10 @@ class FakeGameMap(object):
 
                 screenpos = self.to_screenpos(pos[0], pos[1])
                 if configs.misc.COLORED == True:
-                    dst.addstr(screenpos[1], screenpos[0], ' ',
-                               color.color(3, 7))
+                    dst.addstr(screenpos[1], screenpos[0], '+',
+                               color.color(7, 0))
                 else:
-                    dst.addstr(screenpos[1], screenpos[0], ' ')
+                    dst.addstr(screenpos[1], screenpos[0], '+')
 
 
                 self.drawPos = []
@@ -133,11 +147,11 @@ class FakeGameMap(object):
                 if configs.misc.COLORED == True:
                     dst.addstr(self.y + self.h - h,
                                self.x + self.w - w,
-                               ' ', color.color(3, 7))
+                               '+', color.color(7, 0))
                 else:
                     dst.addstr(self.y + self.h - h,
                                self.x + self.w - w,
-                               ' ')
+                               '+')
 
 
 class GameMap(object):
@@ -151,6 +165,7 @@ class GameMap(object):
         self.size = [LEVEL_WIDTH, LEVEL_HEIGHT]
         self.drawPos = []
         self.drawAllFlag = True
+        self.namedField = dict()
 
         # Preparing level
         self.clear()
@@ -201,10 +216,18 @@ class GameMap(object):
         self[x, y]['walkable'] = walkable
 
     def saveToFile(self, filename):
-        pass
+        cPickle.dump(self, file(filename, 'w'))
 
     def loadFromFile(self, filename):
         pass
+
+    def setNamedField(self, k, pos):
+        self.namedField[k] = pos
+
+    def getNamedField(self, k):
+        if k not in self.namedField:
+            return None
+        return self.namedField[k]
 
     def resize(self, x, y, w, h):
         self.x = x
@@ -215,9 +238,9 @@ class GameMap(object):
     def to_screenpos(self, x, y):
         ret = (x + self.x + self.w/2 - self.pos[0] + self.w%2, \
                y + self.y + self.h/2 - self.pos[1] + self.h%2)
-        if (ret[0] < 0) or (ret[1] < 0) or (ret[0] >= 80) or (ret[1] >= 24):
-            raise "%i, %i, %i, %i, %i, %i" % (self.pos[0], self.pos[1],
-                                              x, y, ret[0], ret[1])
+        #if (ret[0] < 0) or (ret[1] < 0) or (ret[0] >= 80) or (ret[1] >= 24):
+        #    raise "%i, %i, %i, %i, %i, %i" % (self.pos[0], self.pos[1],
+        #                                      x, y, ret[0], ret[1])
         return ret
 
     def draw_colored(self, pos, elem):

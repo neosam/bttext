@@ -1,3 +1,3 @@
 #! /bin/bash
 
-python editor.py
+python editor.py $1

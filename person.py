@@ -61,23 +61,23 @@ class Person(object):
 
     def goRight(self):
         pos = (self.pos[0] + 1, self.pos[1])
-        gMap = self.theWorld.maps[pos[0] / 256, pos[1] / 256]
+        gMap = self.theWorld.maps[pos[0] / 256 * (-1), pos[1] / 256 * (-1)]
         pos = [x % 256 for x in pos]
-        if (self.gMap[pos]['walkable'] == True) | \
+        if (gMap[pos]['walkable'] == True) | \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0] + 1, self.pos[1])
 
     def goLeft(self):
         pos = (self.pos[0] - 1, self.pos[1])
-        gMap = self.theWorld.maps[pos[0] / 256, pos[1] / 256]
+        gMap = self.theWorld.maps[pos[0] / 256 * (-1), pos[1] / 256 * (-1)]
         pos = [x % 256 for x in pos]
-        if (self.gMap[pos]['walkable'] == True) | \
+        if (gMap[pos]['walkable'] == True) | \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0] - 1, self.pos[1])
 
     def goDown(self):
         pos = (self.pos[0], self.pos[1] + 1)
-        gMap = self.theWorld.maps[pos[0] / 256, pos[1] / 256]
+        gMap = self.theWorld.maps[pos[0] / 256 * (-1), pos[1] / 256 * (-1)]
         pos = [x % 256 for x in pos]
         if (gMap[pos]['walkable'] == True) | \
                (self.cheatWalkEverywhere):
@@ -85,9 +85,9 @@ class Person(object):
 
     def goUp(self):
         pos = (self.pos[0], self.pos[1] - 1)
-        gMap = self.theWorld.maps[pos[0] / 256, pos[1] / 256]
+        gMap = self.theWorld.maps[pos[0] / 256 * (-1), pos[1] / 256 * (-1)]
         pos = [x % 256 for x in pos]
-        if (self.gMap[pos]['walkable'] == True) | \
+        if (gMap[pos]['walkable'] == True) | \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0], self.pos[1] - 1)
 

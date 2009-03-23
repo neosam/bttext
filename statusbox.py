@@ -13,9 +13,9 @@ class statusBox(object):
     def draw(self):
         w = self.w
         h = self.h
-        self.stdscr.vline(4, w/2, curses.ACS_VLINE, h - 5)
+        self.stdscr.vline(4, w * 3 / 4, curses.ACS_VLINE, h - 5)
         self.stdscr.addstr(4, 2, "Meldungen:", curses.A_BOLD)
-        self.stdscr.addstr(4, w/2 + 2, "Karte:", curses.A_BOLD)
+        self.stdscr.addstr(4, w * 3 / 4 + 2, "Karte:", curses.A_BOLD)
         self.stdscr.addstr(2, 2, "Status: ", curses.A_BOLD)
         self.stdscr.addstr(2, 10, self.statusString)
 

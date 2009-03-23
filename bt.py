@@ -41,6 +41,23 @@ def waveWare(x, y, dst):
     ww = textout.btText("$%" + blue + "$%W$%" + white + "$%ave $%" + blue + "$%W$%" + white + "$%are")
     textout.textOut(ww, x, y, dst)
 
+def step(self, pos):
+    def out(text):
+        self.sendText(str(text))
+
+    #TODO Check other maps
+    if (pos[0] < 0) or (pos[1] < 0) or (pos[0] >= LEVEL_WIDTH) or \
+       (pos[1] >= LEVEL_HEIGHT):
+        return
+
+    source = self.player.gMap[pos]
+    if 'trigger' in source:
+        try:
+            code = compile(source['trigger'], 'fake.py', 'exec')
+        except:
+            self.sendText('TriggerError')
+        eval(code)
+
 def main():
     global stdscr
 
@@ -53,34 +70,19 @@ def main():
 
         h, w = stdscr.getmaxyx()
 
-        # Create falco and put him into the map
-#        falco = Person(-1, "Falco", -1, [0, 0], ["F", curses.COLOR_WHITE, curses.COLOR_BLUE],
-#                   configs.colorof["falco"][0])
-#        falco.jumpTo(1, 0)
-#        falco.crashWith = FalcoCrashMike
-
-        theWorld = world.World(stdscr, w, h)
+        theWorld = world.World(stdscr, w, h, filename=sys.argv[1])
+        world.World.step = step
 
         # Mike is the hero!
-        mike = Player(theWorld.statusBox, -1, "Du", -1, [0, 0], ["M", curses.COLOR_BLACK, curses.COLOR_RED],
+        mike = Player(theWorld.statusBox, -1, "Du", -1, theWorld, [0, 0], ["M", curses.COLOR_BLACK, curses.COLOR_RED],
                       configs.colorof["mike"][0], profile={"hp": [100, 100],
                                                        "mp": [0, 0]})
 
-        # Adding mike and falco to Bermuda Triangle World
+        # Adding mike to Bermuda Triangle World
         theWorld.setPlayer(mike)
-#        theWorld.addPerson(falco)
 
         theWorld.setCheatWalkEverywhere(False)
 
-        # Adding water in map (mike cannot move on it)
-        for i in range(10):
-            theWorld.gMaps[1][1].gMap[10][i] = ["~", curses.COLOR_WHITE, curses.COLOR_BLUE, True, nothing]
-        for i in range(10):
-            theWorld.gMaps[1][0].gMap[10][198-i] = ["~", curses.COLOR_WHITE, curses.COLOR_BLUE, False, nothing]
-
-        theWorld.load("testsave")
-    
-    
         while 1:                     # Gameloop
             timer.fpsDelay()         # FPS-Control
             clearError()
@@ -97,7 +99,7 @@ def main():
             if c == ord("j"): theWorld.playerGoDown()  #  Player
             if c == ord("k"): theWorld.playerGoUp()    #  movement
             if c == ord("l"): theWorld.playerGoRight() #
-            if c == ord("s"): theWorld.load("testsave.btt")  # Loading doesn't really work ;)
+            if c == ord("c"): theWorld.askCode()
             if c == ord("x"): theWorld.sendText(str(mike.gMap.pos))
             # --- Event handling ---
 

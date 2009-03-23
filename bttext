@@ -1,3 +1,3 @@
 #! /bin/bash
 
-python bt.py
+python bt.py $1
