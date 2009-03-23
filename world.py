@@ -36,19 +36,6 @@ class World(object):
         self.setMapPos((0, 0))
         self.redrawAllMaps()
 
-#        if filename == -1:
-            # If no filename is given, I will create an empty world
-#            self.walkArea = 3
-#            self.maps = {}
-#            for y in range(-1, 2):
-#                for x in range(-1, 2):
-#                    self.maps[(x, y)] = gamemap.GameMap(self.w/2 + 2, 6,
-#                                                        self.w/2 - 5, self.h -
-#                                                        8)
-#                    self.maps[x, y].textField = self.textField
-#            self.setMapPos((0, 0))
-#            self.globalMapPos = [0, 0]
-#
     def screenposMap(self):
         return (self.w * 3 / 4 + 2, 6, self.w / 4 - 5, self.h - 8)
 
@@ -148,24 +135,14 @@ class World(object):
         self.statusBox.resize(w, h)
         self.redrawAllMaps()
 
-#    def setMapPos(self, x, y):
-#        for i in range(self.maps[1]):
-#            for j in range(self.maps[0]):
-#                self.gMaps[j][i].pos = [-j * self.player.gMap.size[0] + x,
-#                                        -i * self.player.gMap.size[1] + y]
-#        self.softPos = [x, y]
-
     def setPlayer(self, player):
         self.player = player
         player.tf = self.textField
         player.gMap = self.maps[0, 0]
 
-    # TODO: Same code four times - that's bad -.- (playerGo...)
+
 
     def redrawAllMaps(self):
-#        for i in range(self.mapPos[1] - 1, self.mapPos[1] + 2):
-#            for j in range(self.mapPos[0] - 1, self.mapPos[0] + 2):
-
         for map in self.maps.values():
             map.drawAllFlag = True
 
@@ -175,22 +152,7 @@ class World(object):
         self.player.gMap = self.maps[mx][my]
 
 
-    def playerGoRight(self):
-        self.player.gMap.drawPos.append([self.player.pos[0], 
-                                         self.player.pos[1]])
-        self.step((self.player.pos[0] + 1, self.player.pos[1]))
-        self.player.goRight()
-        self.check_playerpos()
-
-        if ((self.player.gMap.size[0] * self.mapPos[0] +
-             self.player.pos[0]) - self.softPos[0]) > self.walkArea:
-            self.setMapPos((self.softPos[0] + 1, self.softPos[1]))
-            self.redrawAllMaps()
-        try:
-            self.curLevel.playerMoved()
-        except:
-            pass
-
+    # TODO: Don't like that code
     def check_playerpos(self):
         changed = False
         mappos = self.screenposMap()
@@ -223,19 +185,32 @@ class World(object):
                     self.maps[x, y] = gamemap.FakeGameMap(*mappos)
                     changed = True
 
-        #if misc.DEBUG:
-        #    self.textField.sendText(str(self.player.pos) + str(self.mapPos))
-
         if changed:
             self.player.pos[0] %= gamemap.LEVEL_WIDTH
             self.player.pos[1] %= gamemap.LEVEL_HEIGHT
             self.player.gMap = self.maps[0, 0]
             self.setMapPos(self.maps[0,0].pos)
-        #    if misc.DEBUG:
-        #        self.textField.sendText("DEBUG: Changed Map")
+ 
+    def playerGoRight(self):
+        self.player.gMap.drawPos.append([self.player.pos[0], 
+                                         self.player.pos[1]])
+        self.step((self.player.pos[0] + 1, self.player.pos[1]))
+        self.player.goRight()
+        self.check_playerpos()
+
+        if ((self.player.gMap.size[0] * self.mapPos[0] +
+             self.player.pos[0]) - self.softPos[0]) > self.walkArea:
+            self.setMapPos((self.softPos[0] + 1, self.softPos[1]))
+            self.redrawAllMaps()
+        try:
+            self.curLevel.playerMoved()
+        except:
+            pass
+
 
     def playerGoLeft(self):
-        self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
+        self.player.gMap.drawPos.append([self.player.pos[0], 
+                                         self.player.pos[1]])
         self.step((self.player.pos[0] - 1, self.player.pos[1]))
         self.player.goLeft()
         self.check_playerpos()
