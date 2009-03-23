@@ -74,14 +74,23 @@ def main():
         world.World.step = step
 
         # Mike is the hero!
-        mike = Player(theWorld.statusBox, -1, "Du", -1, theWorld, [0, 0], ["M", curses.COLOR_BLACK, curses.COLOR_RED],
+        player = Player(theWorld.statusBox, -1, "Du", -1, theWorld, [0, 0], ["M", curses.COLOR_BLACK, curses.COLOR_RED],
                       configs.colorof["mike"][0], profile={"hp": [100, 100],
                                                        "mp": [0, 0]})
 
         # Adding mike to Bermuda Triangle World
-        theWorld.setPlayer(mike)
+        theWorld.setPlayer(player)
 
         theWorld.setCheatWalkEverywhere(False)
+
+        # Try to load and evaluate the init file.
+        try:
+            filename = "%s/init.py" % sys.argv[1]
+            initFile = file(filename).read()
+            code = compile(initFile, filename, 'eval')
+            eval(code)
+        except:
+            theWorld.sendText('Could not load init.py')
 
         while 1:                     # Gameloop
             timer.fpsDelay()         # FPS-Control
