@@ -20,7 +20,6 @@
 /3.2\\ Die Steuerung
 
 
-
 /1\\ Was ist Bermuda Triangle? //1\
 
 Bermuda Triangle ist eine Story, die vom Wave Ware Team entwickelt
@@ -114,18 +113,18 @@ Abenteuer bestreiten. (boa, das hab ich jetzt toll gesagt...)
 |    |                                                       |
 | Status: HP: 100/100                                        | 
 |                                                            |
-| Meldungen:                    |  Karte:                    |
-|                               |                            |
-| Mike: Boa geil!!              |  +----------+--            |
-| Britta: Danke, Schwuli ;)     |  |    M  B                 |
-| Mike: -.-                     |  |          +--            |
-|                               |  +----------+              |
-|       |                       |     |                      |
-+-------|-----------------------------|-------------Wave Ware+
-        |                             |                |
-   Messagebox                        Map               |
-                                               Totale Schleichwerbung
-                                                   (sauerei!)
+| Meldungen:                                  |  Karte:      |
+|                                             |              |
+| Du hast das Haus betreten.  Unten ist ein   |   +-------+  |
+| Ausgang.                                    |   +       |  |
+|                                             |/    M     |  |
+|                                             /   +       |  |
+|       |                                    /|   +--+ +--+  |
++-------|-----------------------------------/-------Wave Ware+
+        |                                  /           |
+   Messagebox                           Karte          |
+                                                Schleichwerbung
+
 
 Statusbox: Hier siehst du, wie es deinen Helden / deiner Heldin geht.
 Messagebox: Alle Ereignisse werden hier sofort erscheinen
