@@ -145,7 +145,7 @@ def main():
         curses.endwin()
 
         # Telling there is went something wrong
-        print "Hardcore error in Bermuda Triangle " + BT_VERSION + " :`(  Exiting forced!!!"
+        print "Error!"
         print "Please send bt_last_error.log and a  description what you did"
         print "to neosam@gmail.com"
 
