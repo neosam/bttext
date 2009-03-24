@@ -79,6 +79,38 @@ def insertVText():
         stdscr.refresh()
         asciiValue = insertAscii()
 
+def fill():
+    global cursor, stdscr, theWorld
+
+    st = list()
+    bg = theWorld.player.gMap[theWorld.player.pos].copy()['ascii']
+    goon = True
+    while goon:
+        try:
+            asciiValue = stdscr.getkey()
+            goon = False
+        except:
+            goon = True
+
+    x, y = theWorld.player.pos
+
+    st.append((x, y))
+    while len(st) != 0:
+        x, y = st.pop()
+
+        if (theWorld.player.gMap[x, y]['ascii'] == bg) and \
+           (x >= 0) and (x < LEVEL_WIDTH) and (y >= 0) and (y < LEVEL_HEIGHT):
+            theWorld.player.gMap.setAscii(x, y, asciiValue)
+            theWorld.player.gMap.setFG(x, y, foreground)
+            theWorld.player.gMap.setBG(x, y, background)
+            theWorld.player.gMap.setWalkable(x, y, walkable)
+
+            st.append((x, y + 1))
+            st.append((x, y - 1))
+            st.append((x + 1, y))
+            st.append((x - 1, y))
+    theWorld.redrawAllMaps()
+
 def addTrigger():
     global cursor, stdscr, theWorld
 
@@ -211,6 +243,7 @@ def main():
             ["a", insertAscii],
             ["t", insertText],
             ["v", insertVText],
+            ["F", fill],
             ["T", addTrigger],
             ["f", changeForeground],
             ["b", changeBackground],

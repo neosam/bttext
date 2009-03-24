@@ -5,7 +5,7 @@
  <-Textversion-------------The future depends on you-----------------Todo->
 
 * Editor:
-** Fill an area !
+** Fill an area ! (done)
 ** Test map !
 ** Field information (trigger, walkable, ...) in statusbox
 ** Hightlight fields (walkable, have trigger, ...)
