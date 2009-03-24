@@ -10,6 +10,7 @@
 ** Field information (trigger, walkable, ...) in statusbox
 ** Hightlight fields (walkable, have trigger, ...)
 ** Insert vertical text ! (done)
+** insert ascii art
 
 * Game:
 ** Battle mode !!
@@ -31,6 +32,7 @@
 ** More trigger shortcut functions
 *** getTile(label)
 *** setTile(label, tile)
+*** player object
 ** Trigger which is always executed
 ** Stupid AI !!
 *** Call frame player.frame function each frame
