@@ -87,7 +87,7 @@ def main():
         try:
             filename = "%s/init.py" % sys.argv[1]
             initFile = file(filename).read()
-            code = compile(initFile, filename, 'eval')
+            code = compile(initFile, filename, 'exec')
             eval(code)
         except:
             theWorld.sendText('Could not load init.py')
