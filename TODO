@@ -1,0 +1,36 @@
+
+    /\  /\   |\ |-- |\           |\        ___ |\ o      |\  |  __ |   |--
+   /  \/  \  |< |-  |/ |\/| |  | | | /\     |  |/ |  /\  | \ | /   |   |-
+  /____\___\ |/ |-- |\ |  |  \/  |/ /--\    |  |\ | /--\ |  \| \_\ \__ |--
+ <-Textversion-------------The future depends on you-----------------Todo->
+
+* Editor:
+** Fill an area !
+** Test map !
+** Field information (trigger, walkable, ...) in statusbox
+** Hightlight fields (walkable, have trigger, ...)
+** Insert vertical text !
+
+* Game:
+** Battle mode !!
+*** Something can hurt the player
+*** Player can attack.
+** Delete standard trigger after exec
+*** Save/Load
+**** Copy game in private folder
+ 
+* All:
+** Use Person class for persons !!
+** Better widgets for text edit
+** Translate everything in english !!!
+*** Readme
+*** Translation tools
+**** Tool to extract strings
+**** Tool to import strings
+*** Tranlate game texts
+** More trigger shortcut functions
+*** getTile(label)
+*** setTile(label, tile)
+** Trigger which is always executed
+** Stupid AI !!
+*** Call frame player.frame function each frame
