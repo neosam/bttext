@@ -1,0 +1,78 @@
+    /\  /\   |\ |-- |\           |\        ___ |\ o      |\  |  __ |   |--
+   /  \/  \  |< |-  |/ |\/| |  | | | /\     |  |/ |  /\  | \ | /   |   |-
+  /____\___\ |/ |-- |\ |  |  \/  |/ /--\    |  |\ | /--\ |  \| \_\ \__ |--
+ <-Textversion-------------The future depends on you---------------Readme->
+
+/\\ Content:
+
+
+/1\\ What is Bermuda Triangle?
+/1.1\\ Status
+
+/2\\ How to start?
+
+/3\\ Ingame
+/3.1\\ The screen
+/3.2\\ Controll
+
+
+
+/1\\ What is Bermuda Triangle? //1\
+
+Bermuda Triangle is a story written by the Wave Ware team.  Actually, the
+story is this game so writing is still in progress.  We also plan to create
+a 3D version of this game.
+
+
+/1.1\\ Status
+The textadventure supports trigger.  At the moment I create a little game
+called 'Story of Lalala' to test the engine.
+
+
+/2\\ How to start? //2\
+Just execute the start script on *nix but I don't have windows support right
+now.
+
+
+/3\\ Ingame //3\
+The game is divided into three parts.  There is a textfield where you can
+read current activities.  On the right there is a map and on the top status
+box.
+
+/3.1\\ The screen
+
+                           Title
+ status box                  |
+     |                       |
++----|--------------/\\ Bermuda Triangle //\-----------------+
+|    |                                                       |
+| Status: HP: 100/100                                        | 
+|                                                            |
+| Messages:                                   |  Map:        |
+|                                             |              |
+| You entered the house.  In the south you    |   +-------+  |
+| can see a exit.                             |   +       |  |
+|                                             |/    M     |  |
+|                                             /   +       |  |
+|       |                                    /|   +--+ +--+  |
++-------|-----------------------------------/-------Wave Ware+
+        |                                  /
+   message box                            Map
+
+
+/3.2\\ Control
+
+If you are a beginner in the *nix world you are probably confused by the
+control keys.  Use hjkl to move:
+
+h = left
+j = down (J points down)
+k = up
+l = right
+
+Press m for menu.
+
+
+
+Have fun,
+Wave Ware
