@@ -69,6 +69,16 @@ def insertText():
         stdscr.refresh()
         asciiValue = insertAscii()
 
+def insertVText():
+    global cursor, stdscr, theWorld
+
+    asciiValue = insertAscii()
+    while asciiValue != "\n":
+        theWorld.playerGoDown()
+        theWorld.draw(stdscr)
+        stdscr.refresh()
+        asciiValue = insertAscii()
+
 def addTrigger():
     global cursor, stdscr, theWorld
 
@@ -200,6 +210,7 @@ def main():
             ["c", theWorld.askCode],
             ["a", insertAscii],
             ["t", insertText],
+            ["v", insertVText],
             ["T", addTrigger],
             ["f", changeForeground],
             ["b", changeBackground],
