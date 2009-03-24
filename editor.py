@@ -98,8 +98,9 @@ def fill():
     while len(st) != 0:
         x, y = st.pop()
 
-        if (theWorld.player.gMap[x, y]['ascii'] == bg) and \
-           (x >= 0) and (x < LEVEL_WIDTH) and (y >= 0) and (y < LEVEL_HEIGHT):
+        if (x >= 0) and (x < LEVEL_WIDTH) and \
+           (y >= 0) and (y < LEVEL_HEIGHT) and \
+           (theWorld.player.gMap[x, y]['ascii'] == bg):
             theWorld.player.gMap.setAscii(x, y, asciiValue)
             theWorld.player.gMap.setFG(x, y, foreground)
             theWorld.player.gMap.setBG(x, y, background)
