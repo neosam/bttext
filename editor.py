@@ -112,6 +112,34 @@ def fill():
             st.append((x - 1, y))
     theWorld.redrawAllMaps()
 
+def insertFile():
+    global cursor, stdscr, theWorld
+
+
+    title = "/\\\\ Set field name //\\"
+    win = curses.newwin(3, theWorld.w - 10, theWorld.h / 2 - 1, 6)
+    win.box()
+    size = win.getmaxyx()
+    win.addstr(0, size[1] / 2 - len(title) / 2, title)
+    win.refresh()
+    win = curses.newwin(1, theWorld.w - 12, theWorld.h / 2, 7)
+    t = Textbox(win)
+    filename = t.edit()
+    f = file(filename[:-1])
+
+    x, y = theWorld.player.pos
+
+    for line in f.readlines():
+        for letter in line:
+            theWorld.player.gMap.setAscii(x, y, letter)
+            theWorld.player.gMap.setFG(x, y, foreground)
+            theWorld.player.gMap.setBG(x, y, background)
+            theWorld.player.gMap.setWalkable(x, y, walkable)
+            x += 1
+        x = theWorld.player.pos[0]
+        y += 1
+
+
 def addTrigger():
     global cursor, stdscr, theWorld
 
@@ -241,6 +269,7 @@ def main():
             ["k", theWorld.playerGoUp],
             ["l", theWorld.playerGoRight],
             ["c", theWorld.askCode],
+            ["A", insertFile],
             ["a", insertAscii],
             ["t", insertText],
             ["v", insertVText],
