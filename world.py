@@ -190,6 +190,8 @@ class World(object):
             self.player.pos[1] %= gamemap.LEVEL_HEIGHT
             self.player.gMap = self.maps[0, 0]
             self.setMapPos(self.maps[0,0].pos)
+
+        self.statusBox.newField(self.player.gMap[self.player.pos])
  
     def playerGoRight(self):
         self.player.gMap.drawPos.append([self.player.pos[0], 

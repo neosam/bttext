@@ -7,7 +7,7 @@
 * Editor:
 ** Fill an area ! (done)
 ** Test map !
-** Field information (trigger, walkable, ...) in statusbox
+** Field information (trigger, walkable, ...) in statusbox (done)
 ** Hightlight fields (walkable, have trigger, ...)
 ** Insert vertical text ! (done)
 ** insert ascii art (done)

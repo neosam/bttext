@@ -1,3 +1,4 @@
+import statusbox
 import sys
 import curses
 import timer
@@ -83,6 +84,7 @@ def fill():
     global cursor, stdscr, theWorld
 
     st = list()
+    done = set()
     bg = theWorld.player.gMap[theWorld.player.pos].copy()['ascii']
     goon = True
     while goon:
@@ -262,6 +264,8 @@ def main():
 
 
         theWorld = world.World(stdscr, w, h, filename = sys.argv[1])
+        theWorld.statusBox = statusbox.EditorStatusBox(stdscr, w, h)
+        theWorld.statusBox.newField(theWorld.maps[0, 0][0, 0])
 
         shortcutList = [
             ["h", theWorld.playerGoLeft],
