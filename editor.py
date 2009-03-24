@@ -102,6 +102,7 @@ def fill():
 
         if (x >= 0) and (x < LEVEL_WIDTH) and \
            (y >= 0) and (y < LEVEL_HEIGHT) and \
+           ((x, y) not in done) and \
            (theWorld.player.gMap[x, y]['ascii'] == bg):
             theWorld.player.gMap.setAscii(x, y, asciiValue)
             theWorld.player.gMap.setFG(x, y, foreground)
@@ -112,6 +113,7 @@ def fill():
             st.append((x, y - 1))
             st.append((x + 1, y))
             st.append((x - 1, y))
+            done.add((x, y))
     theWorld.redrawAllMaps()
 
 def insertFile():
