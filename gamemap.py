@@ -109,6 +109,9 @@ class GameMap(object):
     def to_screenpos(self, x, y):
         ret = (x + self.x + self.w/2 - self.pos[0] + self.w%2, \
                y + self.y + self.h/2 - self.pos[1] + self.h%2)
+        if (ret[0] < self.x) or (ret[0] >= (self.x + self.w)) or \
+           (ret[1] < self.y) or (ret[1] >= (self.y + self.h)):
+            return 0, 0
         return ret
 
     def draw_colored(self, pos, elem):
