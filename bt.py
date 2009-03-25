@@ -57,6 +57,7 @@ def step(self, pos):
         except:
             self.sendText('TriggerError')
         eval(code)
+        source.pop('trigger')
 
     if tuple(pos) in self.maps[0, 0].persons:
         self.maps[0, 0].persons[tuple(pos)].onCrash()
