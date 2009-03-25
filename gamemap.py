@@ -23,6 +23,8 @@ def loadFromFile(filename, theWorld):
     res.y = mappos[1]
     res.w = mappos[2]
     res.h = mappos[3]
+    if 'persons' not in res.__dict__:
+        res.persons = dict()
     return res
 
 class GameMap(object):
@@ -37,6 +39,7 @@ class GameMap(object):
         self.drawPos = []
         self.drawAllFlag = True
         self.namedField = dict()
+        self.persons = dict()
 
         # Preparing level
         self.clear()
