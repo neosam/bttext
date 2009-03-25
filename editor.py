@@ -188,6 +188,7 @@ def changeForeground():
             foreground = curses.COLOR_YELLOW
         elif newForeground == "r":
             foreground = curses.COLOR_RED
+        world.foreground = foreground
 
 def changeBackground():
     global stdscr, background
@@ -213,6 +214,7 @@ def changeBackground():
             background = curses.COLOR_YELLOW
         elif newBackground == "r":
             background = curses.COLOR_RED
+        world.background = background
 
 def changeWalkable():
     global stdscr, walkable
@@ -267,7 +269,8 @@ def main():
 
         h, w = stdscr.getmaxyx()
 
-
+        world.foreground = foreground
+        world.background = background
         theWorld = world.World(stdscr, w, h, filename = sys.argv[1])
         theWorld.statusBox = statusbox.EditorStatusBox(stdscr, w, h, 
                                                        w / 2)

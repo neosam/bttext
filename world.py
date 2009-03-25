@@ -1,3 +1,5 @@
+import traceback
+import sys
 import os
 import gamemap
 import textfield
@@ -56,7 +58,7 @@ class World(object):
                                     self.globalMapPos[0] - pos[0],
                                     self.globalMapPos[1] - pos[1])
         self.maps[pos] = gamemap.loadFromFile(filename, self)
-        self.maps[pos].textField = self.textField
+#       self.maps[pos].textField = self.textField
 
     def saveMap(self, pos):
         filename = "%s/map%i_%i" % (self.filename,
@@ -86,6 +88,14 @@ class World(object):
 
         def new(pos=(0, 0)):
             self.createNewMap(pos)
+
+        def addPerson(name, ascii, message):
+            p = person.Person(self.textField, name, 
+                              self.maps[0, 0], self, 
+                              mapDraw=[ascii, foreground, background])
+            p.message = message
+            self.maps[0, 0].persons[tuple(self.player.pos)] = p
+
         title = "/\\\\ Hack some code //\\"
         win = curses.newwin(self.h - 6, self.w - 10, 3, 5)
         win.box()
@@ -99,7 +109,12 @@ class World(object):
         try:
             eval(code)
         except:
-            self.textField.sendText("error while executing code")
+            tb = sys.exc_info()[2]
+            while tb != None:
+                self.textField.sendText(str(tb.tb_lineno))
+                tb = tb.tb_next
+            self.textField.sendText(sys.exc_info()[0])
+            self.textField.sendText(sys.exc_info()[1])
 
     def setMapPos(self, pos):
         self.softPos = pos

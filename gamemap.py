@@ -25,6 +25,8 @@ def loadFromFile(filename, theWorld):
     res.h = mappos[3]
     if 'persons' not in res.__dict__:
         res.persons = dict()
+    for persons in res.persons.values():
+        persons.tf = theWorld.textField
     return res
 
 class GameMap(object):
@@ -162,11 +164,18 @@ class GameMap(object):
                     continue
 
                 if configs.misc.COLORED == True:
-                    dst.addstr(self.y + self.h - h,
-                               self.x + self.w - w,
-                               self[pos]['ascii'],
-                               color.color(self[pos]['fg'],
-                               self[pos]['bg']))
+                    if tuple(pos) in self.persons:
+                        mapDraw = self.persons[tuple(pos)].mapDraw
+                        dst.addstr(self.y + self.h - h,
+                                   self.x + self.w - w,
+                                   mapDraw[0],
+                                   color.color(mapDraw[1], mapDraw[2]))
+                    else:
+                        dst.addstr(self.y + self.h - h,
+                                   self.x + self.w - w,
+                                   self[pos]['ascii'],
+                                   color.color(self[pos]['fg'],
+                                   self[pos]['bg']))
                 else:
                     dst.addstr(self.y + self.h - h,
                                self.x + self.w - w,

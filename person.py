@@ -15,10 +15,17 @@ class Person(object):
         self.mapDraw = mapDraw
         self.cheatWalkEverywhere = False
         self.theWorld = w
+        self.message = ''
 
         if profile == 0:
             profile = { "HP": [0,0] }
         self.profile = profile
+
+    def __getstate__(self):
+        return {'color': self.color,
+                'name': self.name,
+                'mapDraw': self.mapDraw,
+                'message': self.message}
 
     def say(self, text):
         try:
@@ -63,7 +70,8 @@ class Person(object):
         pos = (self.pos[0] + 1, self.pos[1])
         gMap = self.theWorld.maps[pos[0] / 256 * (-1), pos[1] / 256 * (-1)]
         pos = [x % 256 for x in pos]
-        if (gMap[pos]['walkable'] == True) | \
+        if (gMap[pos]['walkable'] == True) and \
+               (tuple(pos) not in gMap.persons) or \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0] + 1, self.pos[1])
 
@@ -71,7 +79,8 @@ class Person(object):
         pos = (self.pos[0] - 1, self.pos[1])
         gMap = self.theWorld.maps[pos[0] / 256 * (-1), pos[1] / 256 * (-1)]
         pos = [x % 256 for x in pos]
-        if (gMap[pos]['walkable'] == True) | \
+        if (gMap[pos]['walkable'] == True) and \
+               (tuple(pos) not in gMap.persons) or \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0] - 1, self.pos[1])
 
@@ -79,7 +88,8 @@ class Person(object):
         pos = (self.pos[0], self.pos[1] + 1)
         gMap = self.theWorld.maps[pos[0] / 256 * (-1), pos[1] / 256 * (-1)]
         pos = [x % 256 for x in pos]
-        if (gMap[pos]['walkable'] == True) | \
+        if (gMap[pos]['walkable'] == True) and \
+               (tuple(pos) not in gMap.persons) or \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0], self.pos[1] + 1)
 
@@ -87,9 +97,15 @@ class Person(object):
         pos = (self.pos[0], self.pos[1] - 1)
         gMap = self.theWorld.maps[pos[0] / 256 * (-1), pos[1] / 256 * (-1)]
         pos = [x % 256 for x in pos]
-        if (gMap[pos]['walkable'] == True) | \
+        if (gMap[pos]['walkable'] == True) and \
+               (tuple(pos) not in gMap.persons) or \
                (self.cheatWalkEverywhere):
             self.jumpTo(self.pos[0], self.pos[1] - 1)
 
     def crashWith(self, person):
         pass
+
+    def onCrash(self):
+        if self.message != '':
+            self.tf.sendText('')
+            self.say(self.message)

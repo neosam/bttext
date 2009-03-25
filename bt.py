@@ -58,6 +58,9 @@ def step(self, pos):
             self.sendText('TriggerError')
         eval(code)
 
+    if tuple(pos) in self.maps[0, 0].persons:
+        self.maps[0, 0].persons[tuple(pos)].onCrash()
+
 def main():
     global stdscr
 

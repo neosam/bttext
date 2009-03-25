@@ -1,6 +1,7 @@
 import curses
 import init
-from textout import btText, textOut
+#from textout import btText, textOut
+import textout
 
 STD_MAX_LINES = 100
 
@@ -14,23 +15,26 @@ class Textfield(object):
         self.lines = 0
         self.line = []
         self.colors = []
+        self.f = file('messages.log', 'a')
 
     def newLine(self):
         self.lines = self.lines + 1
 
     def sendText(self, text2):
-        text = btText(text2)
+        self.f.write(str(text2) + '\n')
+        self.f.flush()
+        text = textout.btText(text2)
         while len(text) > self.w:
             line = text.getRegion(0, self.w)
             other = text.getRegion(self.w, len(text))
             words = line.split(" ")
             if (len(words[0]) < self.w):
                 col = line.getColor(len(text))
-                text = btText("$%"+col+"$%" + words.pop() + other)
-                self.line.append(btText("$%" + col + "$%" + " ".join(words)))
+                text = textout.btText("$%"+col+"$%" + words.pop() + other)
+                self.line.append(textout.btText("$%" + col + "$%" + " ".join(words)))
             else:
-                self.line.append(btText(words[0]))
-                words.remove(btText(words[0]))
+                self.line.append(textout.btText(words[0]))
+                words.remove(textout.btText(words[0]))
                 text = other
             self.newLine()
             
@@ -48,15 +52,15 @@ class Textfield(object):
         blankLine = " " * self.w
 
         for i in range(begin, height):
-            textOut(blankLine, self.x, self.y + i - begin)
+            textout.textOut(blankLine, self.x, self.y + i - begin)
             if len(self.line[i]) > self.w:
-                textOut(self.line[i].getRegion(0, self.w), self.x,
+                textout.textOut(self.line[i].getRegion(0, self.w), self.x,
                         self.y + i - begin)
                 #textOut("".join([self.line[i][elem] for elem in range(self.w)]),
                     #self.x, self.y + i - begin)
                     
             else:
-                textOut(self.line[i], self.x, self.y + i - begin)
+                textout.textOut(self.line[i], self.x, self.y + i - begin)
 
     def resize(self, w, h):
         self.w = w
