@@ -27,6 +27,7 @@ def loadFromFile(filename, theWorld):
         res.persons = dict()
     for persons in res.persons.values():
         persons.tf = theWorld.textField
+        persons.w = theWorld
     return res
 
 class GameMap(object):

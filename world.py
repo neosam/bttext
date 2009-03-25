@@ -96,6 +96,9 @@ class World(object):
             p.message = message
             self.maps[0, 0].persons[tuple(self.player.pos)] = p
 
+        def removePerson():
+            self.maps[0, 0].persons.pop(tuple(self.player.pos))
+
         title = "/\\\\ Hack some code //\\"
         win = curses.newwin(self.h - 6, self.w - 10, 3, 5)
         win.box()

@@ -108,4 +108,8 @@ class Person(object):
     def onCrash(self):
         if self.message != '':
             self.tf.sendText('')
-            self.say(self.message)
+            for i in range(len(self.message)):
+                if (i % 2) == 0:
+                    self.say(self.message[i])
+                else:
+                    self.theWorld.player.say(self.message[i])
