@@ -1,10 +1,11 @@
 import curses
 
 class statusBox(object):
-    def __init__(self, stdscr, w, h):
+    def __init__(self, stdscr, w, h, border):
         self.stdscr = stdscr
         self.w = w
         self.h = h
+        self.border = border
         self.field = {'walkable': False}
         self.mp_active = False
         self.changeHP([0, 0])
@@ -15,16 +16,17 @@ class statusBox(object):
         w = self.w
         h = self.h
         clearLine = " " * (self.w - 12)
-        self.stdscr.vline(4, w * 3 / 4, curses.ACS_VLINE, h - 5)
+        self.stdscr.vline(4, self.border, curses.ACS_VLINE, h - 5)
         self.stdscr.addstr(4, 2, "Meldungen:", curses.A_BOLD)
-        self.stdscr.addstr(4, w * 3 / 4 + 2, "Karte:", curses.A_BOLD)
+        self.stdscr.addstr(4, self.border + 2, "Karte:", curses.A_BOLD)
         self.stdscr.addstr(2, 2, "Status: ", curses.A_BOLD)
         self.stdscr.addstr(2, 10, clearLine)
         self.stdscr.addstr(2, 10, self.statusString)
 
-    def resize(self, w, h):
+    def resize(self, w, h, border):
         self.w = w
         self.h = h
+        self.border = border
 
     def createStatusString(self):
         self.statusString = "HP: " + str(self.hp[0]) + "/" + str(self.hp[1])

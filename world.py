@@ -19,11 +19,13 @@ class World(object):
 
         self.softPos = [self.mapPos[0] * 256, self.mapPos[1] * 256]
 
+        self.borderFunction(w, h)
+
         self.textField = textfield.Textfield(*self.screenposText())
         self.persons = []
         self.cheatWalkEverywhere = False
 
-        self.statusBox = statusbox.statusBox(stdscr, w, h)
+        self.statusBox = statusbox.statusBox(stdscr, w, h, self.border)
         self.stdscr = stdscr
 
         self.globalMapPos = [0, 0]
@@ -36,11 +38,15 @@ class World(object):
         self.setMapPos((0, 0))
         self.redrawAllMaps()
 
+    def borderFunction(self, w, h):
+        self.border = w * 3 / 4
+
     def screenposMap(self):
-        return (self.w * 3 / 4 + 2, 6, self.w / 4 - 5, self.h - 8)
+        return (self.border + 2, 6, (self.w - self.border) - 5,
+                self.h - 8)
 
     def screenposText(self):
-        return (2, 6, self.w * 3 / 4 - 5, self.h - 7)
+        return (2, 6, self.border - 5, self.h - 7)
 
     def step(self, pos):
         pass
@@ -127,12 +133,13 @@ class World(object):
     def resize(self, w, h):
         self.w = w
         self.h = h
+        self.borderFunction(w, h)
         mappos = self.screenposMap()
         textpos = self.screenposText()
         self.textField.resize(textpos[2], textpos[3])
         for map in self.maps.values():
             map.resize(*mappos)
-        self.statusBox.resize(w, h)
+        self.statusBox.resize(w, h, self.border)
         self.redrawAllMaps()
 
     def setPlayer(self, player):

@@ -42,6 +42,9 @@ def waveWare(x, y, dst):
     ww = textout.btText("$%" + blue + "$%W$%" + white + "$%ave $%" + blue + "$%W$%" + white + "$%are")
     textout.textOut(ww, x, y, dst)
 
+def borderFunction(self, w, h):
+    self.border = w / 2
+
 def insertAscii():
     global theWorld, foreground
 
@@ -266,8 +269,11 @@ def main():
 
 
         theWorld = world.World(stdscr, w, h, filename = sys.argv[1])
-        theWorld.statusBox = statusbox.EditorStatusBox(stdscr, w, h)
+        theWorld.statusBox = statusbox.EditorStatusBox(stdscr, w, h, 
+                                                       w / 2)
         theWorld.statusBox.newField(theWorld.maps[0, 0][0, 0])
+        world.World.borderFunction = borderFunction
+        theWorld.resize(w, h)
 
         shortcutList = [
             ["h", theWorld.playerGoLeft],
