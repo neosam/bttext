@@ -113,3 +113,6 @@ class Person(object):
                     self.say(self.message[i])
                 else:
                     self.theWorld.player.say(self.message[i])
+
+    def onFrame(self):
+        pass
