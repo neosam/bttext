@@ -16,27 +16,20 @@ class World(object):
     def __init__(self, stdscr, w, h, filename):
         self.w = w
         self.h = h
-        self.mapPos = [0,0]
-        self.walkArea = 3
-
-        self.softPos = [self.mapPos[0] * 256, self.mapPos[1] * 256]
-
         self.borderFunction(w, h)
-
         self.textField = textfield.Textfield(*self.screenposText())
-        self.persons = []
-        self.cheatWalkEverywhere = False
-
-        self.statusBox = statusbox.statusBox(stdscr, w, h, self.border)
-        self.stdscr = stdscr
-
-        self.globalMapPos = [0, 0]
-
         self.filename = filename
         self.maps = dict()
-        for y in xrange(-1, 2):
-            for x in xrange(-1, 2):
-                self.loadMap((x, y))
+        self.globalMapPos = [0, 0]
+        self.softPos = [0, 0]
+        self.stdscr = stdscr
+
+        self.WALK_AREA = 3
+
+        self.load()
+
+        self.cheatWalkEverywhere = False
+        self.statusBox = statusbox.statusBox(stdscr, w, h, self.border)
         self.setMapPos((0, 0))
         self.redrawAllMaps()
 
@@ -140,8 +133,10 @@ class World(object):
     def save(self, filename):
         pass
 
-    def load(self, filename):
-        pass
+    def load(self):
+        for y in xrange(-1, 2):
+            for x in xrange(-1, 2):
+                self.loadMap((x, y))
 
     def addPerson(self, person):
         person.gMap = self.maps[0, 0]
@@ -208,21 +203,16 @@ class World(object):
         self.statusBox.newField(self.player.gMap[self.player.pos])
  
     def draw(self, dst):
-        for elem in self.persons:
-            if (self.player.pos[0] == elem.pos[0]) & \
-                   (self.player.pos[1] == elem.pos[1]):
-                elem.crashWith(elem, self.player)
         self.textField.draw()
         for map in self.maps.values():
                 map.draw(dst)
         self.player.draw(dst)
-        for elem in self.persons:
-            elem.draw(dst)
-
         self.statusBox.draw()
 
     def sendText(self, text):
         self.textField.sendText(text)
+
+
 
 def playerGo(posmodifier, playerfunc):
     def action(self):
@@ -233,12 +223,8 @@ def playerGo(posmodifier, playerfunc):
         self.check_playerpos()
 
         # Handler for walk area
-        if (abs((self.player.gMap.size[0] * self.mapPos[0] +
-             self.player.pos[0]) - self.softPos[0]) >  
-            abs(self.walkArea)) or \
-           (abs((self.player.gMap.size[1] * self.mapPos[1] +
-             self.player.pos[1]) - self.softPos[1]) > 
-            abs(self.walkArea)):
+        if abs(self.player.pos[0] - self.softPos[0]) > abs(self.WALK_AREA) or\
+           abs(self.player.pos[1] - self.softPos[1]) > abs(self.WALK_AREA):
             self.setMapPos(posmodifier(self.softPos))
             self.redrawAllMaps()
     return action

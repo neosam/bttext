@@ -24,30 +24,30 @@ Attributes:
 Methods:
   - borderFunction() -> None:
       Refresh border attribute
+  - createNewMap(pos) -> None:
+      Creates new map on spezified position
+  - draw() -> None
+  - evalCode(code) -> None:
+      Evaluates code from the parameter.
+  - loadMap(pos) -> None:
+      Loads map from spezified position
+  - playerGo(Left/Right/Up/Down) -> None:
+      Moves player.
+  - redrawAllMaps() -> None:
+      Sets draw all flag of all maps
+  - resize(size) -> None:
+      Resizes everything
+  - saveMap(pos) -> None:
+      Saves map from spezified position
   - screenposMap() -> (x, y, w, h):
       Map position on screen
   - screenposText() -> (x, y, w, h):
       Text messages position on screen
-  - step(pos) -> None:
-      Is called if the player moves
-  - loadMap(pos) -> None:
-      Loads map from spezified position
-  - saveMap(pos) -> None:
-      Saves map from spezified position
-  - createNewMap(pos) -> None:
-      Creates new map on spezified position
-  - evalCode(code) -> None:
-      Evaluates code from the parameter.
-  - setMapPos(pos) -> None:
-      Set all map positions.
-  - resize(size) -> None:
-      Resizes everything
-  - setPlayer(player) -> None:
-  - redrawAllMaps() -> None:
-      Sets draw all flag of all maps
-  - playerGo(Left/Right/Up/Down) -> None:
-      Moves player.
-  - draw() -> None
   - sendText(text)
       Add text to textfield.
+  - setMapPos(pos) -> None:
+      Set all map positions.
+  - setPlayer(player) -> None:
+  - step(pos) -> None:
+      Is called if the player moves
 
