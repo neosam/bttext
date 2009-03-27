@@ -49,7 +49,6 @@ class World(object):
                                     self.globalMapPos[0] - pos[0],
                                     self.globalMapPos[1] - pos[1])
         self.maps[pos] = gamemap.loadFromFile(filename, self)
-#       self.maps[pos].textField = self.textField
 
     def saveMap(self, pos):
         filename = "%s/map%i_%i" % (self.filename,
@@ -63,7 +62,7 @@ class World(object):
         self.setMapPos(self.softPos)
         self.redrawAllMaps()
 
-    def askCode(self):
+    def evalCode(self, text):
         def out(txt):
             self.textField.sendText(str(txt))
         def save():
@@ -81,8 +80,8 @@ class World(object):
             self.createNewMap(pos)
 
         def addPerson(name, ascii, message):
-            p = person.Person(self.textField, name, 
-                              self.maps[0, 0], self, 
+            p = person.Person(self.textField, name,
+                              self.maps[0, 0], self,
                               mapDraw=[ascii, foreground, background])
             p.message = message
             self.maps[0, 0].persons[tuple(self.player.pos)] = p
@@ -90,15 +89,9 @@ class World(object):
         def removePerson():
             self.maps[0, 0].persons.pop(tuple(self.player.pos))
 
-        title = "/\\\\ Hack some code //\\"
-        win = curses.newwin(self.h - 6, self.w - 10, 3, 5)
-        win.box()
-        size = win.getmaxyx()
-        win.addstr(0, size[1] / 2 - len(title) / 2, title)
-        win.refresh()
-        win = curses.newwin(self.h - 8, self.w - 12, 4, 6)
-        t = Textbox(win)
-        text = t.edit()
+        if callable(text):
+            text = text()
+
         code = compile(text, 'fake.py', 'exec')
         try:
             eval(code)

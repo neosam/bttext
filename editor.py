@@ -1,3 +1,4 @@
+import textbox
 import statusbox
 import sys
 import curses
@@ -151,18 +152,10 @@ def addTrigger():
     global cursor, stdscr, theWorld
 
     dst = cursor.gMap[cursor.pos]
-    title = "/\\\\ Add trigger code //\\"
-    win = curses.newwin(theWorld.h - 6, theWorld.w - 10, 3, 5)
-    win.box()
-    size = win.getmaxyx()
-    win.addstr(0, size[1] / 2 - len(title) / 2, title)
-    win.refresh()
-    win = curses.newwin(theWorld.h - 8, theWorld.w - 12, 4, 6)
+    text = ""
     if 'trigger' in dst:
-        win.addstr(dst['trigger'])
-    t = Textbox(win)
-    dst['trigger'] = t.edit()
-    cursor.gMap[cursor.pos] = dst
+        text = dst['trigger']
+    dst['trigger'] = textbox.textEdit(theWorld, "Add trigger code", text)
 
 def changeForeground():
     global stdscr, foreground
@@ -245,15 +238,7 @@ def saveMap():
 def insertFlag():
     global cursor, stdscr, theWorld
 
-    title = "/\\\\ Set field name //\\"
-    win = curses.newwin(3, theWorld.w - 10, theWorld.h / 2 - 1, 6)
-    win.box()
-    size = win.getmaxyx()
-    win.addstr(0, size[1] / 2 - len(title) / 2, title)
-    win.refresh()
-    win = curses.newwin(1, theWorld.w - 12, theWorld.h / 2, 7)
-    t = Textbox(win)
-    k = t.edit()
+    k = textbox.lineEdit(theWorld, 'Set named field')
     cursor.gMap.setNamedField(k, cursor.pos)
 
 
@@ -283,7 +268,8 @@ def main():
             ["j", theWorld.playerGoDown, (True,)],
             ["k", theWorld.playerGoUp, (True,)],
             ["l", theWorld.playerGoRight, (True,)],
-            ["c", theWorld.askCode, ()],
+            ["c", theWorld.evalCode, 
+             (lambda: textbox.textEdit(theWorld,'hack'),)],
             ["A", insertFile, ()],
             ["a", insertAscii, ()],
             ["t", insertText, ()],

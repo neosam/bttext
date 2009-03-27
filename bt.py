@@ -1,3 +1,4 @@
+import textbox
 import sys
 import curses
 import timer
@@ -52,11 +53,7 @@ def step(self, pos):
 
     source = self.player.gMap[pos]
     if 'trigger' in source:
-        try:
-            code = compile(source['trigger'], 'fake.py', 'exec')
-        except:
-            self.sendText('TriggerError')
-        eval(code)
+        self.evalCode(source['trigger'])
         source.pop('trigger')
 
     if tuple(pos) in self.maps[0, 0].persons:
@@ -110,7 +107,8 @@ def main():
             if c == ord("j"): theWorld.playerGoDown()  #  Player
             if c == ord("k"): theWorld.playerGoUp()    #  movement
             if c == ord("l"): theWorld.playerGoRight() #
-            if c == ord("c"): theWorld.askCode()
+            if c == ord("c"): theWorld.evalCode(textbox.textEdit(theWorld,
+                                                                 'hack'))
             if c == ord("x"): theWorld.sendText(str(mike.gMap.pos))
             # --- Event handling ---
 
