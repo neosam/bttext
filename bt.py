@@ -95,22 +95,31 @@ def main():
             timer.fpsDelay()         # FPS-Control
             clearError()
                                      # +++ Event handling +++
-            c = stdscr.getch()       # I don't think an eventloop is needed in a
-                                     # textadventure
-            if c == ord("q"):
-                theWorld.sendText("Bitte im Menue Beenden ('m' druecken)")
-            if c == ord("w"): # Switches between colored and b/w
-                misc.COLORED = not misc.COLORED
-                theWorld.redrawAllMaps()
-            if c == ord("m"): menu.start() # Enter menu
-            if c == ord("h"): theWorld.playerGoLeft()  #
-            if c == ord("j"): theWorld.playerGoDown()  #  Player
-            if c == ord("k"): theWorld.playerGoUp()    #  movement
-            if c == ord("l"): theWorld.playerGoRight() #
-            if c == ord("c"): theWorld.evalCode(textbox.textEdit(theWorld,
+            try:
+                c = stdscr.getkey() 
+
+                if c == ord("q"):
+                    theWorld.sendText("Bitte im Menue Beenden ('m' druecken)")
+                if c == ord("w"): # Switches between colored and b/w
+                    misc.COLORED = not misc.COLORED
+                    theWorld.redrawAllMaps()
+                if c == "m": menu.start() # Enter menu
+                if c == "h": theWorld.playerGoLeft()  #
+                if c == "j": theWorld.playerGoDown()  #  Player
+                if c == "k": theWorld.playerGoUp()    #  movement
+                if c == "l": theWorld.playerGoRight() #
+                if c == "KEY_LEFT": theWorld.playerGoLeft()
+                if c == "KEY_RIGHT": theWorld.playerGoRight()
+                if c == "KEY_UP": theWorld.playerGoUp()
+                if c == "KEY_DOWN": theWorld.playerGoDown()
+                if c == "c": theWorld.evalCode(textbox.textEdit(theWorld,
                                                                  'hack'))
-            if c == ord("x"): theWorld.sendText(str(mike.gMap.pos))
+                if c == "x": theWorld.sendText(str(mike.gMap.pos))
             # --- Event handling ---
+            except SystemExit:
+                raise SystemExit
+            except:
+                pass
 
             # +++ Drawing +++
             oldH = h   # Need this for resizing
