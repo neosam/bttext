@@ -1,0 +1,53 @@
+World class:
+
+Description:
+The World class handles everything including player movement, map loading
+and so on.
+
+It always loads nine maps, the current map and the eight surrounding ones.
+If loading failes it loads a FakeGameMap.
+
+
+Attributes:
+  - WALK_AREA - Rectangular area in the center of the map where the player
+                can move without moving the map.
+
+  - border: Border between text field and map
+  - filename: directory where it should read
+  - globalMapPos: To determine which map should be loaded.
+  - maps: Dictionary which holds 9 maps.
+          See in class description for more details.
+  - softPos: the maps' position
+  - stdscr: curses window
+  - w, h:  screen width and height.
+
+Methods:
+  - borderFunction() -> None:
+      Refresh border attribute
+  - screenposMap() -> (x, y, w, h):
+      Map position on screen
+  - screenposText() -> (x, y, w, h):
+      Text messages position on screen
+  - step(pos) -> None:
+      Is called if the player moves
+  - loadMap(pos) -> None:
+      Loads map from spezified position
+  - saveMap(pos) -> None:
+      Saves map from spezified position
+  - createNewMap(pos) -> None:
+      Creates new map on spezified position
+  - evalCode(code) -> None:
+      Evaluates code from the parameter.
+  - setMapPos(pos) -> None:
+      Set all map positions.
+  - resize(size) -> None:
+      Resizes everything
+  - setPlayer(player) -> None:
+  - redrawAllMaps() -> None:
+      Sets draw all flag of all maps
+  - playerGo(Left/Right/Up/Down) -> None:
+      Moves player.
+  - draw() -> None
+  - sendText(text)
+      Add text to textfield.
+

@@ -1,0 +1,35 @@
+GameMap class
+
+Attributes:
+  - namedField - A dictionary which holds the namedFields.  Key is name.
+  - persons - A dictionary which holds the persons.  Key is position.
+  - maps - One dimensional of tiles index = y * LEVEL_WIDTH + x
+
+Methods:
+  __getitem__(pos) -> tile:
+      returns the tile on pos
+  __setitem__(pos, v):
+      sets tile on pos
+  - clear() -> None:
+      Clears the map.
+  - get(Ascii/FG/BG) and isWalkable (pos) -> attribute:
+      returns the specified attribute.
+  - set(Ascii/FG/BG/Walkable(pos, v) -> None:
+      Sets the specified attribute to v
+  - save(filename) -> None:
+      Saves map to filenamed file using pickle protocol 0
+  - load(filename) -> None:
+      Loads map from filenamed file.
+  - getNamedField(name) -> (x, y):
+      Get the position of the named field
+  - setNamedField(name, pos) -> None:
+      Set new namedField or replaces name.
+  - resize((x, y, w, h)) -> None:
+      Set size of map
+  - toScreenpos((x, y)) -> x, y:
+      Calculates screenpos from map coordinates.  If screenpos wouldn't
+      fit in the map, it returns (0, 0) to avoid a crash.
+  - draw() -> None:
+      Draw marked tiles
+  - drawAll() -> None:
+      Draw complete visible map.

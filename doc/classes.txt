@@ -1,0 +1,13 @@
+Bermuda Triangle 0.1 should come up with this classes:
+
+World:
+  This is the main class which handles the game.
+
+GameMap:
+  One part of a big map.  A world objects connects more of them.
+
+Person:
+  Represents a person, monster. ...
+
+Player:
+  This is the Player.  Extends from Person.

@@ -1,0 +1,20 @@
+Person class:
+
+Attributes:
+  - color - Color in text messages
+  - name - Name of person
+  - mapDraw - [ascii, fg, bg]: how to draw this person on the map
+  - message - List of messages.  Even index says the person, odd the player
+              on crash.
+
+Methods:
+  - say(text):
+      Person says something.  This will be drawn on the text field.
+  - jumpTo(x, y):
+      Jumps on the local map
+  - go(Right/Left/Up/Down):
+
+
+Events:
+  - onCrash() - if player walks into person
+  - onFrame() - called every frame
