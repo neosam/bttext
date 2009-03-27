@@ -177,112 +177,36 @@ class World(object):
         self.player.gMap = self.maps[mx][my]
 
 
-    # TODO: Don't like that code
     def check_playerpos(self):
         changed = False
         mappos = self.screenposMap()
-        if self.player.pos[0] < 0:
-            self.globalMapPos[0] -= 1
-            for y in range(-1, 2):
-                for x in range(0, 2):
-                    self.maps[x - 1, y] = self.maps[x, y]
+        def scrollMaps(func, rangex, rangey):
+            self.globalMapPos = func(self.globalMapPos)
+            for y in rangey:
+                for x in rangex:
+                    self.maps[tuple(func([x, y]))] = self.maps[x, y]
                     self.maps[x, y] = gamemap.FakeGameMap(*mappos)
                     changed = True
-        if self.player.pos[0] >= gamemap.LEVEL_WIDTH:
-            self.globalMapPos[0] += 1
-            for y in range(-1, 2):
-                for x in range(0, -2, -1):
-                    self.maps[x + 1, y] = self.maps[x, y]
-                    self.maps[x, y] = gamemap.FakeGameMap(*mappos)
-                    changed = True
-        if self.player.pos[1] < 0:
-            self.globalMapPos[1] -= 1
-            for y in range(0, 2):
-                for x in range(-1, 2):
-                    self.maps[x, y - 1] = self.maps[x, y]
-                    self.maps[x, y] = gamemap.FakeGameMap(*mappos)
-                    changed = True
-        if self.player.pos[1] >= gamemap.LEVEL_HEIGHT:
-            self.globalMapPos[1] += 1
-            for y in range(0, -2, -1):
-                for x in range(-1, 2):
-                    self.maps[x, y + 1] = self.maps[x, y]
-                    self.maps[x, y] = gamemap.FakeGameMap(*mappos)
-                    changed = True
-
-        if changed:
             self.player.pos[0] %= gamemap.LEVEL_WIDTH
             self.player.pos[1] %= gamemap.LEVEL_HEIGHT
             self.player.gMap = self.maps[0, 0]
             self.setMapPos(self.maps[0,0].pos)
 
+        if self.player.pos[0] < 0:
+            scrollMaps(lambda(pos): [pos[0] - 1, pos[1]], 
+                       range(0, 2), range(-1, 2))
+        if self.player.pos[0] >= gamemap.LEVEL_WIDTH:
+            scrollMaps(lambda(pos): [pos[0] + 1, pos[1]],
+                       range(0, -2, -1), range(-1, 2))
+        if self.player.pos[1] < 0:
+            scrollMaps(lambda(pos): [pos[0], pos[1] - 1],
+                       range(-1, 2), range(0, 2))
+        if self.player.pos[1] >= gamemap.LEVEL_HEIGHT:
+            scrollMaps(lambda(pos): [pos[0], pos[1] + 1],
+                       range(-1, 2), range(0, -2, -1))
+
         self.statusBox.newField(self.player.gMap[self.player.pos])
  
-    def playerGoRight(self):
-        self.player.gMap.drawPos.append([self.player.pos[0], 
-                                         self.player.pos[1]])
-        self.step((self.player.pos[0] + 1, self.player.pos[1]))
-        self.player.goRight()
-        self.check_playerpos()
-
-        if ((self.player.gMap.size[0] * self.mapPos[0] +
-             self.player.pos[0]) - self.softPos[0]) > self.walkArea:
-            self.setMapPos((self.softPos[0] + 1, self.softPos[1]))
-            self.redrawAllMaps()
-        try:
-            self.curLevel.playerMoved()
-        except:
-            pass
-
-
-    def playerGoLeft(self):
-        self.player.gMap.drawPos.append([self.player.pos[0], 
-                                         self.player.pos[1]])
-        self.step((self.player.pos[0] - 1, self.player.pos[1]))
-        self.player.goLeft()
-        self.check_playerpos()
-
-        if ((self.player.gMap.size[0] * self.mapPos[0] +
-             self.player.pos[0]) - self.softPos[0]) < -self.walkArea:
-            self.setMapPos((self.softPos[0] - 1, self.softPos[1]))
-            self.redrawAllMaps()
-        try:
-            self.curLevel.playerMoved()
-        except:
-            pass
-
-    def playerGoUp(self):
-        self.player.gMap.drawPos.append([self.player.pos[0], 
-                                         self.player.pos[1]])
-        self.step((self.player.pos[0], self.player.pos[1] - 1))
-
-        self.player.goUp()
-        self.check_playerpos()
-
-        if ((self.player.gMap.size[1] * self.mapPos[1] +
-             self.player.pos[1]) - self.softPos[1]) < -self.walkArea:
-            self.setMapPos((self.softPos[0], self.softPos[1] - 1))
-            self.redrawAllMaps()
-        try:
-            self.curLevel.playerMoved()
-        except:
-            pass
-
-    def playerGoDown(self):
-        self.player.gMap.drawPos.append([self.player.pos[0], self.player.pos[1]])
-        self.step((self.player.pos[0], self.player.pos[1] + 1))
-        self.player.goDown()
-        self.check_playerpos()
-
-        if ((self.player.gMap.size[1] * self.mapPos[1] +
-             self.player.pos[1]) - self.softPos[1]) > self.walkArea:
-            self.setMapPos((self.softPos[0], self.softPos[1] + 1))
-            self.redrawAllMaps()
-        try:
-            self.curLevel.playerMoved()
-        except:
-            pass
-
     def draw(self, dst):
         for elem in self.persons:
             if (self.player.pos[0] == elem.pos[0]) & \
@@ -299,3 +223,27 @@ class World(object):
 
     def sendText(self, text):
         self.textField.sendText(text)
+
+def playerGo(posmodifier, playerfunc):
+    def action(self):
+        self.player.gMap.drawPos.append([self.player.pos[0],
+                                         self.player.pos[1]])
+        self.step(posmodifier(self.player.pos))
+        getattr(self.player, playerfunc)()  # self.player.go...
+        self.check_playerpos()
+
+        # Handler for walk area
+        if (abs((self.player.gMap.size[0] * self.mapPos[0] +
+             self.player.pos[0]) - self.softPos[0]) >  
+            abs(self.walkArea)) or \
+           (abs((self.player.gMap.size[1] * self.mapPos[1] +
+             self.player.pos[1]) - self.softPos[1]) > 
+            abs(self.walkArea)):
+            self.setMapPos(posmodifier(self.softPos))
+            self.redrawAllMaps()
+    return action
+
+World.playerGoLeft = playerGo(lambda(pos): [pos[0] - 1, pos[1]], 'goLeft')
+World.playerGoRight = playerGo(lambda(pos): [pos[0] + 1, pos[1]], 'goRight')
+World.playerGoUp = playerGo(lambda(pos): [pos[0], pos[1] - 1], 'goUp')
+World.playerGoDown = playerGo(lambda(pos): [pos[0], pos[1] + 1], 'goDown')
