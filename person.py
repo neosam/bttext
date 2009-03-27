@@ -17,14 +17,15 @@ class Person(object):
         self.message = ''
 
         if profile == 0:
-            profile = { "HP": [0,0] }
+            profile = { "": [100,100] }
         self.profile = profile
 
     def __getstate__(self):
         return {'color': self.color,
                 'name': self.name,
                 'mapDraw': self.mapDraw,
-                'message': self.message}
+                'message': self.message,
+                'profile': self.profile}
 
     def say(self, text):
         try:
@@ -68,6 +69,10 @@ class Person(object):
     def crashWith(self, person):
         pass
 
+    def setHP(self, hp):
+        self.profile["hp"][0] = hp
+        self.onChangeHP()
+
     def onCrash(self):
         if self.message != '':
             self.tf.sendText('')
@@ -78,6 +83,9 @@ class Person(object):
                     self.theWorld.player.say(self.message[i])
 
     def onFrame(self):
+        pass
+
+    def onChangeHP(self):
         pass
 
 def go(posmodifier):

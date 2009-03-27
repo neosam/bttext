@@ -86,8 +86,9 @@ def main():
         try:
             filename = "%s/init.py" % sys.argv[1]
             initFile = file(filename).read()
-            code = compile(initFile, filename, 'exec')
-            eval(code)
+#            code = compile(initFile, filename, 'exec')
+#            eval(code)
+            theWorld.evalCode(initFile)
         except:
             theWorld.sendText('Could not load init.py')
 
@@ -151,11 +152,11 @@ def main():
             stdscr.refresh()
         # --- Drawing ---
     
-        init.quit()
 
     except SystemExit:   # This is not really an error so there happens nothing
-        pass
+        init.quit()
     except:              # If there was an error python will do this:
+        init.quit()
         # Exiting curses
         curses.nocbreak()
         stdscr.keypad(0)

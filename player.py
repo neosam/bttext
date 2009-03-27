@@ -13,9 +13,8 @@ class Player (Person):
 
     def onChangeHP(self):
         self.statusBox.changeHP(self.profile["hp"])
+        if self.profile['hp'][0] == 0: self.theWorld.dead()
 
     def onChangeMP(self):
         self.statusBox.changeHP(self.profile["mp"])
 
-     
-        

@@ -34,6 +34,9 @@ class World(object):
     def borderFunction(self, w, h):
         self.border = w * 3 / 4
 
+    def dead(self):
+        raise SystemExit
+
     def screenposMap(self):
         return (self.border + 2, 6, (self.w - self.border) - 5,
                 self.h - 8)
@@ -86,13 +89,15 @@ class World(object):
         code = compile(text, 'fake.py', 'exec')
         try:
             eval(code)
+        except SystemExit:
+            raise SystemExit
         except:
             tb = sys.exc_info()[2]
             while tb != None:
                 self.textField.sendText(str(tb.tb_lineno))
                 tb = tb.tb_next
             self.textField.sendText(sys.exc_info()[0])
-            self.textField.sendText(sys.exc_info()[1])
+            self.textField.sendText(str(sys.exc_info()[1]))
 
     def setMapPos(self, pos):
         self.softPos = pos
@@ -105,7 +110,7 @@ class World(object):
         except:
             pass
 
-    def save(self, filename):
+    def save(self):
         for y in xrange(-1, 2):
             for x in xrange(-1, 2):
                 self.saveMap((x, y))

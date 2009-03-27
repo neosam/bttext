@@ -18,3 +18,4 @@ Methods:
 Events:
   - onCrash() - if player walks into person
   - onFrame() - called every frame
+  - onChangeHP() - called every time the hp changes
