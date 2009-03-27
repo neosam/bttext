@@ -105,9 +105,6 @@ class World(object):
         except:
             pass
 
-    def getPlayerPos(self):
-        return self.player.pos, self.mapPos
-
     def save(self, filename):
         for y in xrange(-1, 2):
             for x in xrange(-1, 2):
@@ -119,12 +116,6 @@ class World(object):
                 self.loadMap((x, y))
         self.redrawAllMaps()
         self.setMapPos(self.softPos)
-
-
-    def addPerson(self, person):
-        person.gMap = self.maps[0, 0]
-        person.tf = self.textField
-        self.persons.append(person)
 
     def resize(self, w, h):
         self.w = w
