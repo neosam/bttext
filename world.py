@@ -160,12 +160,6 @@ class World(object):
         for map in self.maps.values():
             map.drawAllFlag = True
 
-    def jumpPlayerTo(self, x, y, mx, my):
-        self.player.pos = [x, y]
-        self.player.mapPos = [mx, my]
-        self.player.gMap = self.maps[mx][my]
-
-
     def check_playerpos(self):
         changed = False
         mappos = self.screenposMap()
