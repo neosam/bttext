@@ -56,29 +56,20 @@ class World(object):
                                     self.globalMapPos[1] - pos[1])
         self.maps[pos].saveToFile(filename)
 
-    def createNewMap(self, pos):
+    def createNewMap(self, pos=(0, 0)):
         mappos = self.screenposMap()
         self.maps[pos] = gamemap.GameMap(*mappos)
         self.setMapPos(self.softPos)
         self.redrawAllMaps()
 
     def evalCode(self, text):
+        player = self.player
+        theWorld = self
         def out(txt):
             self.textField.sendText(str(txt))
-        def save():
-            for y in xrange(-1, 2):
-                for x in xrange(-1, 2):
-                    self.saveMap((x, y))
-        def load():
-            for y in xrange(-1, 2):
-                for x in xrange(-1, 2):
-                    self.loadMap((x, y))
-            self.redrawAllMaps()
-            self.setMapPos(self.softPos)
-
-        def new(pos=(0, 0)):
-            self.createNewMap(pos)
-
+        save = self.save
+        load = self.load
+        new = self.createNewMap
         def addPerson(name, ascii, message):
             p = person.Person(self.textField, name,
                               self.maps[0, 0], self,
@@ -118,18 +109,23 @@ class World(object):
         return self.player.pos, self.mapPos
 
     def save(self, filename):
-        pass
+        for y in xrange(-1, 2):
+            for x in xrange(-1, 2):
+                self.saveMap((x, y))
 
     def load(self):
         for y in xrange(-1, 2):
             for x in xrange(-1, 2):
                 self.loadMap((x, y))
+        self.redrawAllMaps()
+        self.setMapPos(self.softPos)
+
 
     def addPerson(self, person):
         person.gMap = self.maps[0, 0]
         person.tf = self.textField
         self.persons.append(person)
-    
+
     def resize(self, w, h):
         self.w = w
         self.h = h
