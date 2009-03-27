@@ -13,7 +13,6 @@ class Person(object):
         self.gMap = gMap
         self.pos = pos
         self.mapDraw = mapDraw
-        self.cheatWalkEverywhere = False
         self.theWorld = w
         self.message = ''
 
@@ -82,14 +81,13 @@ class Person(object):
         pass
 
 def go(posmodifier):
-     def action(self):
+     def action(self, force=False):
          pos = posmodifier(self.pos)
          gMap = self.theWorld.maps[pos[0] / 256 * (-1),
                                    pos[1] / 256 * (-1)]
          pos = [x % 256 for x in pos]
          if (gMap[pos]['walkable'] == True) and \
-            (tuple(pos) not in gMap.persons) or \
-            (self.cheatWalkEverywhere):
+            (tuple(pos) not in gMap.persons) or force:
              self.jumpTo(*posmodifier(self.pos))
      return action
 

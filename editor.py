@@ -68,7 +68,7 @@ def insertText():
 
     asciiValue = insertAscii()
     while asciiValue != "\n":
-        theWorld.playerGoRight()
+        theWorld.playerGoRight(force=True)
         theWorld.draw(stdscr)
         stdscr.refresh()
         asciiValue = insertAscii()
@@ -78,7 +78,7 @@ def insertVText():
 
     asciiValue = insertAscii()
     while asciiValue != "\n":
-        theWorld.playerGoDown()
+        theWorld.playerGoDown(force=True)
         theWorld.draw(stdscr)
         stdscr.refresh()
         asciiValue = insertAscii()
@@ -279,22 +279,22 @@ def main():
         theWorld.resize(w, h)
 
         shortcutList = [
-            ["h", theWorld.playerGoLeft],
-            ["j", theWorld.playerGoDown],
-            ["k", theWorld.playerGoUp],
-            ["l", theWorld.playerGoRight],
-            ["c", theWorld.askCode],
-            ["A", insertFile],
-            ["a", insertAscii],
-            ["t", insertText],
-            ["v", insertVText],
-            ["F", fill],
-            ["T", addTrigger],
-            ["f", changeForeground],
-            ["b", changeBackground],
-            ["g", changeWalkable],
-            ["s", saveMap],
-            ["e", insertFlag]]
+            ["h", theWorld.playerGoLeft, (True,)],
+            ["j", theWorld.playerGoDown, (True,)],
+            ["k", theWorld.playerGoUp, (True,)],
+            ["l", theWorld.playerGoRight, (True,)],
+            ["c", theWorld.askCode, ()],
+            ["A", insertFile, ()],
+            ["a", insertAscii, ()],
+            ["t", insertText, ()],
+            ["v", insertVText, ()],
+            ["F", fill, ()],
+            ["T", addTrigger, ()],
+            ["f", changeForeground, ()],
+            ["b", changeBackground, ()],
+            ["g", changeWalkable, ()],
+            ["s", saveMap, ()],
+            ["e", insertFlag, ()]]
         # Initialize cursor object
         cursor = Player(theWorld.statusBox, -1, "Cursor", -1, theWorld, [0, 0], ["C", 0, 3],
                       configs.colorof["mike"][0], profile={"hp": [100, 100],
@@ -304,8 +304,6 @@ def main():
         
         # Adding cursor to the world
         theWorld.setPlayer(cursor)
-
-        theWorld.setCheatWalkEverywhere(True)
 
         while 1:                     # Gameloop
             timer.fpsDelay()         # FPS-Control
@@ -321,7 +319,7 @@ def main():
                 theWorld.redrawAllMaps()
             for elem in shortcutList:
                 if c == ord(elem[0]):
-                    elem[1]()
+                    elem[1](*elem[2])
 #            if c == ord("m"): menu.start() # Enter menu
 #            if c == ord("h"): theWorld.playerGoLeft()  #
 #            if c == ord("j"): theWorld.playerGoDown()  #  Cursor

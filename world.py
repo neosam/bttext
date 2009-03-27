@@ -27,8 +27,6 @@ class World(object):
         self.WALK_AREA = 3
 
         self.load()
-
-        self.cheatWalkEverywhere = False
         self.statusBox = statusbox.statusBox(stdscr, w, h, self.border)
         self.setMapPos((0, 0))
         self.redrawAllMaps()
@@ -126,10 +124,6 @@ class World(object):
     def getPlayerPos(self):
         return self.player.pos, self.mapPos
 
-    def setCheatWalkEverywhere(self, newCheat):
-        self.cheatWalkEverywhere = newCheat
-        self.player.cheatWalkEverywhere = newCheat
-
     def save(self, filename):
         pass
 
@@ -215,11 +209,11 @@ class World(object):
 
 
 def playerGo(posmodifier, playerfunc):
-    def action(self):
+    def action(self, force=False):
         self.player.gMap.drawPos.append([self.player.pos[0],
                                          self.player.pos[1]])
         self.step(posmodifier(self.player.pos))
-        getattr(self.player, playerfunc)()  # self.player.go...
+        getattr(self.player, playerfunc)(force)  # self.player.go...
         self.check_playerpos()
 
         # Handler for walk area

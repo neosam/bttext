@@ -85,8 +85,6 @@ def main():
         # Adding mike to Bermuda Triangle World
         theWorld.setPlayer(player)
 
-        theWorld.setCheatWalkEverywhere(False)
-
         # Try to load and evaluate the init file.
         try:
             filename = "%s/init.py" % sys.argv[1]
