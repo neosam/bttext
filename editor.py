@@ -14,7 +14,6 @@ from player import *
 import menu
 import textout
 import world
-import gui
 import traceback
 from curses.textpad import Textbox
 
