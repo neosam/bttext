@@ -5,6 +5,7 @@ import gamemap
 import textfield
 import timer
 import person
+import enemy
 import statusbox
 from configs import misc
 import textout
@@ -78,6 +79,12 @@ class World(object):
                               self.maps[0, 0], self,
                               mapDraw=[ascii, foreground, background])
             p.message = message
+            self.maps[0, 0].persons[tuple(self.player.pos)] = p
+
+        def addEnemy(name, ascii):
+            p = enemy.Enemy(self.textField, name,
+                            self.maps[0, 0], self,
+                            mapDraw=[ascii, foreground, background])
             self.maps[0, 0].persons[tuple(self.player.pos)] = p
 
         def removePerson():
@@ -189,8 +196,8 @@ class World(object):
 
 def playerGo(posmodifier, playerfunc):
     def action(self, force=False):
-        self.player.gMap.drawPos.append([self.player.pos[0],
-                                         self.player.pos[1]])
+#        self.player.gMap.drawPos.append([self.player.pos[0],
+#                                         self.player.pos[1]])
         self.step(posmodifier(self.player.pos))
         getattr(self.player, playerfunc)(force)  # self.player.go...
         self.check_playerpos()

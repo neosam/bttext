@@ -150,13 +150,21 @@ class GameMap(object):
 
                 screenpos = self.to_screenpos(pos[0], pos[1])
                 if configs.misc.COLORED == True:
-                    dst.addstr(screenpos[1], screenpos[0], self[pos]['ascii'],
-                               color.color(self[pos]['fg'], self[pos]['bg']))
+                    if tuple(pos) in self.persons:
+                        mapDraw = self.persons[tuple(pos)].mapDraw
+                        dst.addstr(screenpos[1], screenpos[0],
+                                   mapDraw[0],
+                                   color.color(mapDraw[1], mapDraw[2]))
+                    else:
+                        dst.addstr(screenpos[1], screenpos[0],
+                                   self[pos]['ascii'],
+                                   color.color(self[pos]['fg'],
+                                   self[pos]['bg']))
                 else:
                     dst.addstr(screenpos[1], screenpos[0], self[pos]['ascii'])
 
 
-                self.drawPos = []
+            self.drawPos = []
 
     def drawAll(self, dst):
         self.drawAllFlag = False

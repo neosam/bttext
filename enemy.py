@@ -1,5 +1,8 @@
 from person import Person
+import random
 
-class Enemy(person.Person):
+class Enemy(Person):
     def onFrame(self):
-        self.goLeft()
+        if random.randrange(10) == 0:
+            random.choice([self.goLeft, self.goRight, 
+                           self.goUp, self.goDown])()

@@ -100,6 +100,8 @@ def go(posmodifier):
                 ("Player" not in str(type(self))):
                  self.gMap.persons.pop(tuple(self.pos))
                  self.gMap.persons[tuple(pos)] = self
+             self.gMap.drawPos.append(self.pos)
+             self.gMap.drawPos.append(pos)
              self.jumpTo(*posmodifier(self.pos))
      return action
 
