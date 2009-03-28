@@ -95,7 +95,8 @@ def go(posmodifier):
                                    pos[1] / 256 * (-1)]
          pos = [x % 256 for x in pos]
          if (gMap[pos]['walkable'] == True) and \
-            (tuple(pos) not in gMap.persons) or force:
+            (tuple(pos) not in gMap.persons) and \
+            (pos != self.theWorld.player.pos) or force:
              if (tuple(self.pos) in self.gMap.persons) and \
                 ("Player" not in str(type(self))):
                  self.gMap.persons.pop(tuple(self.pos))
