@@ -28,8 +28,11 @@ def loadFromFile(filename, theWorld):
     for persons in res.persons.values():
         persons.tf = theWorld.textField
         persons.theWorld = theWorld
+        persons.gMap = res
         if not hasattr(persons, 'profile'):
             persons.profile = {"hp": 100}
+    for position in res.persons:
+        res.persons[position].pos = list(position)
     return res
 
 class GameMap(object):

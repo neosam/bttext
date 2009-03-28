@@ -96,6 +96,10 @@ def go(posmodifier):
          pos = [x % 256 for x in pos]
          if (gMap[pos]['walkable'] == True) and \
             (tuple(pos) not in gMap.persons) or force:
+             if (tuple(self.pos) in self.gMap.persons) and \
+                ("Player" not in str(type(self))):
+                 self.gMap.persons.pop(tuple(self.pos))
+                 self.gMap.persons[tuple(pos)] = self
              self.jumpTo(*posmodifier(self.pos))
      return action
 
