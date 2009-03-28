@@ -113,6 +113,11 @@ def main():
                 if c == "KEY_RIGHT": theWorld.playerGoRight()
                 if c == "KEY_UP": theWorld.playerGoUp()
                 if c == "KEY_DOWN": theWorld.playerGoDown()
+                if c == "y": theWorld.attackLeft()
+                if c == "z": theWorld.attackLeft()
+                if c == "u": theWorld.attackDown()
+                if c == "i": theWorld.attackUp()
+                if c == "o": theWorld.attackRight()
                 if c == "c": theWorld.evalCode(textbox.textEdit(theWorld,
                                                                  'hack'))
                 if c == "x": theWorld.sendText(str(mike.gMap.pos))

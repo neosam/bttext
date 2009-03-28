@@ -17,7 +17,7 @@ class Person(object):
         self.message = ''
 
         if profile == 0:
-            profile = { "": [100,100] }
+            profile = { "hp": [100,100] }
         self.profile = profile
 
     def __getstate__(self):
@@ -86,7 +86,9 @@ class Person(object):
         pass
 
     def onChangeHP(self):
-        pass
+        if self.profile['hp'][0] <= 0:
+            if tuple(self.pos) in self.gMap.persons:
+                self.gMap.persons.pop(tuple(self.pos))
 
 def go(posmodifier):
      def action(self, force=False):
