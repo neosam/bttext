@@ -122,6 +122,9 @@ def main():
             except:
                 pass
 
+            for person in theWorld.maps[0, 0].persons.values():
+                person.onFrame()
+
             # +++ Drawing +++
             oldH = h   # Need this for resizing
             oldW = w
