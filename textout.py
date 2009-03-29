@@ -4,6 +4,7 @@ import init
 import bt
 import sys
 import init
+import os
 
 color = configs.color
 colorof = configs.colorof
@@ -11,10 +12,14 @@ recreateColors = configs.recreateColors
 addError = configs.addError
 clearError = configs.clearError
 misc = configs.misc
+lang = os.getenv('LANG')[:2]
 
 class btText(str):
+    trans = dict()
     def __init__(self, text = ""):
         try:
+            if (text in self.trans) and (lang in self.trans[text]):
+                text = self.trans[text][lang]
             self.__orig__ = text
             self.__inlist__ = str(text).split("$%")
             self.__cont__ = self.__makestr__()
