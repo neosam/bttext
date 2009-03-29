@@ -13,18 +13,18 @@
 ** insert ascii art (done)
 
 * Game:
-** Battle mode !!
-*** Something can hurt the player
-*** Player can attack.
-** Delete standard trigger after exec
+** Battle mode !! (done)
+*** Something can hurt the player (dont)
+*** Player can attack. (dont)
+** Delete standard trigger after execa(dont)
 *** Save/Load
 **** Copy game in private folder
  
 * All:
-** Use Person class for persons !!
+** Use Person class for persons !! (done)
 ** Better widgets for text edit
 ** Translate everything in english !!!
-*** Readme
+*** Readme (done)
 *** Translation tools
 **** Tool to extract strings
 **** Tool to import strings
@@ -32,7 +32,7 @@
 ** More trigger shortcut functions
 *** getTile(label)
 *** setTile(label, tile)
-*** player object
+*** player object (done)
 ** Trigger which is always executed
-** Stupid AI !!
-*** Call frame player.frame function each frame
+** Stupid AI !! (done)
+*** Call frame player.frame function each frame (done)
