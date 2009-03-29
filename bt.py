@@ -55,6 +55,8 @@ def step(self, pos):
     if 'trigger' in source:
         self.evalCode(source['trigger'])
         source.pop('trigger')
+    if 'rtrigger' in source:
+        self.evalCode(source['rtrigger'])
 
     if tuple(pos) in self.maps[0, 0].persons:
         self.maps[0, 0].persons[tuple(pos)].onCrash()

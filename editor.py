@@ -156,6 +156,15 @@ def addTrigger():
         text = dst['trigger']
     dst['trigger'] = textbox.textEdit(theWorld, "Add trigger code", text)
 
+def addRTrigger():
+    global cursor, stdscr, theWorld
+
+    dst = cursor.gMap[cursor.pos]
+    text = ""
+    if 'rtrigger' in dst:
+        text = dst['rtrigger']
+    dst['rtrigger'] = textbox.textEdit(theWorld, "Add rtrigger code", text)
+
 def changeForeground():
     global stdscr, foreground
 
@@ -275,6 +284,7 @@ def main():
             ["v", insertVText, ()],
             ["F", fill, ()],
             ["T", addTrigger, ()],
+            ["r", addRTrigger, ()],
             ["f", changeForeground, ()],
             ["b", changeBackground, ()],
             ["g", changeWalkable, ()],

@@ -33,6 +33,6 @@
 *** getTile(label) (done)
 *** setTile(label, tile) (done)
 *** player object (done)
-** Trigger which is always executed
+** Trigger which is always executed (done)
 ** Stupid AI !! (done)
 *** Call frame player.frame function each frame (done)
