@@ -29,9 +29,9 @@
 **** Tool to extract strings
 **** Tool to import strings
 *** Tranlate game texts
-** More trigger shortcut functions
-*** getTile(label)
-*** setTile(label, tile)
+** More trigger shortcut functions (done)
+*** getTile(label) (done)
+*** setTile(label, tile) (done)
 *** player object (done)
 ** Trigger which is always executed
 ** Stupid AI !! (done)

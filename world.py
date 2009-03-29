@@ -74,6 +74,11 @@ class World(object):
         save = self.save
         load = self.load
         new = self.createNewMap
+        try:
+            getNamedField = self.maps[0, 0].getNamedField
+            setNamedField = self.maps[0, 0].setNamedField
+        except:
+            pass
         def addPerson(name, ascii, message):
             p = person.Person(self.textField, name,
                               self.maps[0, 0], self,
