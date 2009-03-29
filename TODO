@@ -14,9 +14,9 @@
 
 * Game:
 ** Battle mode !! (done)
-*** Something can hurt the player (dont)
-*** Player can attack. (dont)
-** Delete standard trigger after execa(dont)
+*** Something can hurt the player (done)
+*** Player can attack. (done)
+** Delete standard trigger after execa(done)
 *** Save/Load
 **** Copy game in private folder
  
