@@ -1,4 +1,6 @@
 import curses
+from textout import btText
+
 
 class statusBox(object):
     def __init__(self, stdscr, w, h, border):
@@ -16,10 +18,13 @@ class statusBox(object):
         w = self.w
         h = self.h
         clearLine = " " * (self.w - 12)
+        msg = btText('Messages:')
+        map = btText('Map:')
+        state = btText("State:")
         self.stdscr.vline(4, self.border, curses.ACS_VLINE, h - 5)
-        self.stdscr.addstr(4, 2, "Meldungen:", curses.A_BOLD)
-        self.stdscr.addstr(4, self.border + 2, "Karte:", curses.A_BOLD)
-        self.stdscr.addstr(2, 2, "Status: ", curses.A_BOLD)
+        self.stdscr.addstr(4, 2, str(msg), curses.A_BOLD)
+        self.stdscr.addstr(4, self.border + 2, str(map), curses.A_BOLD)
+        self.stdscr.addstr(2, 2, str(state), curses.A_BOLD)
         self.stdscr.addstr(2, 10, clearLine)
         self.stdscr.addstr(2, 10, self.statusString)
 

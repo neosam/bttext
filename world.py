@@ -12,7 +12,6 @@ import textout
 import curses
 from curses.textpad import Textbox
 
-
 class World(object):
     def __init__(self, stdscr, w, h, filename):
         self.w = w
@@ -31,6 +30,11 @@ class World(object):
         self.statusBox = statusbox.statusBox(stdscr, w, h, self.border)
         self.setMapPos((0, 0))
         self.redrawAllMaps()
+
+        textout.btText.trans['Messages:'] = {'de': 'Meldungen:'}
+        textout.btText.trans['Map:'] = {'de': 'Karte:'}
+        textout.btText.trans['State:'] = {'de': 'Status:'}
+
 
     def borderFunction(self, w, h):
         self.border = w * 3 / 4

@@ -11,14 +11,14 @@ recreateColors = configs.recreateColors
 addError = configs.addError
 clearError = configs.clearError
 misc = configs.misc
-lang = os.getenv('LANG')[:2]
 
 class btText(str):
     trans = dict()
+    lang = os.getenv('LANG')[:2]
     def __init__(self, text = ""):
         try:
-            if (text in self.trans) and (lang in self.trans[text]):
-                text = self.trans[text][lang]
+            if (text in self.trans) and (self.lang in self.trans[text]):
+                text = self.trans[text][self.lang]
             self.__orig__ = text
             self.__inlist__ = str(text).split("$%")
             self.__cont__ = self.__makestr__()
