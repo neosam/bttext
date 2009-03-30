@@ -3,6 +3,7 @@ import init
 import sys
 import color
 import configs
+from textout import btText
 
 class Person(object):
     def __init__(self, tf, name, gMap, w, pos = [0,0], mapDraw=["?", 0, 7],
@@ -29,7 +30,9 @@ class Person(object):
 
     def say(self, text):
         try:
-            self.tf.sendText("$%" + str(self.color) + "$%" + self.name +
+            text = str(btText(text))
+            name = str(btText(self.name))
+            self.tf.sendText("$%" + str(self.color) + "$%" + name +
                              ":$%" + str(configs.colorof["talk"][0]) + "$% " + text)
         except:
             init.quit()
