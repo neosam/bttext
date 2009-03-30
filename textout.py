@@ -1,7 +1,6 @@
 import curses
 import configs
 import init
-import bt
 import sys
 import init
 import os
