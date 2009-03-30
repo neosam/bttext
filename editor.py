@@ -88,7 +88,7 @@ def fill():
 
     st = list()
     done = set()
-    bg = theWorld.player.gMap[theWorld.player.pos].copy()['ascii']
+    bg = theWorld.player.gMap[theWorld.player.pos].copy()
     goon = True
     while goon:
         try:
@@ -106,7 +106,9 @@ def fill():
         if (x >= 0) and (x < LEVEL_WIDTH) and \
            (y >= 0) and (y < LEVEL_HEIGHT) and \
            ((x, y) not in done) and \
-           (theWorld.player.gMap[x, y]['ascii'] == bg):
+           (theWorld.player.gMap[x, y]['ascii'] == bg['ascii']) and \
+           (theWorld.player.gMap[x, y]['bg'] == bg['bg']) and \
+           (theWorld.player.gMap[x, y]['fg'] == bg['fg']):
             theWorld.player.gMap.setAscii(x, y, asciiValue)
             theWorld.player.gMap.setFG(x, y, foreground)
             theWorld.player.gMap.setBG(x, y, background)
