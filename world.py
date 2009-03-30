@@ -35,6 +35,10 @@ class World(object):
         textout.btText.trans['Map:'] = {'de': 'Karte:'}
         textout.btText.trans['State:'] = {'de': 'Status:'}
 
+        # Menu translations
+        textout.btText.trans['Continue'] = {'de': 'Weiterspielen'}
+        textout.btText.trans['Quit'] = {'de': 'Beenden'}
+
 
     def borderFunction(self, w, h):
         self.border = w * 3 / 4

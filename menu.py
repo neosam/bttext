@@ -1,5 +1,6 @@
 import curses
 import textout
+from textout import btText
 import init
 import sys
 
@@ -13,8 +14,8 @@ def btExit():
 def btContinue():
     pass
 
-menuList = [["Weiterspielen", btContinue],
-            ["Beenden", btExit]]
+menuList = [[str(btText("Continue")), btContinue],
+            [str(btText("Quit")), btExit]]
 
 def drawMenu(menuWin, choice):
     menuWin.erase()
@@ -24,7 +25,7 @@ def drawMenu(menuWin, choice):
     for i in range(len(menuList)):
         if choice == i:
             textout.textOut(">", 2, i + 2, dst = menuWin)
-        textout.textOut(menuList[i][0], 4, i + 2, dst = menuWin)
+        textout.textOut(str(btText(menuList[i][0])), 4, i + 2, dst = menuWin)
 
 def start():
     dsth, dstw = init.stdscr.getmaxyx()
