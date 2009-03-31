@@ -205,7 +205,7 @@ class World(object):
         self.statusBox.draw()
 
     def sendText(self, text):
-        self.textField.sendText(text)
+        self.textField.sendText(str(textout.btText(text)))
 
 
 
