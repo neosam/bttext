@@ -61,6 +61,11 @@ def step(self, pos):
     if tuple(pos) in self.maps[0, 0].persons:
         self.maps[0, 0].persons[tuple(pos)].onCrash()
 
+def executeCode(theWorld):
+    text = textbox.textEdit(theWorld,'hack')
+    theWorld.evalCode(text)
+    theWorld.lastExecuted = text
+
 def main():
     global stdscr
 
@@ -84,6 +89,31 @@ def main():
         # Adding mike to Bermuda Triangle World
         theWorld.setPlayer(player)
 
+        theWorld.keys = {
+                "q":
+                    [theWorld.sendText,
+                     ("Use the menu to quit (press 'm')",)],
+#                "w": # Switches between colored and b/w
+#                    misc.COLORED = not misc.COLORED
+#                    theWorld.redrawAllMaps()
+                "m": [menu.start, ()], # Enter menu
+                "h": [theWorld.playerGoLeft, ()],  #
+                "j": [theWorld.playerGoDown, ()],  #  Player
+                "k": [theWorld.playerGoUp, ()],    #  movement
+                "l": [theWorld.playerGoRight, ()], #
+                "KEY_LEFT": [theWorld.playerGoLeft, ()],
+                "KEY_RIGHT": [theWorld.playerGoRight, ()],
+                "KEY_UP": [theWorld.playerGoUp, ()],
+                "KEY_DOWN": [theWorld.playerGoDown, ()],
+                "y": [theWorld.attackLeft, ()],
+                "z": [theWorld.attackLeft, ()],
+                "u": [theWorld.attackDown, ()],
+                "i": [theWorld.attackUp, ()],
+                "o": [theWorld.attackRight, ()],
+                "c": [executeCode, (theWorld,)],
+#                "x": [theWorld.sendText, (str(mike.gMap.pos))],
+        }
+
         # Try to load and evaluate the init file.
         try:
             filename = "%s/init.py" % sys.argv[1]
@@ -100,34 +130,18 @@ def main():
                                      # +++ Event handling +++
             try:
                 c = stdscr.getkey() 
+                if c in theWorld.keys:
+                    elem = theWorld.keys[c]
+                    elem[0](*elem[1])
 
-                if c == ord("q"):
-                    theWorld.sendText("Bitte im Menue Beenden ('m' druecken)")
-                if c == ord("w"): # Switches between colored and b/w
-                    misc.COLORED = not misc.COLORED
-                    theWorld.redrawAllMaps()
-                if c == "m": menu.start() # Enter menu
-                if c == "h": theWorld.playerGoLeft()  #
-                if c == "j": theWorld.playerGoDown()  #  Player
-                if c == "k": theWorld.playerGoUp()    #  movement
-                if c == "l": theWorld.playerGoRight() #
-                if c == "KEY_LEFT": theWorld.playerGoLeft()
-                if c == "KEY_RIGHT": theWorld.playerGoRight()
-                if c == "KEY_UP": theWorld.playerGoUp()
-                if c == "KEY_DOWN": theWorld.playerGoDown()
-                if c == "y": theWorld.attackLeft()
-                if c == "z": theWorld.attackLeft()
-                if c == "u": theWorld.attackDown()
-                if c == "i": theWorld.attackUp()
-                if c == "o": theWorld.attackRight()
-                if c == "c": theWorld.evalCode(textbox.textEdit(theWorld,
-                                                                 'hack'))
-                if c == "x": theWorld.sendText(str(mike.gMap.pos))
             # --- Event handling ---
             except SystemExit:
                 raise SystemExit
-            except:
+            except curses.error:
                 pass
+            except:
+                theWorld.sendText(str(sys.exc_info()[0]))
+                theWorld.sendText(str(sys.exc_info()[1]))
 
             for person in theWorld.maps[0, 0].persons.values():
                 person.onFrame()

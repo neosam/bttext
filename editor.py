@@ -283,25 +283,26 @@ def main():
         world.World.borderFunction = borderFunction
         theWorld.resize(w, h)
 
-        shortcutList = [
-            ["h", theWorld.playerGoLeft, (True,)],
-            ["j", theWorld.playerGoDown, (True,)],
-            ["k", theWorld.playerGoUp, (True,)],
-            ["l", theWorld.playerGoRight, (True,)],
-            ["c", executeCode, ()],
-            ["C", repeatCode, ()],
-            ["A", insertFile, ()],
-            ["a", insertAscii, ()],
-            ["t", insertText, ()],
-            ["v", insertVText, ()],
-            ["F", fill, ()],
-            ["T", addTrigger, ()],
-            ["r", addRTrigger, ()],
-            ["f", changeForeground, ()],
-            ["b", changeBackground, ()],
-            ["g", changeWalkable, ()],
-            ["s", saveMap, ()],
-            ["e", insertFlag, ()]]
+        theWorld.keys = {
+            "h": [theWorld.playerGoLeft, (True,)],
+            "j": [theWorld.playerGoDown, (True,)],
+            "k": [theWorld.playerGoUp, (True,)],
+            "l": [theWorld.playerGoRight, (True,)],
+            "c": [executeCode, ()],
+            "C": [repeatCode, ()],
+            "A": [insertFile, ()],
+            "a": [insertAscii, ()],
+            "t": [insertText, ()],
+            "v": [insertVText, ()],
+            "F": [fill, ()],
+            "T": [addTrigger, ()],
+            "r": [addRTrigger, ()],
+            "f": [changeForeground, ()],
+            "b": [changeBackground, ()],
+            "g": [changeWalkable, ()],
+            "s": [saveMap, ()],
+            "e": [insertFlag, ()]
+        }
         # Initialize cursor object
         cursor = Player(theWorld.statusBox, -1, "Cursor", -1, theWorld, [0, 0], ["C", 0, 3],
                       configs.colorof["mike"][0], profile={"hp": [100, 100],
@@ -325,18 +326,23 @@ def main():
         while 1:                     # Gameloop
             timer.fpsDelay()         # FPS-Control
             clearError()
+
+            c = None
                                      # +++ Event handling +++
-            c = stdscr.getch()       # I don't think an eventloop is needed in a
+            try:
+                c = stdscr.getkey()
+            except curses.error:
+                pass
                                      # textadventure
-            if c == ord("q"):
+            if c == "q":
                 init.quit()
                 sys.exit()
-            if c == ord("w"): # Switches between colored and b/w
-                misc.COLORED = not misc.COLORED
-                theWorld.redrawAllMaps()
-            for elem in shortcutList:
-                if c == ord(elem[0]):
-                    elem[1](*elem[2])
+#            if c == "w": # Switches between colored and b/w
+#                misc.COLORED = not misc.COLORED
+#                theWorld.redrawAllMaps()
+            if c in theWorld.keys:
+                elem = theWorld.keys[c]
+                elem[0](*elem[1])
 #            if c == ord("m"): menu.start() # Enter menu
 #            if c == ord("h"): theWorld.playerGoLeft()  #
 #            if c == ord("j"): theWorld.playerGoDown()  #  Cursor
