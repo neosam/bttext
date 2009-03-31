@@ -23,12 +23,9 @@
 * All:
 ** Use Person class for persons !! (done)
 ** Better widgets for text edit
-** Translate everything in english !!!
+** Translate everything in english !!! (done)
 *** Readme (done)
-*** Translation tools
-**** Tool to extract strings
-**** Tool to import strings
-*** Tranlate game texts
+*** Tranlate game texts (done)
 ** More trigger shortcut functions (done)
 *** getTile(label) (done)
 *** setTile(label, tile) (done)
