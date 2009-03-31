@@ -251,6 +251,16 @@ def insertFlag():
     k = textbox.lineEdit(theWorld, 'Set named field')
     cursor.gMap.setNamedField(k, cursor.pos)
 
+def executeCode():
+    global theWorld
+    text = textbox.textEdit(theWorld,'hack')
+    theWorld.evalCode(text)
+    theWorld.lastExecuted = text
+
+def repeatCode():
+    global theWorld
+    theWorld.evalCode(theWorld.lastExecuted)
+    
 
 def main():
     global stdscr, theWorld, cursor
@@ -278,8 +288,8 @@ def main():
             ["j", theWorld.playerGoDown, (True,)],
             ["k", theWorld.playerGoUp, (True,)],
             ["l", theWorld.playerGoRight, (True,)],
-            ["c", theWorld.evalCode, 
-             (lambda: textbox.textEdit(theWorld,'hack'),)],
+            ["c", executeCode, ()],
+            ["C", repeatCode, ()],
             ["A", insertFile, ()],
             ["a", insertAscii, ()],
             ["t", insertText, ()],
