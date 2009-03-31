@@ -88,7 +88,7 @@ def fill():
 
     st = list()
     done = set()
-    bg = theWorld.player.gMap[theWorld.player.pos].copy()['ascii']
+    bg = theWorld.player.gMap[theWorld.player.pos].copy()
     goon = True
     while goon:
         try:
@@ -106,7 +106,9 @@ def fill():
         if (x >= 0) and (x < LEVEL_WIDTH) and \
            (y >= 0) and (y < LEVEL_HEIGHT) and \
            ((x, y) not in done) and \
-           (theWorld.player.gMap[x, y]['ascii'] == bg):
+           (theWorld.player.gMap[x, y]['ascii'] == bg['ascii']) and \
+           (theWorld.player.gMap[x, y]['bg'] == bg['bg']) and \
+           (theWorld.player.gMap[x, y]['fg'] == bg['fg']):
             theWorld.player.gMap.setAscii(x, y, asciiValue)
             theWorld.player.gMap.setFG(x, y, foreground)
             theWorld.player.gMap.setBG(x, y, background)
@@ -249,6 +251,16 @@ def insertFlag():
     k = textbox.lineEdit(theWorld, 'Set named field')
     cursor.gMap.setNamedField(k, cursor.pos)
 
+def executeCode():
+    global theWorld
+    text = textbox.textEdit(theWorld,'hack')
+    theWorld.evalCode(text)
+    theWorld.lastExecuted = text
+
+def repeatCode():
+    global theWorld
+    theWorld.evalCode(theWorld.lastExecuted)
+    
 
 def main():
     global stdscr, theWorld, cursor
@@ -276,8 +288,8 @@ def main():
             ["j", theWorld.playerGoDown, (True,)],
             ["k", theWorld.playerGoUp, (True,)],
             ["l", theWorld.playerGoRight, (True,)],
-            ["c", theWorld.evalCode, 
-             (lambda: textbox.textEdit(theWorld,'hack'),)],
+            ["c", executeCode, ()],
+            ["C", repeatCode, ()],
             ["A", insertFile, ()],
             ["a", insertAscii, ()],
             ["t", insertText, ()],
@@ -299,6 +311,16 @@ def main():
         
         # Adding cursor to the world
         theWorld.setPlayer(cursor)
+
+        # Loading editor initializing file
+        try:
+            filename = "%s/editinit.py" % sys.argv[1]
+            initFile = file(filename).read()
+            theWorld.evalCode(initFile)
+        except:
+            theWorld.sendText(btText('Could not load editinit.py'))
+            theWorld.sendText(btText('Use this file to extend this editor'))
+
 
         while 1:                     # Gameloop
             timer.fpsDelay()         # FPS-Control

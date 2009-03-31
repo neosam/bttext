@@ -83,6 +83,7 @@ class World(object):
         load = self.load
         new = self.createNewMap
         btText = textout.btText
+        gMap = self.maps[0, 0]
         try:
             getNamedField = self.maps[0, 0].getNamedField
             setNamedField = self.maps[0, 0].setNamedField

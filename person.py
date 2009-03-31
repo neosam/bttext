@@ -109,6 +109,8 @@ def go(posmodifier):
              self.gMap.drawPos.append(self.pos)
              self.gMap.drawPos.append(pos)
              self.jumpTo(*posmodifier(self.pos))
+         if pos == self.theWorld.player.pos:
+             self.onCrash()
      return action
 
 Person.goLeft = go(lambda(pos): [pos[0] - 1, pos[1]])
