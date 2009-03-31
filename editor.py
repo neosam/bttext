@@ -312,6 +312,16 @@ def main():
         # Adding cursor to the world
         theWorld.setPlayer(cursor)
 
+        # Loading editor initializing file
+        try:
+            filename = "%s/editinit.py" % sys.argv[1]
+            initFile = file(filename).read()
+            theWorld.evalCode(initFile)
+        except:
+            theWorld.sendText(btText('Could not load editinit.py'))
+            theWorld.sendText(btText('Use this file to extend this editor'))
+
+
         while 1:                     # Gameloop
             timer.fpsDelay()         # FPS-Control
             clearError()
