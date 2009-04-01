@@ -26,6 +26,9 @@ class World(object):
 
         self.WALK_AREA = 3
 
+        self.onStepDict = dict()
+        self.onFrameDict = dict()
+
         self.load()
         self.statusBox = statusbox.statusBox(stdscr, w, h, self.border)
         self.setMapPos((0, 0))
@@ -54,7 +57,15 @@ class World(object):
         return (2, 6, self.border - 5, self.h - 7)
 
     def step(self, pos):
-        pass
+        if (pos[0] < 0) or (pos[1] < 0) or (pos[0] >= gamemap.LEVEL_WIDTH) or \
+           (pos[1] >= gamemap.LEVEL_HEIGHT):
+            return
+        for elem in self.onStepDict.values():
+            elem[0](self, pos, *elem[1])
+
+    def frame(self):
+        for elem in self.onFrameDict.values():
+            elem[0](self, *elem[1])
 
     def loadMap(self, pos):
         filename = "%s/map%i_%i" % (self.filename,

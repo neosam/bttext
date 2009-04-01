@@ -42,22 +42,18 @@ def waveWare(x, y, dst):
     ww = textout.btText("$%" + blue + "$%W$%" + white + "$%ave $%" + blue + "$%W$%" + white + "$%are")
     textout.textOut(ww, x, y, dst)
 
-def step(self, pos):
-    def out(text):
-        self.sendText(str(text))
-
-    #TODO Check other maps
-    if (pos[0] < 0) or (pos[1] < 0) or (pos[0] >= LEVEL_WIDTH) or \
-       (pos[1] >= LEVEL_HEIGHT):
-        return
-
+def trigger(self, pos):
     source = self.player.gMap[pos]
     if 'trigger' in source:
         self.evalCode(source['trigger'])
         source.pop('trigger')
+
+def rtrigger(self, pos):
+    source = self.player.gMap[pos]
     if 'rtrigger' in source:
         self.evalCode(source['rtrigger'])
 
+def crash(self, pos):
     if tuple(pos) in self.maps[0, 0].persons:
         self.maps[0, 0].persons[tuple(pos)].onCrash()
 
@@ -65,6 +61,10 @@ def executeCode(theWorld):
     text = textbox.textEdit(theWorld,'hack')
     theWorld.evalCode(text)
     theWorld.lastExecuted = text
+
+def personOnFrame(theWorld):
+    for person in theWorld.maps[0, 0].persons.values():
+        person.onFrame()
 
 def main():
     global stdscr
@@ -79,7 +79,7 @@ def main():
         h, w = stdscr.getmaxyx()
 
         theWorld = world.World(stdscr, w, h, filename=sys.argv[1])
-        world.World.step = step
+#        world.World.step = step
 
         # Mike is the hero!
         player = Player(theWorld.statusBox, -1, "Du", -1, theWorld, [0, 0], ["M", curses.COLOR_BLACK, curses.COLOR_RED],
@@ -114,6 +114,12 @@ def main():
 #                "x": [theWorld.sendText, (str(mike.gMap.pos))],
         }
 
+        theWorld.onStepDict['trigger'] = [trigger, ()]
+        theWorld.onStepDict['rtrigger'] = [rtrigger, ()]
+        theWorld.onStepDict['crash'] = [crash, ()]
+
+        theWorld.onFrameDict['personOnFrame'] = [personOnFrame, ()]
+
         # Try to load and evaluate the init file.
         try:
             filename = "%s/init.py" % sys.argv[1]
@@ -143,8 +149,7 @@ def main():
                 theWorld.sendText(str(sys.exc_info()[0]))
                 theWorld.sendText(str(sys.exc_info()[1]))
 
-            for person in theWorld.maps[0, 0].persons.values():
-                person.onFrame()
+            theWorld.frame()
 
             # +++ Drawing +++
             oldH = h   # Need this for resizing
