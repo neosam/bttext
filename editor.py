@@ -317,10 +317,12 @@ def main():
         try:
             filename = "%s/editinit.py" % sys.argv[1]
             initFile = file(filename).read()
-            theWorld.evalCode(initFile)
+            theWorld.evalCode(initFile, filename)
         except:
             theWorld.sendText(btText('Could not load editinit.py'))
             theWorld.sendText(btText('Use this file to extend this editor'))
+            theWorld.sendText(str(sys.exc_info()[0]))
+            theWorld.sendText(str(sys.exc_info()[1]))
 
 
         while 1:                     # Gameloop

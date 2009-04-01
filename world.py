@@ -74,7 +74,7 @@ class World(object):
         self.setMapPos(self.softPos)
         self.redrawAllMaps()
 
-    def evalCode(self, text):
+    def evalCode(self, text, filename='fake.py'):
         player = self.player
         theWorld = self
         def out(txt):
@@ -108,7 +108,7 @@ class World(object):
         if callable(text):
             text = text()
 
-        code = compile(text, 'fake.py', 'exec')
+        code = compile(text, filename, 'exec')
         try:
             eval(code)
         except SystemExit:
