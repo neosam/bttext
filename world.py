@@ -243,12 +243,14 @@ World.playerGoDown = playerGo(lambda(pos): [pos[0], pos[1] + 1], 'goDown')
 def attack(directionfunc, ascii):
     def action(self):
         pos = directionfunc(self.player.pos)
+        self.maps[0, 0].foreground[pos] = ascii
+        self.maps[0, 0].drawPos.append(pos)
         if pos in self.maps[0, 0].persons:
             person = self.maps[0, 0].persons[pos]
             person.setHP(person.profile['hp'][0] - 100)
     return action
 
-World.attackLeft = attack(lambda(pos): (pos[0] - 1, pos[1]), '-')
-World.attackRight = attack(lambda(pos): (pos[0] + 1, pos[1]), '-')
-World.attackUp = attack(lambda(pos): (pos[0], pos[1] - 1), '|')
-World.attackDown = attack(lambda(pos): (pos[0], pos[1] + 1), '|')
+World.attackLeft = attack(lambda(pos): (pos[0] - 1, pos[1]), ['-', 0, 7])
+World.attackRight = attack(lambda(pos): (pos[0] + 1, pos[1]), ['-', 0, 7])
+World.attackUp = attack(lambda(pos): (pos[0], pos[1] - 1), ['|', 0, 7])
+World.attackDown = attack(lambda(pos): (pos[0], pos[1] + 1), ['|', 0, 7])

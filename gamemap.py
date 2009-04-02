@@ -140,6 +140,7 @@ class GameMap(object):
                    self[pos]['ascii'])
 
     def draw(self, dst):
+        newList = list()
         if self.drawAllFlag == True:
             self.drawAll(dst)
         else:
@@ -158,6 +159,8 @@ class GameMap(object):
                         dst.addstr(screenpos[1], screenpos[0],
                                    mapDraw[0],
                                    color.color(mapDraw[1], mapDraw[2]))
+                        self.foreground.pop(pos)
+                        newList.append(pos)
                     elif tuple(pos) in self.persons:
                         mapDraw = self.persons[tuple(pos)].mapDraw
                         dst.addstr(screenpos[1], screenpos[0],
@@ -172,8 +175,7 @@ class GameMap(object):
                     dst.addstr(screenpos[1], screenpos[0], self[pos]['ascii'])
 
 
-            self.drawPos = []
-
+            self.drawPos = newList
     def drawAll(self, dst):
         self.drawAllFlag = False
         for h in range(self.h):
@@ -192,6 +194,7 @@ class GameMap(object):
                                    self.x + self.w - w,
                                    mapDraw[0],
                                    color.color(mapDraw[1], mapDraw[2]))
+                        self.foreground.pop(pos)
                     elif tuple(pos) in self.persons:
                         mapDraw = self.persons[tuple(pos)].mapDraw
                         dst.addstr(self.y + self.h - h,
