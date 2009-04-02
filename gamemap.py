@@ -33,6 +33,8 @@ def loadFromFile(filename, theWorld):
             persons.profile = {"hp": 100}
     for position in res.persons:
         res.persons[position].pos = list(position)
+    if not hasattr(res, 'foreground'):
+        res.foreground = dict()
     return res
 
 class GameMap(object):
@@ -48,6 +50,7 @@ class GameMap(object):
         self.drawAllFlag = True
         self.namedField = dict()
         self.persons = dict()
+        self.foreground = dict()
 
         # Preparing level
         self.clear()
@@ -150,7 +153,12 @@ class GameMap(object):
 
                 screenpos = self.to_screenpos(pos[0], pos[1])
                 if configs.misc.COLORED == True:
-                    if tuple(pos) in self.persons:
+                    if tuple(pos) in self.foreground:
+                        mapDraw = self.foreground[tuple(pos)]
+                        dst.addstr(screenpos[1], screenpos[0],
+                                   mapDraw[0],
+                                   color.color(mapDraw[1], mapDraw[2]))
+                    elif tuple(pos) in self.persons:
                         mapDraw = self.persons[tuple(pos)].mapDraw
                         dst.addstr(screenpos[1], screenpos[0],
                                    mapDraw[0],
@@ -178,7 +186,13 @@ class GameMap(object):
                     continue
 
                 if configs.misc.COLORED == True:
-                    if tuple(pos) in self.persons:
+                    if tuple(pos) in self.foreground:
+                        mapDraw = self.foreground[tuple(pos)]
+                        dst.addstr(self.y + self.h - h,
+                                   self.x + self.w - w,
+                                   mapDraw[0],
+                                   color.color(mapDraw[1], mapDraw[2]))
+                    elif tuple(pos) in self.persons:
                         mapDraw = self.persons[tuple(pos)].mapDraw
                         dst.addstr(self.y + self.h - h,
                                    self.x + self.w - w,
