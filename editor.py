@@ -342,9 +342,13 @@ def main():
 #            if c == "w": # Switches between colored and b/w
 #                misc.COLORED = not misc.COLORED
 #                theWorld.redrawAllMaps()
-            if c in theWorld.keys:
-                elem = theWorld.keys[c]
+            keys = theWorld.keys
+            if c in keys:
+                elem = keys[c]
                 elem[0](*elem[1])
+                if '' in keys:
+                    elem = keys['']
+                    elem[0](*elem[1])
 #            if c == ord("m"): menu.start() # Enter menu
 #            if c == ord("h"): theWorld.playerGoLeft()  #
 #            if c == ord("j"): theWorld.playerGoDown()  #  Cursor
