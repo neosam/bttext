@@ -34,6 +34,8 @@ class World(object):
         self.setMapPos((0, 0))
         self.redrawAllMaps()
 
+	self.evalObjs = dict()
+
         textout.btText.trans['Messages:'] = {'de': 'Meldungen:'}
         textout.btText.trans['Map:'] = {'de': 'Karte:'}
         textout.btText.trans['State:'] = {'de': 'Status:'}
@@ -121,7 +123,10 @@ class World(object):
 
         code = compile(text, filename, 'exec')
         try:
-            eval(code)
+            evalObjs = globals()
+            evalObjs.update(locals())
+            evalObjs.update(self.evalObjs)
+            eval(code, evalObjs)
         except SystemExit:
             raise SystemExit
         except:
